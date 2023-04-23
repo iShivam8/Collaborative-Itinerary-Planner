@@ -1,15 +1,16 @@
 package client;
 
-import static client.ClientInputHelper.fetchUserInput;
-import static client.ClientInputHelper.fetchUserLoginInput;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
+import static client.ClientInputHelper.fetchLoginInput;
+import static client.ClientInputHelper.fetchSignUpInput;
+import static client.ClientInputHelper.fetchUserOperationInput;
+import static client.ClientInputHelper.fetchSignupOrLoginInput;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import logs.Logger;
 import server.Server;
+import server.user.User;
 
 /**
  * Client class that is used to look up the server stub from the RMI registry and invoke remote
@@ -23,6 +24,10 @@ public class Client {
   private final Logger logger;
 
   private Server server;
+
+  // TODO - Use any fields from below to keep a track of whether the client is signed in or not
+  private User user;
+  private boolean isSignedIn;
 
   /**
    * Constructor for client and initializes the client object.
@@ -49,33 +54,38 @@ public class Client {
       logger.debug(false, "Found RMI registry!");
 
       logger.debug(false, "Looking for server stub...");
-      this.server = (Server) registry.lookup("KVS" + serverId);
+      this.server = (Server) registry.lookup("UserDB");
+      //this.server = (Server) registry.lookup("KVS" + serverId);
       logger.debug(false, "Found the server stub!");
 
       // Server asks for Log in Sign up
 
-      boolean flag = true;
-      while (true) {
-        String sessionRequest = fetchUserLoginInput(flag);
-        logger.debug(false, "Received Session request from user: ", sessionRequest);
+      String signupOrLoginInput = fetchSignupOrLoginInput();
+      logger.debug(false, "Received Session request from user: ", signupOrLoginInput);
 
-        if (flag) {
-          flag = false;
+      if (signupOrLoginInput != null) {
+        String response = null;
+
+        if (signupOrLoginInput.equalsIgnoreCase("Signup")) {
+          String signUpInput = fetchSignUpInput();
+          logger.debug(false, "Sending sign up request to the server: ", signUpInput);
+          response = server.signUp(signUpInput);
+        } else if (signupOrLoginInput.equalsIgnoreCase("Login")) {
+          String loginInput = fetchLoginInput();
+          logger.debug(false, "Sending login request to the server: ", loginInput);
+          response = server.login(loginInput);
         }
 
-        if (sessionRequest != null) {
-          logger.debug(false, "Sending sign in request to the server: ", sessionRequest);
-          String response = server.signIn(sessionRequest);
-          logger.debug(false, "Response from server: ", response);
-          System.out.println("Response from server: " + response);
-        }
+        logger.debug(false, "Response from server: ", response);
+        System.out.println("Response from server: " + response);
       }
 
-    } catch (RemoteException | NotBoundException e) {
+    } catch (Exception e) {
       logger.error(false, "Error connecting to RMI registry and while fetching the" +
           " server stub.");
       System.out.println("Error! The RMI registry is not reachable!\nMake sure that it has been started and " +
           "that the hostname and port number are correct.");
+      e.printStackTrace();
     }
   }
 
@@ -94,7 +104,7 @@ public class Client {
       while (true) {
 
         // For taking input after logging in
-        String request = fetchUserInput(prompt);
+        String request = fetchUserOperationInput(prompt);
         logger.debug(false, "Received request from user: ", request);
 
         if (prompt) {
@@ -104,6 +114,7 @@ public class Client {
         if (request != null) {
           if (request.equalsIgnoreCase("x")) {
             logger.debug(false, "Quitting the application.");
+            // TODO - Make isSignedIn boolean of the user as false. Send false to server
             break;
           }
 

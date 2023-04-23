@@ -1,8 +1,9 @@
 package server;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface Server {
+public interface Server extends Remote {
 
   /**
    * Client can use this method as a part of the server stub. It allows the client to interact with
@@ -15,11 +16,20 @@ public interface Server {
   String executeOperation(String inputMessage) throws RemoteException;
 
   /**
-   * Method used to allow the client to create a new account or sign in to an old account.
+   * Method used to allow the client to create a new account.
    *
-   * @param inputMessage - SignUp / LogIn / X
-   * @return - Response whether the account is created or the client is logged in
+   * @param signupInfo - Name, Email, Password
+   * @return - Response whether the account is created or not
    * @throws RemoteException
    */
-  String signIn(String inputMessage) throws RemoteException;
+  String signUp(String signupInfo) throws RemoteException;
+
+  /**
+   * Method to login to an old account.
+   *
+   * @param loginInfo - Email, Password
+   * @return - Whether the client is logged in or not
+   * @throws RemoteException
+   */
+  String login(String loginInfo) throws RemoteException;
 }

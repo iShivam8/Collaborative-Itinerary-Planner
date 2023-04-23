@@ -1,0 +1,3 @@
+2023-04-22 20:47:13.375  [DEBUG]   Starting the servers...
+2023-04-22 20:47:13.376  [DEBUG]   Creating RMI Registry at port:  1099
+2023-04-22 20:47:13.644  [DEBUG]   Server bounded with stub UserDB to RMI Registry.

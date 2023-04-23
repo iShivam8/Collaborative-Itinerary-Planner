@@ -34,7 +34,7 @@ public class ClientMainApplication {
     client.signIn();
 
     // TODO - Check if the client is logged in, then only run the client
-    client.run();
+    //client.run();
   }
 }
 
