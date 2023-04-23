@@ -8,6 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import logs.Logger;
+import server.keyvaluestore.KeyValueStoreServer;
 import server.user.UserDBServer;
 
 public class ServerMainApplication {
@@ -42,7 +43,7 @@ public class ServerMainApplication {
     Logger logger = new Logger("src/logs/server.log", "ServerMain");
     logger.debug(true, "Starting the servers...");
 
-    //List<PaxosServer> listOfServers = new ArrayList<>();
+    List<PaxosServer> listOfServers = new ArrayList<>();
 
     try {
       logger.debug(true, "Creating RMI Registry at port: ", String.valueOf(port));
@@ -54,7 +55,7 @@ public class ServerMainApplication {
 
       logger.debug(true, "Server bounded with stub UserDB to RMI Registry.");
 
-      /*
+
       for (int i = 0; i < numberOfServers; i++) {
         Server server = new KeyValueStoreServer("KVS" + i);
         listOfServers.add((PaxosServer) server);
@@ -68,7 +69,7 @@ public class ServerMainApplication {
       for (PaxosServer paxosServer: listOfServers) {
         paxosServer.connectWithAllServers(numberOfServers, port);
       }
-      */
+
 
     } catch (RemoteException remoteException) {
       logger.error(true, "Cannot create RMI Registry! Please try again.");

@@ -53,10 +53,9 @@ public class Client {
       Registry registry = LocateRegistry.getRegistry(hostName, port);
       logger.debug(false, "Found RMI registry!");
 
-      logger.debug(false, "Looking for server stub...");
+      logger.debug(false, "Looking for the User Database server stub...");
       this.server = (Server) registry.lookup("UserDB");
-      //this.server = (Server) registry.lookup("KVS" + serverId);
-      logger.debug(false, "Found the server stub!");
+      logger.debug(false, "Found the User Database server stub!");
 
       // Server asks for Log in Sign up
 
@@ -101,8 +100,24 @@ public class Client {
    */
   void run() {
 
+    try {
+      logger.debug(false, "Looking for RMI registry...");
+      Registry registry = LocateRegistry.getRegistry(hostName, port);
+      logger.debug(false, "Found RMI registry!");
+
+      logger.debug(false, "Looking for the Itinerary KeyValueStore server stub...");
+      this.server = (Server) registry.lookup("KVS" + serverId);
+      logger.debug(false, "Found the Itinerary KeyValueStore server stub!");
+    } catch (Exception e) {
+      logger.error(false, "Error connecting to KeyValueStore RMI registry and " +
+          "while fetching the server stub.");
+      System.out.println("Error! The RMI registry is not reachable!\nMake sure that it has been started and " +
+          "that the hostname and port number are correct.");
+      e.printStackTrace();
+    }
+
     // After the client is signed in, it can execute operations
-    logger.debug(true, "Client connected to server");
+    logger.debug(true, "Client connected to the server");
 
     try {
 
@@ -110,6 +125,7 @@ public class Client {
       while (true) {
 
         // For taking input after logging in
+        // Request contains the input entered by the client for any operation
         String request = fetchUserOperationInput(prompt);
         logger.debug(false, "Received request from user: ", request);
 
@@ -120,11 +136,13 @@ public class Client {
         if (request != null) {
           if (request.equalsIgnoreCase("x")) {
             logger.debug(false, "Quitting the application.");
-            // TODO - Make isSignedIn boolean of the user as false. Send false to server
+            // TODO - Make isSignedIn boolean of the user as false. Send false to server for User
+            this.setSignedIn(false);
             break;
           }
 
           logger.debug(false, "Sending request to the server: ", request);
+          // Server executes the user inputs and sends the response
           String response = server.executeOperation(request);
           logger.debug(false, "Response from server: ", response);
           System.out.println("Response from server: " + response);
