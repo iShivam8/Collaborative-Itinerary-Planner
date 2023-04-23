@@ -100,8 +100,7 @@ public class UserDB {
       String password = tokens[1];
 
       if (!userDatabase.containsKey(email)) {
-        logger.debug(true, "User Not Found with Email: ", email, " Create a new " +
-            "account or login with correct credentials");
+        logger.debug(true, "User Not Found with Email: ", email);
         return "User Not Found";
       }
 

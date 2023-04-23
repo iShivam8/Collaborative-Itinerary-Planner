@@ -76,6 +76,12 @@ public class Client {
           response = server.login(loginInput);
         }
 
+        if (response != null) {
+          if (response.contains("User Created") || response.contains("User Logged in")) {
+            this.setSignedIn(true);
+          }
+        }
+
         logger.debug(false, "Response from server: ", response);
         System.out.println("Response from server: " + response);
       }
@@ -128,5 +134,13 @@ public class Client {
     } catch (Exception e) {
       logger.error(true, "Error connecting client with server! Unable to Sign In!");
     }
+  }
+
+  public boolean isSignedIn() {
+    return isSignedIn;
+  }
+
+  void setSignedIn(boolean signedIn) {
+    isSignedIn = signedIn;
   }
 }

@@ -33,11 +33,9 @@ public class ClientMainApplication {
 
     client.signIn();
 
-    // TODO - Check if the client is logged in, then only run the client
-    //client.run();
+    // If the client is logged in with valid credentials, then only run the client
+    if (client.isSignedIn()) {
+      client.run();
+    }
   }
 }
-
-
-// TODO - Client can sign up / login <-- implementation is left
-// TODO - Once the client logs in, run the client

@@ -1,0 +1,4 @@
+2023-04-23 00:06:23.044  [DEBUG]   SignUp Info received from the Client:  Shiv|s@s.com|123
+2023-04-23 00:06:23.047  [DEBUG]   Sending response message to the Client:  User Created
+2023-04-23 00:07:15.619  [DEBUG]   Login Info received from the Client:  s@s.com|123
+2023-04-23 00:07:15.620  [DEBUG]   Sending response message to the Client:  User Logged in
