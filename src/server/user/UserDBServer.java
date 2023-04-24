@@ -54,6 +54,11 @@ public class UserDBServer implements Server {
   }
 
   @Override
+  public UserDB getUserDB() {
+    return this.userDB;
+  }
+
+  @Override
   public User getUser() {
 
     if (userDB.getLoggedInUser().isLoggedIn()) {
@@ -67,12 +72,12 @@ public class UserDBServer implements Server {
 
   // Below methods are implemented in KeyValueStoreServer
   @Override
-  public String executeOperation(String inputMessage) throws RemoteException {
+  public String executeOperation(String inputMessage, User user) throws RemoteException {
     return null;
   }
 
   @Override
-  public String putItinerary(Itinerary itinerary) throws RemoteException {
+  public String putItinerary(Itinerary itinerary, User currentUser) throws RemoteException {
     return null;
   }
 }

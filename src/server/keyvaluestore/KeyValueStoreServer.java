@@ -21,6 +21,7 @@ import server.Promise;
 import server.Server;
 import server.itinerary.Itinerary;
 import server.user.User;
+import server.user.UserDB;
 
 public class KeyValueStoreServer implements Server, PaxosServer {
 
@@ -31,8 +32,10 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   private final String serverId;
   private final Logger logger;
 
-  public KeyValueStoreServer(String serverId) {
-    this.keyValueStore = new KeyValueStore("src/logs/server_" + serverId + ".log", serverId);
+  private User user;
+
+  public KeyValueStoreServer(String serverId, Server userDb) {
+    this.keyValueStore = new KeyValueStore("src/logs/server_" + serverId + ".log", serverId, userDb);
     this.acceptors = new HashMap<>();
     this.metadata = new HashMap<>();
     this.serverId = serverId;
@@ -335,7 +338,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     if (operation[0].equals("PUT")) {
       result = "Itinerary Created";
     } else {
-      result = keyValueStore.executeOperation(operation);
+      result = keyValueStore.executeOperation(operation, user);
     }
 
     metadata.remove(key);
@@ -343,10 +346,11 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public String executeOperation(String inputMessage) throws RemoteException {
+  public String executeOperation(String inputMessage, User currentUser) throws RemoteException {
 
     // InputMessage:  Put;   EDIT|123;    Get|123;    Delete|123;   Share|123|a@a.com;
     logger.debug(true, "Message received from the Client: ", inputMessage);
+    this.user = currentUser;
 
     String result;
     String[] tokens = keyValueStore.parseMessage(inputMessage);
@@ -357,7 +361,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     } else if (validatedResponse.contains("PAXOS")) {
       result = startPaxos(tokens);
     } else {
-      result = keyValueStore.executeOperation(tokens);
+      result = keyValueStore.executeOperation(tokens, currentUser);
     }
 
     logger.debug(true, "Sending response message to the Client: ", result);
@@ -365,10 +369,10 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public String putItinerary(Itinerary itinerary) throws RemoteException {
+  public String putItinerary(Itinerary itinerary, User currentUser) throws RemoteException {
     logger.debug(true, "Itinerary received from the Client: ", itinerary.getName());
 
-    String itineraryId = keyValueStore.addItinerary(itinerary);
+    String itineraryId = keyValueStore.addItinerary(itinerary, currentUser);
     String[] tokens = {"PUT", itineraryId, itinerary.getName()};
     String result = startPaxos(tokens);
 
@@ -396,6 +400,11 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   @Override
   public User getUser() {
     logger.debug(true, "Is it running this server?");
+    return null;
+  }
+
+  @Override
+  public UserDB getUserDB() {
     return null;
   }
 }

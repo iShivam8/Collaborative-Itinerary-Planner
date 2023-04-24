@@ -34,11 +34,18 @@ public class ClientMainApplication {
     // TODO - If a user is already signed in, do not allow to sign in from another client terminal
     // We can use a temporary list, to keep track of signed in users.
     // If a user is found in that list, do not allow to sign in that user
-    client.signIn();
+    if (!client.isSignedIn()) {
 
-    // If the client is logged in with valid credentials, then only run the client
-    if (client.isSignedIn()) {
-      client.run();
+      client.signIn();
+
+      // If the client is logged in with valid credentials, then only run the client
+      if (client.isSignedIn()) {
+        client.run();
+      } else {
+        System.out.println("Invalid Credentials!");
+      }
+    } else {
+      System.out.println("This User is already signed in to a different terminal! Cannot sign in again");
     }
   }
 }

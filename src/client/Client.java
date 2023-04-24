@@ -27,6 +27,7 @@ public class Client {
 
   private Server userDbServer, keyValueStoreServer;
 
+  private User user;
   // TODO - Use any fields from below to keep a track of whether the client is signed in or not
   private boolean isSignedIn;
 
@@ -79,6 +80,8 @@ public class Client {
         if (response != null) {
           if (response.contains("User Created") || response.contains("User Logged in")) {
             this.setSignedIn(true);
+            this.user = userDbServer.getUser();
+            this.user.setLoggedIn(true);
           }
         }
 
@@ -118,13 +121,15 @@ public class Client {
     }
 
     // After the client is signed in, it can execute operations
-    logger.debug(true, "Client connected to the server");
+    logger.debug(false, "Client connected to the server");
+    System.out.println("Client is connected to the server");
 
     try {
 
       boolean prompt = true;
       while (true) {
 
+        //System.out.println("Current User: " + this.user.getName());
         // For taking input after logging in
         // Request contains the input entered by the client for any operation
         String request = fetchUserOperationInput(prompt);
@@ -137,44 +142,49 @@ public class Client {
         if (request != null) {
           if (request.equalsIgnoreCase("x")) {
             logger.debug(false, "Quitting the application.");
-            // TODO - Make isSignedIn boolean of the user as false. Send false to server for User
             this.setSignedIn(false);
+
+            // TODO - A Case where same user signs in different terminal.
+            // Sol: Do not allow to sign in a different terminal
+            this.user.setLoggedIn(false);
+
             break;
           }
 
           logger.debug(false, "Sending request to the server: ", request);
           // Server executes the user inputs and sends the response
-          String response = keyValueStoreServer.executeOperation(request);
+          String response = keyValueStoreServer.executeOperation(request, this.user);
           logger.debug(false, "Response from server: ", response);
           System.out.println("Response from server: " + response);
 
-          if (response.equalsIgnoreCase("Enter Itinerary Details")) {
-            // Ask for user input for itinerary details
-            User user = userDbServer.getUser();
-            Itinerary itinerary = fetchItineraryInput(user);
-            user.setListOfCreatedItinerary(itinerary);
+          if (response != null) {
+            if (response.equalsIgnoreCase("Enter Itinerary Details")) {
+              // Ask for user input for itinerary details
+              Itinerary itinerary = fetchItineraryInput(user);
+              user.setListOfCreatedItinerary(itinerary);
 
-            // To carry on getting continuous input from user for the 5 operations
-            prompt = true;
+              // To carry on getting continuous input from user for the 5 operations
+              prompt = true;
 
-            if (itinerary != null) {
-              // Add the itinerary in the KeyValueStore
-              logger.debug(false, "Sending Itinerary request to the server: ",
-                  itinerary.getName());
-              String itineraryResponse = keyValueStoreServer.putItinerary(itinerary);
-              logger.debug(false, "Response from server: ", itineraryResponse);
-              //System.out.println("Response from server: " + itineraryResponse);
-
-
-              if (itineraryResponse.startsWith("Error")) {
-                System.out.println("Response from server: " + itineraryResponse);
-                logger.error(true, "Couldn't add your created Itinerary: ",
+              if (itinerary != null) {
+                // Add the itinerary in the KeyValueStore
+                logger.debug(false, "Sending Itinerary request to the server: ",
                     itinerary.getName());
-              } else {
-                System.out.println("Itinerary Added with Name: '"+ itinerary.getName() +
-                    "'  Your Unique ID for Accessing it is: " + itineraryResponse);
-                logger.debug(false, "Itinerary Added with Name: '", itinerary.getName(),
-                    "'  and you can access it using Unique ID: ", itineraryResponse);
+                String itineraryResponse = keyValueStoreServer.putItinerary(itinerary, this.user);
+                logger.debug(false, "Response from server: ", itineraryResponse);
+                //System.out.println("Response from server: " + itineraryResponse);
+
+
+                if (itineraryResponse.startsWith("Error")) {
+                  System.out.println("Response from server: " + itineraryResponse);
+                  logger.error(true, "Couldn't add your created Itinerary: ",
+                      itinerary.getName());
+                } else {
+                  System.out.println("Itinerary Added with Name: '"+ itinerary.getName() +
+                      "'  Your Unique ID for Accessing it is: " + itineraryResponse);
+                  logger.debug(false, "Itinerary Added with Name: '", itinerary.getName(),
+                      "'  and you can access it using Unique ID: ", itineraryResponse);
+                }
               }
             }
           }

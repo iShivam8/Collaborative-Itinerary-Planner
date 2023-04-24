@@ -9,7 +9,8 @@ public class UserDB {
   private final ConcurrentHashMap<String, User> userDatabase;
   private final Logger logger;
 
-  private User loggedInUser;
+  // This variable changes as per the latest logged in user
+  private User currentLoggedInUser;
 
   public UserDB(String fileName, String serverId) {
     this.userDatabase = new ConcurrentHashMap<>();
@@ -142,12 +143,16 @@ public class UserDB {
   }
 
   private void setLoggedInUser(User user) {
-    this.loggedInUser = user;
+    this.currentLoggedInUser = user;
   }
 
-  // Helper method to return the logged in user
+  // Helper method to return the logged-in user
   User getLoggedInUser() {
-    return this.loggedInUser;
+    return this.currentLoggedInUser;
+  }
+
+  public ConcurrentHashMap<String, User> getUserDatabase() {
+    return this.userDatabase;
   }
 
   /**

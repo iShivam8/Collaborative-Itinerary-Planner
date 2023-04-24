@@ -1,23 +1,29 @@
 package server.keyvaluestore;
 
 import static server.keyvaluestore.UniqueIdGenerator.generateId;
+import java.rmi.RemoteException;
 import java.util.concurrent.ConcurrentHashMap;
 import logs.Logger;
+import server.Server;
 import server.itinerary.Itinerary;
+import server.user.User;
 
 public class KeyValueStore {
 
   // KeyValueStore that stores Unique ID as Key, and Itinerary Object as value
   private final ConcurrentHashMap<String, Itinerary> keyValueStore;
   private final Logger logger;
+  private final Server userDbServer;
 
   /**
    * Constructor of KeyValueStore that initializes the Key-Value Store.
    *
    * @param fileName - Filename for logger
+   * @param userDb
    */
-  public KeyValueStore(String fileName, String serverId) {
+  public KeyValueStore(String fileName, String serverId, Server userDb) {
     this.keyValueStore = new ConcurrentHashMap<>();
+    this.userDbServer = userDb;
     this.logger = new Logger(fileName, serverId);
   }
 
@@ -51,7 +57,8 @@ public class KeyValueStore {
       }
     } else if (tokens.length == 3) {
       if (tokens[0].equalsIgnoreCase("SHARE")) {
-        return "Valid Operation. PAXOS. SHARE.";
+        // TODO Add PAXOS.
+        return "Valid Operation. SHARE.";
       } else {
         logger.error(true, "Invalid operation", tokens[0]);
         return "Invalid operation: " + tokens[0] + ". Only SHARE is supported with " +
@@ -64,7 +71,14 @@ public class KeyValueStore {
     }
   }
 
-  synchronized String executeOperation(String[] tokens) {
+  /**
+   * This method executes the 5 operations: PUT, GET, DELETE, EDIT, SHARE
+   * After validating the token message received from the client.
+   *
+   * @param tokens - input message token received from the client
+   * @return - response of the executed operation
+   */
+  synchronized String executeOperation(String[] tokens, User currentUser) {
 
     // Tokens:  Put;    Get|123;    Delete|123;    EDIT|123;   Share|123|a@a.com;
 
@@ -97,20 +111,70 @@ public class KeyValueStore {
 
         // TODO - Enable Put operation
 
+        // TODO - If the itinerary is in the createdList or SharedList of the current user, then only he will be able to edit it
+        return "Update Itinerary Details";
+
       } else {
         logger.debug(true, "Itinerary Key : ", tokens[1], " not found in the store.");
         return "Itinerary Not found";
       }
 
     } else if (tokens[0].equalsIgnoreCase("SHARE")) {
+      //   0      1       2
+      // SHARE|1223123|s@s.com
 
       // If the specified Key is found, then search for User with email
-        // Now search for user, if user is found, send the random it to that user to listOfSharedIts
+      if (keyValueStore.containsKey(tokens[1])) {
+        try {
 
-      // If no key is found, return no itinerary found
+          // Now search for user, if user is found, send itinerary id to that user to listOfSharedIts
+          if (userDbServer.getUserDB().getUserDatabase().containsKey(tokens[2])) {
+            // If user is found in db, then share the key with that user
+            logger.debug(true, "User found with Email: ", tokens[2],
+                " Sharing the Itinerary: ",
+                userDbServer.getUserDB().getUserDatabase().get(tokens[2]).getName());
 
-      // TODO
+            Itinerary itinerary = keyValueStore.get(tokens[1]);
+            User sharedUser = null;
 
+            try {
+              sharedUser = userDbServer.getUserDB().getUserDatabase().get(tokens[2]);
+              logger.debug(true, "Current User: ", currentUser.getName(),
+                  " Shareable User: ", sharedUser.getName());
+              System.out.println("Current User: " + currentUser.getName() +
+                  ", Shareable User: " + sharedUser.getName());
+
+              // Setting list of shared user for current user, and shared itinerary for the shared users
+              currentUser.addSharedUserToMap(itinerary, sharedUser);
+              sharedUser.setListOfSharedItinerary(itinerary);
+
+              // TODO - Although the Itinerary is shared, its not visible using get method
+              // Probably because the servers are not in sync with each other
+
+              logger.debug(true, "Itinerary '", itinerary.getName(),
+                  "' successfully shared with User: ", sharedUser.getName());
+
+              return "Itinerary Successfully Shared";
+
+            } catch (RemoteException e) {
+              e.printStackTrace();
+            }
+
+            // It Key = tokens[1]
+
+          } else {
+            logger.debug(true, "No user found with Email: ", tokens[2]);
+            return "No User Found";
+          }
+        } catch (Exception e) {
+          logger.debug(true, "Exception occurred! Can't share with the specified User!");
+          e.printStackTrace();
+        }
+      } else {
+        // If no key is found, return no itinerary found
+        logger.debug(true, "Itinerary Key : ", tokens[1], " not found in the store.");
+        return "Itinerary Not found";
+      }
     } else {
       if (keyValueStore.containsKey(tokens[1])) {
         logger.debug(true, "Deleted key :", tokens[1], " from the store.");
@@ -130,14 +194,21 @@ public class KeyValueStore {
 
   /**
    * Method that adds the itinerary to the KeyValueStore
-   * @param itinerary
-   * @return
+   * @param itinerary - Created Itinerary by the user
+   * @param currentUser - Current User who created the Itinerary
+   * @return - Itinerary ID KEY
    */
-  public String addItinerary(Itinerary itinerary) {
+  public String addItinerary(Itinerary itinerary, User currentUser) {
     if (itinerary != null) {
       String uniqueKeyId = generateId();
 
       this.keyValueStore.put(uniqueKeyId, itinerary);
+
+      // Adding this itinerary in the list of created itinerary of the Current User
+      currentUser.setListOfCreatedItinerary(itinerary);
+      logger.debug(true, "Itinerary '", itinerary.getName(),
+          "' Added in the List of Created Itineraries of User: ", currentUser.getName());
+
       return uniqueKeyId;
     }
 

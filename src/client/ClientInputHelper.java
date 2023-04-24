@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import server.itinerary.Itinerary;
 import server.user.User;
@@ -19,6 +18,8 @@ import server.user.User;
 public class ClientInputHelper {
 
   static String fetchSignupOrLoginInput() {
+
+    // TODO - If invalid input, then keep asking user until valid inputs
 
     System.out.println("\nChoose from the following Requests: ");
     System.out.println("1] Sign Up for New Account: Enter - Signup");
@@ -49,6 +50,8 @@ public class ClientInputHelper {
    * @return
    */
   static String fetchSignUpInput() {
+
+    // TODO - If invalid input, then keep asking user until valid inputs
 
     System.out.println("\nEnter the following Details to Register a New Account: ");
     System.out.println("1] Enter Your First Name only");
@@ -83,6 +86,8 @@ public class ClientInputHelper {
    * @return
    */
   static String fetchLoginInput() {
+    // TODO - If invalid input, then keep asking user until valid inputs
+
     System.out.println("\nEnter the following Credentials to Login: ");
     System.out.println("1] Enter Your Email ID");
     System.out.println("2] Enter Your Password");
@@ -126,8 +131,16 @@ public class ClientInputHelper {
       System.out.println("2] Get an Itinerary:       GET  (Itinerary-ID)");
       System.out.println("3] Delete an Itinerary:    DELETE  (Itinerary-ID)");
       System.out.println("4] Edit an Itinerary:      EDIT (Itinerary-ID)");
-      System.out.println("5] Share an Itinerary:     SHARE (Itinerary-ID) (Email id)");
-      System.out.println("Enter X to exit the Application");
+      System.out.println("5] Share an Itinerary:     SHARE (Itinerary-ID) (Email id)\n");
+      // TODO - Implement User Profile Operations
+      System.out.println("User Profile Operations:");
+      // This will print all the itineraries that are created by this user,
+      // and with whom he has shared it with
+      System.out.println("a] List of Created and Shared Itineraries:        LIST CREATED");
+      // This will print out the itineraries that you have been invited to collaborate
+      // And you're not the owner but a collaborator for that Itinerary.
+      System.out.println("b] List of Collaborated Itineraries (Non-Owner):  LIST COLLAB");
+      System.out.println("Enter X to exit the Application and Logout!");
     }
 
     System.out.println("\nPlease enter your intended action: ");

@@ -56,7 +56,8 @@ public class ServerMainApplication {
 
 
       for (int i = 0; i < numberOfServers; i++) {
-        Server server = new KeyValueStoreServer("KVS" + i);
+        // TODO - check is userDb is needed or UserDbSerStub
+        Server server = new KeyValueStoreServer("KVS" + i, userDb);
         listOfServers.add((PaxosServer) server);
 
         Server serverStub = (Server) UnicastRemoteObject.exportObject(server, i);
