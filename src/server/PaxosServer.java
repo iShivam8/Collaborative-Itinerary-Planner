@@ -27,7 +27,7 @@ public interface PaxosServer extends Remote {
    * @return - Result of PUT and DELETE operation after PAXOS is completed.
    * @throws RemoteException
    */
-  String startPaxos(String[] inputTokens) throws RemoteException;
+  String startPaxos(String[] inputTokens, String operation) throws RemoteException;
 
   /**
    * Proposer uses this method for sending prepare(sequenceId) message of PAXOS.
@@ -62,5 +62,5 @@ public interface PaxosServer extends Remote {
    * @return - Result of PUT and DELETE operations when the commit actually occurs.
    * @throws RemoteException
    */
-  String learn(String key, String value) throws RemoteException;
+  String learn(String key, String value, String operation) throws RemoteException;
 }

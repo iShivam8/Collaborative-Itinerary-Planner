@@ -60,7 +60,9 @@ public class User implements Serializable {
   // This method is for current users, who is the owner of itinerary
   // Current user can see how many itineraries he has created
   public void setListOfCreatedItinerary(Itinerary createdItinerary) {
-    this.listOfCreatedItinerary.add(createdItinerary);
+    if (!this.listOfCreatedItinerary.contains(createdItinerary)) {
+      this.listOfCreatedItinerary.add(createdItinerary);
+    }
   }
   public List<Itinerary> getListOfCreatedItinerary() {
     return this.listOfCreatedItinerary;

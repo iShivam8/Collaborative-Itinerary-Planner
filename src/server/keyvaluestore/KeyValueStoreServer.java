@@ -1,5 +1,6 @@
 package server.keyvaluestore;
 
+import static server.keyvaluestore.UniqueIdGenerator.generateId;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -15,6 +16,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import com.google.gson.Gson;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import logs.Logger;
 import server.PaxosServer;
 import server.Promise;
@@ -76,7 +79,9 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public String startPaxos(String[] inputTokens) throws RemoteException {
+  public String startPaxos(String[] inputTokens, String operation) throws RemoteException {
+
+    // PUT,  1223123, TripName
 
     String key = inputTokens[1], value = null;
 
@@ -212,12 +217,12 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       logger.debug(true, "Consensus has been reached! Learning and Committing the value: ",
           value, " for Key: ", key);
 
-      String response = learn(key, value);
+      String response = learn(key, value, operation);
 
       for (Map.Entry<String, PaxosServer> entry: acceptors.entrySet()) {
         if (!serverId.equals(entry.getKey())) {
           String finalValue = value;
-          executorService.submit(() -> entry.getValue().learn(key, finalValue));
+          executorService.submit(() -> entry.getValue().learn(key, finalValue, operation));
         }
       }
 
@@ -316,31 +321,70 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public String learn(String key, String value) throws RemoteException {
+  public String learn(String key, String value, String operation) throws RemoteException {
+    // operation = PUT / GET / DELETE / EDIT / SHARE
+
     // Need to commit the accepted value
     logger.debug(true, "Learning and Committing the Value: ", value, " for Key: ", key);
 
-    String[] operation;
+    String[] stringCompleteOperation = null;
 
-    if (value == null) {
-      operation = new String[2];
-      operation[0] = "DELETE";
-      operation[1] = key;
-    } else {
-      operation = new String[3];
-      operation[0] = "PUT";
-      operation[1] = key;
-      operation[2] = value;
+    switch (operation) {
+      case "PUT":
+        stringCompleteOperation = new String[3];
+        stringCompleteOperation[0] = "INSERT";
+        stringCompleteOperation[1] = key;
+        stringCompleteOperation[2] = value;
+        break;
+      case "DELETE":
+        stringCompleteOperation = new String[2];
+        stringCompleteOperation[0] = "DELETE";
+        stringCompleteOperation[1] = key;
+        break;
+      case "EDIT":
+        stringCompleteOperation = new String[2];
+        stringCompleteOperation[0] = "EDIT";
+        stringCompleteOperation[1] = key;
+        break;
+      case "SHARE":
+        stringCompleteOperation = new String[3];
+        stringCompleteOperation[0] = "SHARE";
+        stringCompleteOperation[1] = key;
+        stringCompleteOperation[2] = value;
+        break;
     }
+
+    /*
+    if (value == null) {
+      stringCompleteOperation = new String[2];
+      stringCompleteOperation[0] = "DELETE";
+      stringCompleteOperation[1] = key;
+    } else {
+      stringCompleteOperation = new String[3];
+      stringCompleteOperation[0] = "PUT";
+      stringCompleteOperation[1] = key;
+      stringCompleteOperation[2] = value;
+    }
+     */
 
     String result;
 
+    /*
     if (operation[0].equals("PUT")) {
       result = "Itinerary Created";
     } else {
       result = keyValueStore.executeOperation(operation, user);
     }
 
+    if (stringCompleteOperation[0].equals("PUT")) {
+      stringCompleteOperation[0] = "INSERT";
+      stringCompleteOperation[1] = key;
+      stringCompleteOperation[2] = value; // TODO - value is only name, because of String input constraint
+    }
+     */
+
+    assert stringCompleteOperation != null;
+    result = keyValueStore.executeOperation(stringCompleteOperation, user);
     metadata.remove(key);
     return result;
   }
@@ -354,12 +398,14 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
     String result;
     String[] tokens = keyValueStore.parseMessage(inputMessage);
-    String validatedResponse = keyValueStore.validateTokens(tokens);
+    String[] validatedResponse = keyValueStore.validateTokens(tokens);
+    // validatedResponse[0] = (Valid/Invalid + PAXOS);
+    // validatedResponse[1] = operation name PUT/GET/DELETE/EDIT/SHARE
 
-    if (validatedResponse.startsWith("Invalid")) {
-      result = validatedResponse;
-    } else if (validatedResponse.contains("PAXOS")) {
-      result = startPaxos(tokens);
+    if (validatedResponse[0].startsWith("Invalid")) {
+      result = validatedResponse[0];
+    } else if (validatedResponse[0].contains("PAXOS")) {
+      result = startPaxos(tokens, validatedResponse[1]);
     } else {
       result = keyValueStore.executeOperation(tokens, currentUser);
     }
@@ -372,17 +418,52 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   public String putItinerary(Itinerary itinerary, User currentUser) throws RemoteException {
     logger.debug(true, "Itinerary received from the Client: ", itinerary.getName());
 
-    String itineraryId = keyValueStore.addItinerary(itinerary, currentUser);
-    String[] tokens = {"PUT", itineraryId, itinerary.getName()};
-    String result = startPaxos(tokens);
+    String itineraryId = generateId();
+    //String itineraryId = keyValueStore.addItinerary(itinerary, currentUser);
+
+    // Converting itinerary object to string for PAXOS
+    logger.debug(true, "Serializing the Itinerary: ",  itinerary.getName());
+
+    /*
+    String itineraryJson = null;
+    try {
+      // Create a new Callable object to serialize the itinerary
+      Callable<String> serializeItinerary = () -> new Gson().toJson(itinerary);
+
+      // Creating a new ExecutorService with a single thread
+      ExecutorService executor = Executors.newSingleThreadExecutor();
+
+      // Submitting the Callable object to the ExecutorService and get a Future object
+      Future<String> future = executor.submit(serializeItinerary);
+
+      // Wait for the serialization to complete and get the serialized JSON string
+      itineraryJson = future.get();
+
+      // Shutdown the ExecutorService
+      executor.shutdown();
+    } catch (ExecutionException | InterruptedException e) {
+      e.printStackTrace();
+    }
+    */
+
+    String itineraryJson = new Gson().toJson(itinerary);
+    logger.debug(true, "Successfully Serialized the Itinerary: ",  itinerary.getName());
+
+    assert itineraryJson != null;
+    String[] tokens = {"PUT", itineraryId, itineraryJson};
+
+    String result = startPaxos(tokens, "PUT");
+
+    // TODO - Start paxos, internally if it has PUT, it'll convert to INSERT,
+    //  and create new if else for insert, over there call add to keystore
 
     // TODO - Not receiving Itinerary ID on Client side
 
-    logger.debug(true, "Sending response message to the Client: ", itineraryId);
+    logger.debug(true, "Sending response message to the Client: ", result);
     logger.debug(true, "Client Access the Created Itinerary of: ",
-        itinerary.getName(), ", with Unique Key ID: ", itineraryId);
+        itinerary.getName(), ", with Unique Key ID: ", result);
 
-    return itineraryId;
+    return result;
   }
 
 

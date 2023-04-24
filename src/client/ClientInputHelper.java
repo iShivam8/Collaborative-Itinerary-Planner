@@ -31,9 +31,9 @@ public class ClientInputHelper {
     try {
       String userInput = bufferedReader.readLine().trim();
 
-      if (userInput.equalsIgnoreCase("Signup")) {
+      if (userInput.equalsIgnoreCase("Signup") || userInput.equals("1")) {
         return "SignUp";
-      } else if (userInput.equalsIgnoreCase("Login")) {
+      } else if (userInput.equalsIgnoreCase("Login") || userInput.equals("2")) {
         return "LogIn";
       }
 
@@ -269,9 +269,7 @@ public class ClientInputHelper {
     }
 
     try {
-      Itinerary itinerary = new Itinerary(name, location, startDate, endDate, description, user);
-      //user.setListOfCreatedItinerary(itinerary);
-      return itinerary;
+      return new Itinerary(name, location, startDate, endDate, description, user);
     } catch (Exception e) {
       System.out.println("Error while creating a new Itinerary! Please try Again!");
       e.printStackTrace();

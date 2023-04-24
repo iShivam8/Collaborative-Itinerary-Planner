@@ -1,6 +1,7 @@
 package server.keyvaluestore;
 
 import static server.keyvaluestore.UniqueIdGenerator.generateId;
+import com.google.gson.Gson;
 import java.rmi.RemoteException;
 import java.util.concurrent.ConcurrentHashMap;
 import logs.Logger;
@@ -33,41 +34,41 @@ public class KeyValueStore {
    * @param tokens - tokens those need the validation
    * @return - Valid or Invalid operation response
    */
-  String validateTokens(String[] tokens) {
+  String[] validateTokens(String[] tokens) {
 
     if (tokens.length == 1) {
       // PUT
       if (tokens[0].equalsIgnoreCase("PUT")) {
-        return "Valid Operation. PUT.";
+        return new String[] {"Valid Operation. PUT.", "PUT"};
       } else {
         logger.error(true, "Invalid operation", tokens[0]);
-        return "Invalid operation: " + tokens[0] + ". Only PUT is supported with Single operand.";
+        return new String[] {"Invalid operation: " + tokens[0] + ". Only PUT is supported with Single operand."};
       }
     } else if (tokens.length == 2) {
       if (tokens[0].equalsIgnoreCase("GET")) {
-        return "Valid Operation.";
+        return new String[] {"Valid Operation.", "GET"};
       } else if (tokens[0].equalsIgnoreCase("DELETE")) {
-        return "Valid Operation. PAXOS. DELETE.";
+        return new String[] {"Valid Operation. PAXOS. DELETE.", "DELETE"};
       } else if (tokens[0].equalsIgnoreCase("EDIT")) {
-        return "Valid Operation. PAXOS. EDIT.";
+        return new String[] {"Valid Operation. PAXOS. EDIT.", "EDIT"};
       } else {
         logger.error(true, "Invalid operation", tokens[0]);
-        return "Invalid operation: " + tokens[0] + ". Only GET, DELETE, and EDIT are supported with " +
-            "Two operands.";
+        return new String[] {"Invalid operation: " + tokens[0] + ". Only GET, DELETE, and EDIT are supported with " +
+            "Two operands."};
       }
     } else if (tokens.length == 3) {
       if (tokens[0].equalsIgnoreCase("SHARE")) {
         // TODO Add PAXOS.
-        return "Valid Operation. SHARE.";
+        return new String[] {"Valid Operation. SHARE.", "SHARE"};
       } else {
         logger.error(true, "Invalid operation", tokens[0]);
-        return "Invalid operation: " + tokens[0] + ". Only SHARE is supported with " +
-            "Three operands.";
+        return new String[] {"Invalid operation: " + tokens[0] + ". Only SHARE is supported with " +
+            "Three operands."};
       }
     } else {
       logger.error(true, "Invalid number of operands in the request.");
-      return "Invalid number of operands in the request. Only PUT, GET, DELETE, EDIT, and SHARE " +
-          "are supported as operations.";
+      return new String[] {"Invalid number of operands in the request. Only PUT, GET, DELETE, EDIT, and SHARE " +
+          "are supported as operations."};
     }
   }
 
@@ -80,13 +81,36 @@ public class KeyValueStore {
    */
   synchronized String executeOperation(String[] tokens, User currentUser) {
 
-    // Tokens:  Put;    Get|123;    Delete|123;    EDIT|123;   Share|123|a@a.com;
+    // Tokens:  Put --> INSERT;    Get|123;    Delete|123;    EDIT|123;   Share|123|a@a.com;
 
     if (tokens[0].equalsIgnoreCase("PUT")) {
       // Need to update in User class, the list of Itineraries
       // USER <--> Itinerary
 
       return "Enter Itinerary Details";
+
+    } else if (tokens[0].equalsIgnoreCase("INSERT")) {
+
+      // tokens[1] contains unique Key ID
+      // tokens[2] contains serialized itinerary
+
+      // Deserializing Itinerary JSON object back to Itinerary
+      Itinerary itinerary = new Gson().fromJson(tokens[2], Itinerary.class);
+      logger.debug(true, "Successfully Deserialized the Itinerary: ",  itinerary.getName());
+
+      //addItinerary(itinerary);
+      // TODO - What if the KVS contains key already?
+      //  Can we skip that and use this method for EDIT as well?
+
+      this.keyValueStore.put(tokens[1], itinerary);
+
+      // Adding this itinerary in the list of created itinerary of the Current User
+      currentUser.setListOfCreatedItinerary(itinerary);
+      logger.debug(true, "Itinerary '", itinerary.getName(),
+          "' Added in the List of Created Itineraries of User: ", currentUser.getName());
+
+      return tokens[1];
+
 
     } else if (tokens[0].equalsIgnoreCase("GET")) {
       // The Token[1] is the Random unique ID generated. Should it be int or string?
@@ -192,15 +216,10 @@ public class KeyValueStore {
     return null;
   }
 
-  /**
-   * Method that adds the itinerary to the KeyValueStore
-   * @param itinerary - Created Itinerary by the user
-   * @param currentUser - Current User who created the Itinerary
-   * @return - Itinerary ID KEY
-   */
-  public String addItinerary(Itinerary itinerary, User currentUser) {
+
+  public String addItinerary(String uniqueKeyId, Itinerary itinerary, User currentUser) {
     if (itinerary != null) {
-      String uniqueKeyId = generateId();
+      //String uniqueKeyId = generateId();
 
       this.keyValueStore.put(uniqueKeyId, itinerary);
 

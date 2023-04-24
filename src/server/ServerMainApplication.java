@@ -10,6 +10,9 @@ import logs.Logger;
 import server.keyvaluestore.KeyValueStoreServer;
 import server.user.UserDBServer;
 
+/**
+ * Entry Gateway for Server.
+ */
 public class ServerMainApplication {
 
   public static void main(String[] args) {
@@ -49,14 +52,13 @@ public class ServerMainApplication {
       Registry registry = LocateRegistry.createRegistry(port);
 
       Server userDb = new UserDBServer("UserDB");
-      Server userDbServerStub = (Server) UnicastRemoteObject.exportObject(userDb, 0);
+      Server userDbServerStub = (Server) UnicastRemoteObject.exportObject(userDb, port);
       registry.rebind("UserDB", userDbServerStub);
 
       logger.debug(true, "Server bounded with stub UserDB to RMI Registry.");
 
 
       for (int i = 0; i < numberOfServers; i++) {
-        // TODO - check is userDb is needed or UserDbSerStub
         Server server = new KeyValueStoreServer("KVS" + i, userDb);
         listOfServers.add((PaxosServer) server);
 

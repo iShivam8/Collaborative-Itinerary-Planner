@@ -5,6 +5,7 @@ import static client.ClientInputHelper.fetchLoginInput;
 import static client.ClientInputHelper.fetchSignUpInput;
 import static client.ClientInputHelper.fetchUserOperationInput;
 import static client.ClientInputHelper.fetchSignupOrLoginInput;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,7 @@ public class Client {
   private final int port;
   private final int serverId;
   private final Logger logger;
+  private boolean prompt = true;
 
   private Server userDbServer, keyValueStoreServer;
 
@@ -125,8 +127,6 @@ public class Client {
     System.out.println("Client is connected to the server");
 
     try {
-
-      boolean prompt = true;
       while (true) {
 
         //System.out.println("Current User: " + this.user.getName());
@@ -135,8 +135,8 @@ public class Client {
         String request = fetchUserOperationInput(prompt);
         logger.debug(false, "Received request from user: ", request);
 
-        if (prompt) {
-          prompt = false;
+        if (this.prompt) {
+          this.prompt = false;
         }
 
         if (request != null) {
@@ -158,34 +158,9 @@ public class Client {
           System.out.println("Response from server: " + response);
 
           if (response != null) {
+            // Execute Operation from server sent this response because of PUT method
             if (response.equalsIgnoreCase("Enter Itinerary Details")) {
-              // Ask for user input for itinerary details
-              Itinerary itinerary = fetchItineraryInput(user);
-              user.setListOfCreatedItinerary(itinerary);
-
-              // To carry on getting continuous input from user for the 5 operations
-              prompt = true;
-
-              if (itinerary != null) {
-                // Add the itinerary in the KeyValueStore
-                logger.debug(false, "Sending Itinerary request to the server: ",
-                    itinerary.getName());
-                String itineraryResponse = keyValueStoreServer.putItinerary(itinerary, this.user);
-                logger.debug(false, "Response from server: ", itineraryResponse);
-                //System.out.println("Response from server: " + itineraryResponse);
-
-
-                if (itineraryResponse.startsWith("Error")) {
-                  System.out.println("Response from server: " + itineraryResponse);
-                  logger.error(true, "Couldn't add your created Itinerary: ",
-                      itinerary.getName());
-                } else {
-                  System.out.println("Itinerary Added with Name: '"+ itinerary.getName() +
-                      "'  Your Unique ID for Accessing it is: " + itineraryResponse);
-                  logger.debug(false, "Itinerary Added with Name: '", itinerary.getName(),
-                      "'  and you can access it using Unique ID: ", itineraryResponse);
-                }
-              }
+              sendItineraryToServer();
             }
           }
         }
@@ -193,6 +168,36 @@ public class Client {
     } catch (Exception e) {
       logger.error(true, "Error connecting client with server!");
       e.printStackTrace();
+    }
+  }
+
+  // Helper method to send Itinerary Inputs from the client to server
+  private void sendItineraryToServer() throws RemoteException {
+    // Ask for user input for itinerary details
+    Itinerary itinerary = fetchItineraryInput(user);
+
+    // To carry on getting continuous input from user for the 5 operations
+    this.prompt = true;
+
+    if (itinerary != null) {
+      // Add the itinerary in the KeyValueStore
+      logger.debug(false, "Sending Itinerary request to the server: ",
+          itinerary.getName());
+      String itineraryResponse = keyValueStoreServer.putItinerary(itinerary, this.user);
+      logger.debug(false, "Response from server: ", itineraryResponse);
+      //System.out.println("Response from server: " + itineraryResponse);
+
+
+      if (itineraryResponse.startsWith("Error")) {
+        System.out.println("Response from server: " + itineraryResponse);
+        logger.error(true, "Couldn't add your created Itinerary: ",
+            itinerary.getName());
+      } else {
+        System.out.println("Itinerary Added with Name: '"+ itinerary.getName() +
+            "'  Your Unique ID for Accessing it is: " + itineraryResponse);
+        logger.debug(false, "Itinerary Added with Name: '", itinerary.getName(),
+            "'  and you can access it using Unique ID: ", itineraryResponse);
+      }
     }
   }
 
