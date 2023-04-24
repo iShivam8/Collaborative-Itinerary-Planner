@@ -89,6 +89,8 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       value = inputTokens[2];
     }
 
+    String tempValue = parseJson(value);
+
     int minMajority = acceptors.size() / 2 + 1;
     ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -171,7 +173,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
        */
 
       List<Callable<Boolean>> proposeTasks = new ArrayList<>();
-      logger.debug(true, "Initiating PAXOS Phase 2 with proposed value: ", value);
+      logger.debug(true, "Initiating PAXOS Phase 2 with proposed value: ", tempValue);
 
       for (PaxosServer acceptor: acceptors.values()) {
         String finalValue = value;
@@ -215,7 +217,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
        */
 
       logger.debug(true, "Consensus has been reached! Learning and Committing the value: ",
-          value, " for Key: ", key);
+          tempValue, " for Key: ", key);
 
       String response = learn(key, value, operation);
 
@@ -232,6 +234,17 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     logger.error(true, "Error! Consensus could Not be reached even after " +
         "Maximum number of tries!");
     return "Failed";
+  }
+
+  // Helper method to parse the JSON object and fetch the Itinerary Name for logging purpose
+  private String parseJson(String jsonValue) {
+    if (jsonValue != null) {
+      Gson gson = new Gson();
+      Itinerary itinerary = gson.fromJson(jsonValue, Itinerary.class);
+      return itinerary.getName();
+    }
+
+    return null;
   }
 
   // Helper method to generate current system time as the sequence id number
@@ -288,8 +301,10 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       return null;
     }
 
+    String tempValue = parseJson(value);
+
     logger.debug(true, "Prepare() request received with sequence id: ",
-        String.valueOf(sequenceId), ", for Key: ", key, ", and Proposed value: ", value);
+        String.valueOf(sequenceId), ", for Key: ", key, ", and Proposed value: ", tempValue);
 
     if (!metadata.containsKey(key)) {
       logger.error(true, "Cannot execute propose() Key does not have the correct metadata");
@@ -309,7 +324,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     // If everything is fine, accept the current proposal
     // Store its value and the sequence id number as the accepted value, and accepted sequence id
 
-    logger.debug(true, "Accepting proposed value: ", value, ", for Key: ", key,
+    logger.debug(true, "Accepting proposed value: ", tempValue, ", for Key: ", key,
         ", and setting the accepted sequence id number to: ", String.valueOf(sequenceId));
 
     metadata.get(key).setStatus("Accepted");
@@ -324,8 +339,11 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   public String learn(String key, String value, String operation) throws RemoteException {
     // operation = PUT / GET / DELETE / EDIT / SHARE
 
+    String tempValue = parseJson(value);
+
     // Need to commit the accepted value
-    logger.debug(true, "Learning and Committing the Value: ", value, " for Key: ", key);
+    logger.debug(true, "Learning and Committing the Value: ", tempValue,
+        " for Key: ", key);
 
     String[] stringCompleteOperation = null;
 
@@ -354,34 +372,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
         break;
     }
 
-    /*
-    if (value == null) {
-      stringCompleteOperation = new String[2];
-      stringCompleteOperation[0] = "DELETE";
-      stringCompleteOperation[1] = key;
-    } else {
-      stringCompleteOperation = new String[3];
-      stringCompleteOperation[0] = "PUT";
-      stringCompleteOperation[1] = key;
-      stringCompleteOperation[2] = value;
-    }
-     */
-
     String result;
-
-    /*
-    if (operation[0].equals("PUT")) {
-      result = "Itinerary Created";
-    } else {
-      result = keyValueStore.executeOperation(operation, user);
-    }
-
-    if (stringCompleteOperation[0].equals("PUT")) {
-      stringCompleteOperation[0] = "INSERT";
-      stringCompleteOperation[1] = key;
-      stringCompleteOperation[2] = value; // TODO - value is only name, because of String input constraint
-    }
-     */
 
     assert stringCompleteOperation != null;
     result = keyValueStore.executeOperation(stringCompleteOperation, user);
