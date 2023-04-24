@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import server.itinerary.Itinerary;
 import server.user.User;
@@ -196,11 +200,16 @@ public class ClientInputHelper {
       try {
         System.out.print("3] Enter Start Date (MM/dd/yyyy): ");
         startDate = sdf.parse(br.readLine());
+
+        validateStartDate(startDate);
+
         validStartDate = true;
       } catch (ParseException e) {
         System.out.println("Invalid date format! Enter date in MM/dd/yyyy format.");
       } catch (IOException e) {
         System.out.println("Error reading Start Date input! Please try again.");
+      } catch (DateTimeException de) {
+        // Throw exception
       }
     }
 
@@ -208,18 +217,20 @@ public class ClientInputHelper {
     boolean validEndDate = false;
     while (!validEndDate) {
       try {
-        System.out.print("Enter End Date (MM/dd/yyyy): ");
+        System.out.print("4] Enter End Date (MM/dd/yyyy): ");
         endDate = sdf.parse(br.readLine());
+
+        validateEndDate(startDate, endDate);
+
         validEndDate = true;
       } catch (ParseException e) {
         System.out.println("Invalid date format! Enter date in MM/dd/yyyy format.");
       } catch (IOException e) {
         System.out.println("Error reading End Date input! Please try again.");
+      } catch (DateTimeException de) {
+        // Throw exception
       }
     }
-
-    // TODO - Check if end date is before start date or not
-
 
     // Taking Itinerary Description
     try {
@@ -227,6 +238,8 @@ public class ClientInputHelper {
       description = br.readLine();
 
       /*
+      //For taking continuous input
+
       try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
         String line;
         while ((line = reader.readLine()) != null && line.length() > 0) {
@@ -252,5 +265,29 @@ public class ClientInputHelper {
     }
 
     return null;
+  }
+
+  private static void validateStartDate(Date startDate) {
+    // Get today's date
+    LocalDate today = LocalDate.now();
+    LocalDate startLocalDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+    if(startLocalDate.isBefore(today)) {
+      System.out.println("Start date cannot be before today's date.");
+      throw new DateTimeException("Start date cannot be before today's date.");
+    }
+  }
+
+  // Helper method to validate End date
+  private static void validateEndDate(Date startDate, Date endDate) {
+     if (endDate.compareTo(startDate) < 0) {
+      // end date is before start date
+      System.out.println("End date cannot be before start date");
+      throw new DateTimeException("End date cannot be before start date");
+    } else if (startDate.compareTo(endDate) > 0) {
+       // start date is after end date
+       System.out.println("Start date cannot be after end date");
+       throw new DateTimeException("tart date cannot be after end date");
+     }
   }
 }

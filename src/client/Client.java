@@ -151,7 +151,6 @@ public class Client {
           if (response.equalsIgnoreCase("Enter Itinerary Details")) {
             // Ask for user input for itinerary details
             User user = userDbServer.getUser();
-            System.out.println("User: " + user.toString());
             Itinerary itinerary = fetchItineraryInput(user);
             user.setListOfCreatedItinerary(itinerary);
 
@@ -164,24 +163,23 @@ public class Client {
                   itinerary.getName());
               String itineraryResponse = keyValueStoreServer.putItinerary(itinerary);
               logger.debug(false, "Response from server: ", itineraryResponse);
+              //System.out.println("Response from server: " + itineraryResponse);
 
-              /*
+
               if (itineraryResponse.startsWith("Error")) {
                 System.out.println("Response from server: " + itineraryResponse);
-                logger.debug(true, "Couldn't add your created Itinerary: ",
+                logger.error(true, "Couldn't add your created Itinerary: ",
                     itinerary.getName());
               } else {
-                System.out.println("Your Unique ID for Accessing Itinerary " + itinerary.getName() +
-                    " is: " + itineraryResponse);
-                logger.debug(true, "Itinerary Added with Name: ", itinerary.getName(),
-                    " and you can access it using Unique ID: ", itineraryResponse);
+                System.out.println("Itinerary Added with Name: '"+ itinerary.getName() +
+                    "'  Your Unique ID for Accessing it is: " + itineraryResponse);
+                logger.debug(false, "Itinerary Added with Name: '", itinerary.getName(),
+                    "'  and you can access it using Unique ID: ", itineraryResponse);
               }
-              */
             }
           }
         }
       }
-
     } catch (Exception e) {
       logger.error(true, "Error connecting client with server!");
       e.printStackTrace();

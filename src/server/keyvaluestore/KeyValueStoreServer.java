@@ -330,7 +330,14 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       operation[2] = value;
     }
 
-    String result = keyValueStore.executeOperation(operation);
+    String result;
+
+    if (operation[0].equals("PUT")) {
+      result = "Itinerary Created";
+    } else {
+      result = keyValueStore.executeOperation(operation);
+    }
+
     metadata.remove(key);
     return result;
   }
@@ -363,16 +370,15 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
     String itineraryId = keyValueStore.addItinerary(itinerary);
     String[] tokens = {"PUT", itineraryId, itinerary.getName()};
-
     String result = startPaxos(tokens);
 
     // TODO - Not receiving Itinerary ID on Client side
 
-    logger.debug(true, "Sending response message to the Client: ", result);
-    logger.debug(true, "You can Access your Created Itinerary of: ",
+    logger.debug(true, "Sending response message to the Client: ", itineraryId);
+    logger.debug(true, "Client Access the Created Itinerary of: ",
         itinerary.getName(), ", with Unique Key ID: ", itineraryId);
 
-    return result;
+    return itineraryId;
   }
 
 
