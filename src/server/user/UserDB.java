@@ -9,6 +9,8 @@ public class UserDB {
   private final ConcurrentHashMap<String, User> userDatabase;
   private final Logger logger;
 
+  private User loggedInUser;
+
   public UserDB(String fileName, String serverId) {
     this.userDatabase = new ConcurrentHashMap<>();
     this.logger = new Logger(fileName, serverId);
@@ -75,6 +77,10 @@ public class UserDB {
       } else {
         // Add the newly created user in User database
         userDatabase.put(email, user);
+
+        // TODO - Send the user to client
+        setLoggedInUser(user);
+
         logger.debug(true, "Successfully created a new user with Email: ", email);
         return "User Created";
       }
@@ -115,6 +121,10 @@ public class UserDB {
       if (user.getPassword().equals(password)) {
         // Sign in user: Correct Email, Password
         user.setLoggedIn(true);
+
+        // TODO send the logged in user to client
+        setLoggedInUser(user);
+
         logger.debug(true, "User found with Email: ", email, ", and Name: ", user.getName());
         return "User Logged in";
       } else {
@@ -129,6 +139,15 @@ public class UserDB {
 
     logger.error(true, "Error while logging in!");
     return "Error while logging in";
+  }
+
+  private void setLoggedInUser(User user) {
+    this.loggedInUser = user;
+  }
+
+  // Helper method to return the logged in user
+  User getLoggedInUser() {
+    return this.loggedInUser;
   }
 
   /**

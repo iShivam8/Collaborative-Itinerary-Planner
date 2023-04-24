@@ -1,5 +1,6 @@
 package client;
 
+import static client.ClientInputHelper.fetchItineraryInput;
 import static client.ClientInputHelper.fetchLoginInput;
 import static client.ClientInputHelper.fetchSignUpInput;
 import static client.ClientInputHelper.fetchUserOperationInput;
@@ -10,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import logs.Logger;
 import server.Server;
+import server.itinerary.Itinerary;
 import server.user.User;
 
 /**
@@ -23,10 +25,9 @@ public class Client {
   private final int serverId;
   private final Logger logger;
 
-  private Server server;
+  private Server userDbServer, keyValueStoreServer;
 
   // TODO - Use any fields from below to keep a track of whether the client is signed in or not
-  private User user;
   private boolean isSignedIn;
 
   /**
@@ -54,7 +55,7 @@ public class Client {
       logger.debug(false, "Found RMI registry!");
 
       logger.debug(false, "Looking for the User Database server stub...");
-      this.server = (Server) registry.lookup("UserDB");
+      userDbServer = (Server) registry.lookup("UserDB");
       logger.debug(false, "Found the User Database server stub!");
 
       // Server asks for Log in Sign up
@@ -68,11 +69,11 @@ public class Client {
         if (signupOrLoginInput.equalsIgnoreCase("Signup")) {
           String signUpInput = fetchSignUpInput();
           logger.debug(false, "Sending sign up request to the server: ", signUpInput);
-          response = server.signUp(signUpInput);
+          response = userDbServer.signUp(signUpInput);
         } else if (signupOrLoginInput.equalsIgnoreCase("Login")) {
           String loginInput = fetchLoginInput();
           logger.debug(false, "Sending login request to the server: ", loginInput);
-          response = server.login(loginInput);
+          response = userDbServer.login(loginInput);
         }
 
         if (response != null) {
@@ -106,7 +107,7 @@ public class Client {
       logger.debug(false, "Found RMI registry!");
 
       logger.debug(false, "Looking for the Itinerary KeyValueStore server stub...");
-      this.server = (Server) registry.lookup("KVS" + serverId);
+      keyValueStoreServer = (Server) registry.lookup("KVS" + serverId);
       logger.debug(false, "Found the Itinerary KeyValueStore server stub!");
     } catch (Exception e) {
       logger.error(false, "Error connecting to KeyValueStore RMI registry and " +
@@ -143,14 +144,47 @@ public class Client {
 
           logger.debug(false, "Sending request to the server: ", request);
           // Server executes the user inputs and sends the response
-          String response = server.executeOperation(request);
+          String response = keyValueStoreServer.executeOperation(request);
           logger.debug(false, "Response from server: ", response);
           System.out.println("Response from server: " + response);
+
+          if (response.equalsIgnoreCase("Enter Itinerary Details")) {
+            // Ask for user input for itinerary details
+            User user = userDbServer.getUser();
+            System.out.println("User: " + user.toString());
+            Itinerary itinerary = fetchItineraryInput(user);
+            user.setListOfCreatedItinerary(itinerary);
+
+            // To carry on getting continuous input from user for the 5 operations
+            prompt = true;
+
+            if (itinerary != null) {
+              // Add the itinerary in the KeyValueStore
+              logger.debug(false, "Sending Itinerary request to the server: ",
+                  itinerary.getName());
+              String itineraryResponse = keyValueStoreServer.putItinerary(itinerary);
+              logger.debug(false, "Response from server: ", itineraryResponse);
+
+              /*
+              if (itineraryResponse.startsWith("Error")) {
+                System.out.println("Response from server: " + itineraryResponse);
+                logger.debug(true, "Couldn't add your created Itinerary: ",
+                    itinerary.getName());
+              } else {
+                System.out.println("Your Unique ID for Accessing Itinerary " + itinerary.getName() +
+                    " is: " + itineraryResponse);
+                logger.debug(true, "Itinerary Added with Name: ", itinerary.getName(),
+                    " and you can access it using Unique ID: ", itineraryResponse);
+              }
+              */
+            }
+          }
         }
       }
 
     } catch (Exception e) {
-      logger.error(true, "Error connecting client with server! Unable to Sign In!");
+      logger.error(true, "Error connecting client with server!");
+      e.printStackTrace();
     }
   }
 

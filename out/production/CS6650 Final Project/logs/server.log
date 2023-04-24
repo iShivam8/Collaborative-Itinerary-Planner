@@ -1,6 +1,0 @@
-2023-04-23 14:13:04.750  [DEBUG]   Starting the servers...
-2023-04-23 14:13:04.751  [DEBUG]   Creating RMI Registry at port:  1099
-2023-04-23 14:13:04.912  [DEBUG]   Server bounded with stub UserDB to RMI Registry.
-2023-04-23 14:13:04.916  [DEBUG]   Server bounded with stub KVS0, to RMI Registry.
-2023-04-23 14:13:04.916  [DEBUG]   Server bounded with stub KVS1, to RMI Registry.
-2023-04-23 14:13:04.916  [DEBUG]   Server bounded with stub KVS2, to RMI Registry.

@@ -1,6 +1,5 @@
 package server;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -73,6 +72,7 @@ public class ServerMainApplication {
 
     } catch (RemoteException remoteException) {
       logger.error(true, "Cannot create RMI Registry! Please try again.");
+      remoteException.printStackTrace();
     }
   }
 }

@@ -1,18 +1,20 @@
 package server.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import server.itinerary.Itinerary;
 
 /**
  * Model class for User.
  */
-public class User {
+public class User implements Serializable {
 
   private String name, emailId, password;
 
   // Created Itinerary that the user has created by himself
   // Shared Itinerary that other users have created, and shared with this user
-  private List<Integer> listOfCreatedItinerary, listOfSharedItinerary;
+  private List<Itinerary> listOfCreatedItinerary, listOfSharedItinerary;
 
   private boolean isLoggedIn;
 
@@ -49,20 +51,20 @@ public class User {
     this.password = password;
   }
 
-  public List<Integer> getListOfCreatedItinerary() {
-    return listOfCreatedItinerary;
+  public List<Itinerary> getListOfCreatedItinerary() {
+    return this.listOfCreatedItinerary;
   }
 
-  public void setListOfCreatedItinerary(List<Integer> listOfCreatedItinerary) {
-    this.listOfCreatedItinerary = listOfCreatedItinerary;
+  public void setListOfCreatedItinerary(Itinerary createdItinerary) {
+    this.listOfCreatedItinerary.add(createdItinerary);
   }
 
-  public List<Integer> getListOfSharedItinerary() {
-    return listOfSharedItinerary;
+  public List<Itinerary> getListOfSharedItinerary() {
+    return this.listOfSharedItinerary;
   }
 
-  public void setListOfSharedItinerary(List<Integer> listOfSharedItinerary) {
-    this.listOfSharedItinerary = listOfSharedItinerary;
+  public void setListOfSharedItinerary(Itinerary sharedItinerary) {
+    this.listOfSharedItinerary.add(sharedItinerary);
   }
 
   public boolean isLoggedIn() {

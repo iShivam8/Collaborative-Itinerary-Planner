@@ -2,6 +2,8 @@ package server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import server.itinerary.Itinerary;
+import server.user.User;
 
 public interface Server extends Remote {
 
@@ -14,6 +16,16 @@ public interface Server extends Remote {
    * @throws RemoteException
    */
   String executeOperation(String inputMessage) throws RemoteException;
+
+  /**
+   * Method that adds a new itinerary in the KeyValueStore after getting the trip details
+   * from the client.
+   *
+   * @param itinerary - Itinerary object
+   * @return - Response whether the object is successfully added or not
+   * @throws RemoteException
+   */
+  String putItinerary(Itinerary itinerary) throws RemoteException;
 
   /**
    * Method used to allow the client to create a new account.
@@ -32,4 +44,11 @@ public interface Server extends Remote {
    * @throws RemoteException
    */
   String login(String loginInfo) throws RemoteException;
+
+  /**
+   * Method returns the current logged-in user.
+   *
+   * @return - User
+   */
+  User getUser() throws RemoteException;
 }

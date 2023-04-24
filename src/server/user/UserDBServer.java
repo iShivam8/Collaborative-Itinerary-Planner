@@ -3,6 +3,7 @@ package server.user;
 import java.rmi.RemoteException;
 import logs.Logger;
 import server.Server;
+import server.itinerary.Itinerary;
 
 public class UserDBServer implements Server {
 
@@ -14,11 +15,6 @@ public class UserDBServer implements Server {
     this.userDB = new UserDB("src/logs/userDB.log", serverId);
     this.serverId = serverId;
     this.logger = new Logger("src/logs/userDatabase_" + serverId + ".log", serverId);
-  }
-
-  @Override
-  public String executeOperation(String inputMessage) throws RemoteException {
-    return null;
   }
 
   @Override
@@ -55,5 +51,28 @@ public class UserDBServer implements Server {
 
     logger.debug(true, "Sending response message to the Client: ", result);
     return result;
+  }
+
+  @Override
+  public User getUser() {
+
+    if (userDB.getLoggedInUser().isLoggedIn()) {
+      logger.debug(true, "Found the Logged in user: ", userDB.getLoggedInUser().getName());
+      return userDB.getLoggedInUser();
+    }
+
+    logger.error(true, "Can't find logged in user!");
+    return null;
+  }
+
+  // Below methods are implemented in KeyValueStoreServer
+  @Override
+  public String executeOperation(String inputMessage) throws RemoteException {
+    return null;
+  }
+
+  @Override
+  public String putItinerary(Itinerary itinerary) throws RemoteException {
+    return null;
   }
 }
