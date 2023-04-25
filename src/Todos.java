@@ -13,10 +13,8 @@ public class Todos {
   // TODO - If a user has access to an itinerary then only he can edit or share or delete
 
   // GET
-  // TODO - If user does not have accesss to It i.e. he's not Owner nor Collaborator, he can't see it
+  // TODO - If user have access to It i.e. he's an Owner or Collaborator, he can't see it
 
   // SHARE
   // TODO - When a user shares It, the other users get call does not reflect the list of shared user
-  // TODO - When we first try to share an It, server says no user found (???)
-  // StartPaxos is getting called where the value is provided as Itinerary
 }

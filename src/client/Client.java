@@ -72,31 +72,29 @@ public class Client {
       if (signupOrLoginInput.equalsIgnoreCase("Signup")) {
         String  signUpInput = fetchSignUpInput();
 
-        assert signUpInput != null;
         String[] tokens = parseMessage(signUpInput);
         emailId = tokens[1];
 
         logger.debug(false, "Sending sign up request to the server: ", signUpInput);
-        response = userDbServer.signUp(signUpInput);
+        response = this.userDbServer.signUp(signUpInput);
       } else if (signupOrLoginInput.equalsIgnoreCase("Login")) {
         String loginInput = fetchLoginInput();
 
-        assert loginInput != null;
         String[] tokens = parseMessage(loginInput);
         emailId = tokens[0];
 
         logger.debug(false, "Sending login request to the server: ", loginInput);
-        response = userDbServer.login(loginInput);
+        response = this.userDbServer.login(loginInput);
       }
 
       if (response != null) {
         if (response.contains("User Created")) {
           this.setSignedIn(true);
-          this.user = userDbServer.getUser(emailId);
+          this.user = this.userDbServer.getUser(emailId);
           this.user.setLoggedIn(true);
         } else if (response.contains("User Logged in")) {
           this.setSignedIn(true);
-          this.user = userDbServer.getUser(emailId);
+          this.user = this.userDbServer.getUser(emailId);
           this.user.setLoggedIn(true);
         }
       }
@@ -142,7 +140,6 @@ public class Client {
     try {
       while (true) {
 
-        //System.out.println("Current User: " + this.user.getName());
         // For taking input after logging in
         // Request contains the input entered by the client for any operation
         String request = fetchUserOperationInput(prompt);

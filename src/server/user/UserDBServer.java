@@ -68,7 +68,7 @@ public class UserDBServer implements Server {
     }
 
     logger.debug(true, "Found the Logged in user: ", user.getName());
-    return user;
+    return this.userDB.fetchUser(emailId);
   }
 
   // Below methods are implemented in KeyValueStoreServer

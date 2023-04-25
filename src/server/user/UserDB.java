@@ -3,6 +3,9 @@ package server.user;
 import java.util.concurrent.ConcurrentHashMap;
 import logs.Logger;
 
+/**
+ * This class acts as the User Database that stores: Key: User Email, Value: User object.
+ */
 public class UserDB {
 
   // User Database with Key: Email, and Value: User object

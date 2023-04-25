@@ -3,6 +3,7 @@ package server.keyvaluestore;
 import com.google.gson.Gson;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import logs.Logger;
 import server.Server;
@@ -55,16 +56,28 @@ public class KeyValueStore {
       }
     } else if (tokens.length == 2) {
       if (tokens[0].equalsIgnoreCase("GET")) {
-        return new String[] {"Valid Operation. GET", "GET"};
+        return new String[] {"Valid Operation. GET.", "GET"};
       } else if (tokens[0].equalsIgnoreCase("DELETE")) {
         return new String[] {"Valid Operation. PAXOS. DELETE.", "DELETE"};
       } else if (tokens[0].equalsIgnoreCase("EDIT")) {
         return new String[] {"Valid Operation. PAXOS. EDIT.", "EDIT"};
-      } else {
+      } else if (tokens[0].equalsIgnoreCase("LIST")) {
+        if (tokens[1].equalsIgnoreCase("CREATED")) {
+          return new String[] {"Valid Operation. LIST.", "CREATED"};
+        } else if (tokens[1].equalsIgnoreCase("COLLAB")) {
+          return new String[] {"Valid Operation. LIST.", "COLLAB."};
+        } else {
+          logger.error(true, "Invalid LIST operation: ", tokens[1]);
+          return new String[] {
+              "Invalid operation: " + tokens[0] + " ", tokens[1], " Only CREATED and COLLAB " +
+              "are supported with LIST operands."};
+        }
+      }
+      else {
         logger.error(true, "Invalid operation", tokens[0]);
         return new String[] {
-            "Invalid operation: " + tokens[0] + ". Only GET, DELETE, and EDIT are supported with " +
-                "Two operands."};
+            "Invalid operation: " + tokens[0] + ". Only GET, DELETE, EDIT, and LIST are supported " +
+                "with Two operands."};
       }
     } else if (tokens.length == 3) {
       if (tokens[0].equalsIgnoreCase("SHARE")) {
@@ -97,11 +110,9 @@ public class KeyValueStore {
     if (tokens[0].equalsIgnoreCase("PUT")) {
       // Need to update in User class, the list of Itineraries
       // USER <--> Itinerary
-
       return "Enter Itinerary Details";
-
-    } else if (tokens[0].equalsIgnoreCase("INSERT")) {
-
+    }
+    else if (tokens[0].equalsIgnoreCase("INSERT")) {
       // tokens[1] contains unique Key ID
       // tokens[2] contains serialized itinerary
 
@@ -109,6 +120,7 @@ public class KeyValueStore {
       Itinerary itinerary = new Gson().fromJson(tokens[2], Itinerary.class);
       logger.debug(true, "Successfully Deserialized the Itinerary: ", itinerary.getName());
 
+      // TODO - The user is different due to diff Itinerary
       User ownerUser = itinerary.getCreatedBy();
 
       //addItinerary(itinerary);
@@ -116,6 +128,7 @@ public class KeyValueStore {
       //  Can we skip that and use this method for EDIT as well?
 
       this.keyValueStore.put(tokens[1], itinerary);
+      ownerUser.addSharedUserToMap(itinerary, null);
 
       // Adding this itinerary in the list of created itinerary of the Current User
       ownerUser.setListOfCreatedItinerary(itinerary);
@@ -124,7 +137,8 @@ public class KeyValueStore {
 
       return tokens[1];
 
-    } else if (tokens[0].equalsIgnoreCase("GET")) {
+    }
+    else if (tokens[0].equalsIgnoreCase("GET")) {
       // The Token[1] is the Random unique ID generated. Should it be int or string?
 
       // If Itinerary is not in the store
@@ -159,7 +173,8 @@ public class KeyValueStore {
           "You don't have access to it as a collaborator!");
       return "No Authorization Access";
 
-    } else if (tokens[0].equalsIgnoreCase("EDIT")) {
+    }
+    else if (tokens[0].equalsIgnoreCase("EDIT")) {
       // Search for specific key (It ID)
       // If found it, then ask for user input for itinerary enable PUT operation
       // If not found, return itinerary not found
@@ -181,7 +196,8 @@ public class KeyValueStore {
         return "Itinerary Not found";
       }
 
-    } else if (tokens[0].equalsIgnoreCase("SHARE")) {
+    }
+    else if (tokens[0].equalsIgnoreCase("SHARE")) {
       //   0      1       2
       // SHARE|1223123|s@s.com
       String itineraryId = tokens[1];
@@ -285,7 +301,8 @@ public class KeyValueStore {
         return "Can't share with specified User";
       }
 
-    } else {
+    }
+    else if (tokens[0].equalsIgnoreCase("DELETE")) {
       if (keyValueStore.containsKey(tokens[1])) {
         logger.debug(true, "Deleted key :", tokens[1], " from the store.");
         keyValueStore.remove(tokens[1]);
@@ -295,6 +312,28 @@ public class KeyValueStore {
             "Not deleting anything.");
 
         return "Key Not Found";
+      }
+    }
+    else {
+      // LIST
+      if (currentUser == null) {
+        logger.debug(true, "User is null, User not found");
+        return "User Not found";
+      }
+
+      User usefulUser = this.userDatabase.getUserDatabase().get(currentUser.getEmailId());
+
+      if (tokens[1].equalsIgnoreCase("CREATED")) {
+
+        // Map - Itineraries created by user, and list of shared users
+        System.out.println("MAP: " + usefulUser.getMapOfSharedItineraries().toString());
+        System.out.println("List Size: " + usefulUser.getListOfCreatedItinerary().size());
+        //return usefulUser.getListOfCreatedItinerary().toString();
+        return usefulUser.getMapOfSharedItineraries().toString();
+
+      } else {
+        // COLLAB
+        return usefulUser.getListOfSharedItinerary().toString();
       }
     }
   }

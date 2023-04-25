@@ -15,7 +15,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 import logs.Logger;
@@ -36,7 +35,6 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   private final Logger logger;
   // We can use the userDbServer to access User Database
   private final Server userDbServer;
-
   private User user;
 
   public KeyValueStoreServer(String serverId, Server userDb) {
@@ -422,7 +420,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     String result;
 
     assert stringCompleteOperation != null;
-    result = keyValueStore.executeOperation(stringCompleteOperation, user);
+    result = keyValueStore.executeOperation(stringCompleteOperation, this.user);
     metadata.remove(key);
     return result;
   }
@@ -431,6 +429,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   public String executeOperation(String inputMessage, User currentUser) throws RemoteException {
 
     // InputMessage:  Put;   EDIT|123;    Get|123;    Delete|123;   Share|123|a@a.com;
+    // LIST|CREATED;          LIST|COLLAB
     logger.debug(true, "Message received from the Client: ", inputMessage);
     this.user = currentUser;
 
@@ -445,7 +444,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     } else if (validatedResponse[0].contains("PAXOS")) {
       result = startPaxos(tokens, validatedResponse[1]);
     } else {
-      result = keyValueStore.executeOperation(tokens, this.user);
+      result = keyValueStore.executeOperation(tokens, currentUser);
     }
 
     logger.debug(true, "Sending response message to the Client: ", result);
