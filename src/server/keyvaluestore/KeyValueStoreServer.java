@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +88,9 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     // PUT,  1223123, ItJSON    JSON only for PUT and EDIT
     // SHARE, 12233123, S@S.COM
 
+    logger.debug(true, "#KVS ", serverId, ": Tokens received at startPaxos: ",
+        Arrays.toString(inputTokens));
+
     String key = inputTokens[1], value = null;
 
     if (inputTokens.length == 3) {
@@ -154,6 +158,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
               if (promise.getAccepted()
                   && promise.getAcceptedSequenceNumber() > maxSequenceNumber) {
                 maxSequenceNumber = promise.getAcceptedSequenceNumber();
+                // TODO - Value getting updated?
                 value = promise.getAcceptedValue();
               }
             }
@@ -186,6 +191,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
       for (PaxosServer acceptor: acceptors.values()) {
         String finalValue = value;
+        // TODO - Need to change key or value?
         proposeTasks.add(() -> acceptor.propose(sequenceNumber, key, finalValue));
       }
 
@@ -228,12 +234,13 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       logger.debug(true, "Consensus has been reached! Learning and Committing the value: ",
           tempValue, " for Key: ", key);
 
-      System.out.println("BEFORE LEARN:  Key: " + key + ", Value: " + tempValue + ", Op: " + operation);
+      System.out.println("#KVS"+ this.serverId +", BEFORE LEARN:  Key: " + key + ", Value: " + value + ", Op: " + operation);
       String response = learn(key, value, operation);
-      System.out.println("RESPONSE AFTER PAXOS LEARN: " + response);
+      System.out.println("#KVS"+ this.serverId +", RESPONSE AFTER PAXOS LEARN: " + response);
 
       for (Map.Entry<String, PaxosServer> entry: acceptors.entrySet()) {
         if (!serverId.equals(entry.getKey())) {
+          // TODO - FOr remaining instances the value is changes to Itinerary instead of email
           String finalValue = value;
           System.out.println("PAXOS SERVERS FINAL VALUE: " + finalValue);
           executorService.submit(() -> entry.getValue().learn(key, finalValue, operation));
@@ -267,10 +274,13 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   @Override
   public Promise prepare(long sequenceId, String key) throws RemoteException {
 
+    /*
+    // Random failure
     if (ThreadLocalRandom.current().nextInt(0, 10) == 0) {
       logger.error(true, "Acceptor", serverId, " has failed!");
       return null;
     }
+     */
 
     logger.debug(true, "Prepare() request received with sequence id: ",
         String.valueOf(sequenceId), ", for Key: ", key);
@@ -308,10 +318,15 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   @Override
   public Boolean propose(long sequenceId, String key, String value) throws RemoteException {
 
+    /*
     if (ThreadLocalRandom.current().nextInt(0, 10) == 0) {
       logger.error(true, "Acceptor", serverId, " has failed!");
       return null;
     }
+     */
+
+    System.out.println("#KVS " + this.serverId + ", IN BEFORE PROPOSE:  Key: " + key + ", Value: " + value);
+
 
     // TODO - how the value is Itinerary and not email of shared user
 
@@ -351,6 +366,8 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     metadata.get(key).setAcceptedValue(value);
     metadata.get(key).setAcceptedSequenceNumber(sequenceId);
 
+    System.out.println("#KVS " + this.serverId + ", AFTER BEFORE PROPOSE:  Key: " + key + ", Value: " + value);
+
     return true;
   }
 
@@ -358,7 +375,9 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   public String learn(String key, String value, String operation) throws RemoteException {
     // operation = PUT / GET / DELETE / EDIT / SHARE 213123 s@s.com
 
-    System.out.println("IN LEARN BEFORE Parse:  Key: " + key + ", Value: " + value + ", Op: " + operation);
+    // TODO - In other instance, the value is Itinerary object. instead of shared email id
+
+    //System.out.println("#KVS " + this.serverId + ", IN LEARN BEFORE Parse:  Key: " + key + ", Value: " + value + ", Op: " + operation);
     String tempValue = null;
     try {
       tempValue = parseJson(value);
@@ -366,7 +385,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       tempValue = value;
     }
 
-    System.out.println("IN LEARN AFTER Parse:  Key: " + key + ", TempValue: " + tempValue + ", Op: " + operation);
+    //System.out.println("#KVS " + this.serverId + ", IN LEARN AFTER Parse:  Key: " + key + ", TempValue: " + tempValue + ", Op: " + operation);
 
     // Need to commit the accepted value
     logger.debug(true, "Learning and Committing the Value: ", tempValue,
@@ -380,6 +399,11 @@ public class KeyValueStoreServer implements Server, PaxosServer {
         stringCompleteOperation[0] = "INSERT";
         stringCompleteOperation[1] = key;
         stringCompleteOperation[2] = value;
+        break;
+      case "GET":
+        stringCompleteOperation = new String[2];
+        stringCompleteOperation[0] = "GET";
+        stringCompleteOperation[1] = key;
         break;
       case "DELETE":
         stringCompleteOperation = new String[2];
@@ -425,7 +449,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     } else if (validatedResponse[0].contains("PAXOS")) {
       result = startPaxos(tokens, validatedResponse[1]);
     } else {
-      result = keyValueStore.executeOperation(tokens, currentUser);
+      result = keyValueStore.executeOperation(tokens, this.user);
     }
 
     logger.debug(true, "Sending response message to the Client: ", result);
@@ -433,7 +457,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public String putItinerary(Itinerary itinerary, User currentUser) throws RemoteException {
+  public String putItinerary(Itinerary itinerary) throws RemoteException {
     logger.debug(true, "Itinerary received from the Client: ", itinerary.getName());
 
     String itineraryId = generateId();
@@ -477,3 +501,5 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     return null;
   }
 }
+
+

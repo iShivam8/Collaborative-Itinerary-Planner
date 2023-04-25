@@ -20,10 +20,10 @@ public interface PaxosServer extends Remote {
 
   /**
    * This method is used to start and initiate the PAXOS algorithm.
-   * It is invoked when the server receives any PUT or DELETE update operations.
+   * It is invoked when the server receives any PUT, DELETE, SHARE update operations.
    * And the server would then act as the proposer for the algorithm.
    *
-   * @param inputTokens - input operation token of PUT and DELETE operations
+   * @param inputTokens - input operation token of PUT, DELETE, SHARE operations
    * @return - Result of PUT and DELETE operation after PAXOS is completed.
    * @throws RemoteException
    */

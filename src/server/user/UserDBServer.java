@@ -78,7 +78,7 @@ public class UserDBServer implements Server {
   }
 
   @Override
-  public String putItinerary(Itinerary itinerary, User currentUser) throws RemoteException {
+  public String putItinerary(Itinerary itinerary) throws RemoteException {
     return null;
   }
 }

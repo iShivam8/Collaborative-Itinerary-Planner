@@ -9,10 +9,6 @@ public class UserDB {
   private final ConcurrentHashMap<String, User> userDatabase;
   private final Logger logger;
 
-  // This variable changes as per the latest logged-in user
-  // TODO - Remove this, and send the user to client
-  private User currentLoggedInUser;
-
   public UserDB(String fileName, String serverId) {
     this.userDatabase = new ConcurrentHashMap<>();
     this.logger = new Logger(fileName, serverId);
@@ -50,9 +46,11 @@ public class UserDB {
     return "Invalid Request - Only SignUp or Login operations are supported.";
   }
 
-  // TODO - Helper method to validate Email id
-  private boolean validateEmail(String emailId) {
-    return true;
+  // Helper method to validate Email
+  private boolean validateEmail(String email) {
+    // Regular expression for email validation
+    String regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    return email.matches(regex);
   }
 
   /**
@@ -124,9 +122,6 @@ public class UserDB {
         // Sign in user: Correct Email, Password
         user.setLoggedIn(true);
 
-        // TODO send the logged in user to client
-        //setLoggedInUser(user);
-
         logger.debug(true, "User found with Email: ", email, ", and Name: ", user.getName());
         return "User Logged in";
       } else {
@@ -142,17 +137,6 @@ public class UserDB {
     logger.error(true, "Error while logging in!");
     return "Error while logging in";
   }
-
-  /*
-  private void setLoggedInUser(User user) {
-    this.currentLoggedInUser = user;
-  }
-
-  // Helper method to return the logged-in user
-  User getLoggedInUser() {
-    return this.currentLoggedInUser;
-  }
-   */
 
   /**
    * Method to fetch Specified User via their Email id.

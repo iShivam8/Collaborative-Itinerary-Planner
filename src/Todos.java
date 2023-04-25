@@ -17,5 +17,6 @@ public class Todos {
 
   // SHARE
   // TODO - When a user shares It, the other users get call does not reflect the list of shared user
-  // TODO - When we first try to share an It, server says no user found
+  // TODO - When we first try to share an It, server says no user found (???)
+  // StartPaxos is getting called where the value is provided as Itinerary
 }

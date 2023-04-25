@@ -169,6 +169,8 @@ public class Client {
             // Execute Operation from server sent this response because of PUT method
             if (response.equalsIgnoreCase("Enter Itinerary Details")) {
               sendItineraryToServer();
+            } else if (response.equalsIgnoreCase("Update Itinerary Details")) {
+              // TODO - for EDIT?
             }
           }
         }
@@ -191,7 +193,7 @@ public class Client {
       // Add the itinerary in the KeyValueStore
       logger.debug(false, "Sending Itinerary request to the server: ",
           itinerary.getName());
-      String itineraryResponse = keyValueStoreServer.putItinerary(itinerary, this.user);
+      String itineraryResponse = keyValueStoreServer.putItinerary(itinerary);
       logger.debug(false, "Response from server: ", itineraryResponse);
       //System.out.println("Response from server: " + itineraryResponse);
 
