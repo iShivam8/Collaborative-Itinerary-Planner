@@ -130,7 +130,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       List<Callable<Promise>> prepareTasks = new ArrayList<>();
 
       for (PaxosServer paxosServer: acceptors.values()) {
-        prepareTasks.add(() -> paxosServer.prepare(sequenceNumber, key));
+        prepareTasks.add(() -> paxosServer.prepare(sequenceNumber, key, operation));
       }
 
       int promises = 0;
@@ -192,7 +192,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       for (PaxosServer acceptor: acceptors.values()) {
         String finalValue = value;
         // TODO - Need to change key or value?
-        proposeTasks.add(() -> acceptor.propose(sequenceNumber, key, finalValue));
+        proposeTasks.add(() -> acceptor.propose(sequenceNumber, key, finalValue, operation));
       }
 
       int totalAcceptedResponses = 0;
@@ -272,7 +272,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public Promise prepare(long sequenceId, String key) throws RemoteException {
+  public Promise prepare(long sequenceId, String key, String operation) throws RemoteException {
 
     /*
     // Random failure
@@ -282,10 +282,16 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     }
      */
 
-    logger.debug(true, "Prepare() request received with sequence id: ",
+    logger.debug(true, "#KVS "+serverId+", Prepare() request received with sequence id: ",
         String.valueOf(sequenceId), ", for Key: ", key);
 
+
     if (!metadata.containsKey(key)) {
+      metadata.put(key, new Promise());
+    }
+
+    // If operation is Share then do this
+    if (operation.equalsIgnoreCase("SHARE")) {
       metadata.put(key, new Promise());
     }
 
@@ -309,14 +315,14 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       metadata.get(key).setStatus("Promised");
     }
 
-    logger.debug(true, "Responding back to the prepare() request with: ",
+    logger.debug(true, "#KVS "+serverId+", Responding back to the prepare() request with: ",
         metadata.get(key).toString());
 
     return new Promise(metadata.get(key));
   }
 
   @Override
-  public Boolean propose(long sequenceId, String key, String value) throws RemoteException {
+  public Boolean propose(long sequenceId, String key, String value, String operation) throws RemoteException {
 
     /*
     if (ThreadLocalRandom.current().nextInt(0, 10) == 0) {
@@ -325,7 +331,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     }
      */
 
-    System.out.println("#KVS " + this.serverId + ", IN BEFORE PROPOSE:  Key: " + key + ", Value: " + value);
+    System.out.println("#KVS " + this.serverId + ", PROPOSE START:  Key: " + key + ", Value: " + value);
 
 
     // TODO - how the value is Itinerary and not email of shared user
@@ -337,7 +343,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       tempValue = value;
     }
 
-    logger.debug(true, "Prepare() request received with sequence id: ",
+    logger.debug(true, "#KVS "+serverId+", Prepare() request received with sequence id: ",
         String.valueOf(sequenceId), ", for Key: ", key, ", and Proposed value: ", tempValue);
 
     if (!metadata.containsKey(key)) {
@@ -363,10 +369,9 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
     metadata.get(key).setStatus("Accepted");
     metadata.get(key).setAccepted(true);
+    System.out.println("#KVS " + this.serverId + ", PROPOSE END:  Key: " + key + ", Value: " + value);
     metadata.get(key).setAcceptedValue(value);
     metadata.get(key).setAcceptedSequenceNumber(sequenceId);
-
-    System.out.println("#KVS " + this.serverId + ", AFTER BEFORE PROPOSE:  Key: " + key + ", Value: " + value);
 
     return true;
   }

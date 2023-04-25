@@ -206,13 +206,17 @@ public class KeyValueStore {
         //System.out.println("CURRENT USER: " + userDbServer.getUserDB().getUserDatabase().get(tokens[2]).getName());
         //System.out.println("SHARED USER: " + userDatabase.getUserDatabase().get(tokens[2]).getName());
 
+        // TODO - While it is shared by 1 user, while 2nd user tries to learn, he uses share again
+        //  and this time it is current user + shared user, so rejects!
+        // TODO - Third server does not have any user.
+
         System.out.println("CURRENT USER: " + currentUser.getName());
         System.out.println("SHARED USER: " + sharedUser.getName());
 
         // Else, if user is found, send itinerary id to that user to listOfSharedIts
         // If user is found in db, then share the key with that user
         logger.debug(true, "User found with Email: ", tokens[2],
-            " Sharing the Itinerary: ",
+            " Sharing the Itinerary with: ",
             userDbServer.getUserDB().getUserDatabase().get(tokens[2]).getName());
 
         Itinerary itinerary = this.keyValueStore.get(itineraryId);

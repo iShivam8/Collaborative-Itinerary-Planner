@@ -39,7 +39,7 @@ public interface PaxosServer extends Remote {
    *           null if Acceptor fails
    * @throws RemoteException
    */
-  Promise prepare(long sequenceId, String key) throws RemoteException;
+  Promise prepare(long sequenceId, String key, String operation) throws RemoteException;
 
   /**
    * Proposer's uses this method for sending propose(sequenceId, proposedValue) message of PAXOS.
@@ -52,7 +52,7 @@ public interface PaxosServer extends Remote {
    *           null if Acceptor fails
    * @throws RemoteException
    */
-  Boolean propose(long sequenceId, String key, String value) throws RemoteException;
+  Boolean propose(long sequenceId, String key, String value, String operation) throws RemoteException;
 
   /**
    * This method is used so all the Acceptors can learn the given value and commit their updates.
