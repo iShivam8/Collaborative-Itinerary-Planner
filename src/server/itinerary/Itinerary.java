@@ -87,8 +87,10 @@ public class Itinerary implements Serializable {
     return listOfSharedWithUsers;
   }
 
-  public void setListOfSharedWithUsers(List<User> listOfSharedWithUsers) {
-    this.listOfSharedWithUsers = listOfSharedWithUsers;
+  public void setListOfSharedWithUsers(User sharedUser) {
+    if (!this.listOfSharedWithUsers.contains(sharedUser)) {
+      this.listOfSharedWithUsers.add(sharedUser);
+    }
   }
 
   public int getVersion() {
@@ -108,7 +110,21 @@ public class Itinerary implements Serializable {
         "Start Date: " + startDate + '\n' +
         "End Date: " + endDate + '\n' +
         "Created by: " + createdBy.getName() + '\n' +
-        "List of Users with whom this Itinerary is shared with: " + listOfSharedWithUsers.toString() + '\n' +
-        "Version: " + version;
+        "List of Users with whom this Itinerary is shared with: "
+        + fetchUserEmail(listOfSharedWithUsers) + '\n' +
+        "Version: " + version + '\n';
+  }
+
+  private String fetchUserEmail(List<User> listOfSharedWithUsers) {
+    StringBuilder stringBuilder = new StringBuilder();
+    for (User user: listOfSharedWithUsers) {
+      stringBuilder.append("[");
+      stringBuilder.append(user.getName());
+      stringBuilder.append(", ");
+      stringBuilder.append(user.getEmailId());
+      stringBuilder.append("] ");
+    }
+
+    return stringBuilder.toString();
   }
 }

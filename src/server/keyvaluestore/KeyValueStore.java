@@ -1,6 +1,5 @@
 package server.keyvaluestore;
 
-import static server.keyvaluestore.UniqueIdGenerator.generateId;
 import com.google.gson.Gson;
 import java.rmi.RemoteException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,6 +7,7 @@ import logs.Logger;
 import server.Server;
 import server.itinerary.Itinerary;
 import server.user.User;
+import server.user.UserDB;
 
 public class KeyValueStore {
 
@@ -15,6 +15,7 @@ public class KeyValueStore {
   private final ConcurrentHashMap<String, Itinerary> keyValueStore;
   private final Logger logger;
   private final Server userDbServer;
+  private UserDB userDatabase;
 
   /**
    * Constructor of KeyValueStore that initializes the Key-Value Store.
@@ -26,6 +27,12 @@ public class KeyValueStore {
     this.keyValueStore = new ConcurrentHashMap<>();
     this.userDbServer = userDb;
     this.logger = new Logger(fileName, serverId);
+
+    try {
+      this.userDatabase = this.userDbServer.getUserDB();
+    } catch (RemoteException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -46,7 +53,7 @@ public class KeyValueStore {
       }
     } else if (tokens.length == 2) {
       if (tokens[0].equalsIgnoreCase("GET")) {
-        return new String[] {"Valid Operation.", "GET"};
+        return new String[] {"Valid Operation. GET", "GET"};
       } else if (tokens[0].equalsIgnoreCase("DELETE")) {
         return new String[] {"Valid Operation. PAXOS. DELETE.", "DELETE"};
       } else if (tokens[0].equalsIgnoreCase("EDIT")) {
@@ -58,8 +65,7 @@ public class KeyValueStore {
       }
     } else if (tokens.length == 3) {
       if (tokens[0].equalsIgnoreCase("SHARE")) {
-        // TODO Add PAXOS.
-        return new String[] {"Valid Operation. SHARE.", "SHARE"};
+        return new String[] {"Valid Operation. PAXOS. SHARE.", "SHARE"};
       } else {
         logger.error(true, "Invalid operation", tokens[0]);
         return new String[] {"Invalid operation: " + tokens[0] + ". Only SHARE is supported with " +
@@ -111,7 +117,6 @@ public class KeyValueStore {
 
       return tokens[1];
 
-
     } else if (tokens[0].equalsIgnoreCase("GET")) {
       // The Token[1] is the Random unique ID generated. Should it be int or string?
       if (keyValueStore.containsKey(tokens[1])) {
@@ -147,11 +152,14 @@ public class KeyValueStore {
       //   0      1       2
       // SHARE|1223123|s@s.com
 
-      // If the specified Key is found, then search for User with email
+      // If the specified Key is found, then search for User with specified email
       if (keyValueStore.containsKey(tokens[1])) {
         try {
 
           // Now search for user, if user is found, send itinerary id to that user to listOfSharedIts
+          //System.out.println("FIRST USER: " + userDbServer.getUserDB().getUserDatabase().get(tokens[2]).getName());
+          //System.out.println("SECOND USER: " + userDatabase.getUserDatabase().get(tokens[2]).getName());
+
           if (userDbServer.getUserDB().getUserDatabase().containsKey(tokens[2])) {
             // If user is found in db, then share the key with that user
             logger.debug(true, "User found with Email: ", tokens[2],
@@ -159,40 +167,55 @@ public class KeyValueStore {
                 userDbServer.getUserDB().getUserDatabase().get(tokens[2]).getName());
 
             Itinerary itinerary = keyValueStore.get(tokens[1]);
+
+            // TODO - Current user gets null
+            if (!currentUser.getEmailId().equals(itinerary.getCreatedBy().getEmailId())) {
+              logger.debug(true, "You're not the Owner of this itinerary, " +
+                  "so you can't share with other users");
+              return "You're not the Owner of this itinerary, so you can't share it with other users!";
+            }
+
             User sharedUser = null;
 
             try {
               sharedUser = userDbServer.getUserDB().getUserDatabase().get(tokens[2]);
               logger.debug(true, "Current User: ", currentUser.getName(),
-                  " Shareable User: ", sharedUser.getName());
+                  " Shared User: ", sharedUser.getName());
               System.out.println("Current User: " + currentUser.getName() +
-                  ", Shareable User: " + sharedUser.getName());
+                  ", Shared User: " + sharedUser.getName());
 
               // Setting list of shared user for current user, and shared itinerary for the shared users
               currentUser.addSharedUserToMap(itinerary, sharedUser);
-              sharedUser.setListOfSharedItinerary(itinerary);
+              itinerary.setCreatedBy(currentUser);
+
+              // Updates Shared Users list of itineraries
+              if (itinerary.getListOfSharedWithUsers().contains(sharedUser)) {
+                logger.debug(true, "This Itinerary is already share with User: ",
+                    sharedUser.getName(), " Email: ", sharedUser.getEmailId());
+                return "Itinerary is Already Shared";
+              } else {
+
+                itinerary.setListOfSharedWithUsers(sharedUser);
+                sharedUser.setListOfSharedItinerary(itinerary);
+                logger.debug(true, "Itinerary '", itinerary.getName(),
+                    "' successfully shared with User: ", sharedUser.getName());
+                return "Itinerary Successfully Shared";
+              }
 
               // TODO - Although the Itinerary is shared, its not visible using get method
-              // Probably because the servers are not in sync with each other
-
-              logger.debug(true, "Itinerary '", itinerary.getName(),
-                  "' successfully shared with User: ", sharedUser.getName());
-
-              return "Itinerary Successfully Shared";
 
             } catch (RemoteException e) {
               e.printStackTrace();
             }
-
             // It Key = tokens[1]
-
           } else {
             logger.debug(true, "No user found with Email: ", tokens[2]);
             return "No User Found";
           }
         } catch (Exception e) {
-          logger.debug(true, "Exception occurred! Can't share with the specified User!");
+          logger.error(true, "Exception occurred! Can't share with the specified User!");
           e.printStackTrace();
+          return "Can't share with specified User";
         }
       } else {
         // If no key is found, return no itinerary found

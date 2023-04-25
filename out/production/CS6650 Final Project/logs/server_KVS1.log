@@ -1,0 +1,52 @@
+2023-04-25 02:16:54.723  [DEBUG]   Prepare() request received with sequence id:  1682403414721 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:16:54.724  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403414721, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:16:54.728  [DEBUG]   Prepare() request received with sequence id:  1682403414721 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and Proposed value:  Amazon
+2023-04-25 02:16:54.729  [DEBUG]   Accepting proposed value:  Amazon , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and setting the accepted sequence id number to:  1682403414721
+2023-04-25 02:16:54.733  [DEBUG]   Learning and Committing the Value:  Amazon  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:16:54.734  [DEBUG]   Successfully Deserialized the Itinerary:  Amazon
+2023-04-25 02:17:10.336  [DEBUG]   Prepare() request received with sequence id:  1682403430334 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:17:10.337  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403430334, acceptedSequenceNumber = 1682403414721, acceptedValue = '{"name":"Amazon","location":"Seattle","description":"Internship!","startDate":"May 10, 2023 12:00:00 AM","endDate":"Aug 5, 2023 12:00:00 AM","createdBy":{"name":"Shivam","emailId":"s@s.com","password":"123","listOfCreatedItinerary":[],"listOfSharedItinerary":[],"isLoggedIn":true,"mapOfSharedItineraries":{}},"listOfSharedWithUsers":[],"version":1}', accepted = true, status = 'Accepted'}
+2023-04-25 02:17:10.341  [DEBUG]   Prepare() request received with sequence id:  1682403430334 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and Proposed value:  Amazon
+2023-04-25 02:17:10.341  [DEBUG]   Accepting proposed value:  Amazon , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and setting the accepted sequence id number to:  1682403430334
+2023-04-25 02:17:10.350  [DEBUG]   Learning and Committing the Value:  Amazon  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:17:10.350  [DEBUG]   No user found with Email:  {"name":"Amazon","location":"Seattle","description":"Internship!","startDate":"May 10, 2023 12:00:00 AM","endDate":"Aug 5, 2023 12:00:00 AM","createdBy":{"name":"Shivam","emailId":"s@s.com","password":"123","listOfCreatedItinerary":[],"listOfSharedItinerary":[],"isLoggedIn":true,"mapOfSharedItineraries":{}},"listOfSharedWithUsers":[],"version":1}
+2023-04-25 02:18:24.094  [DEBUG]   Prepare() request received with sequence id:  1682403504092 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:24.094  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403504092, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:18:24.097  [DEBUG]   Prepare() request received with sequence id:  1682403504092 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and Proposed value:  t@t.com
+2023-04-25 02:18:24.097  [DEBUG]   Accepting proposed value:  t@t.com , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and setting the accepted sequence id number to:  1682403504092
+2023-04-25 02:18:24.102  [DEBUG]   Learning and Committing the Value:  t@t.com  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:24.102  [DEBUG]   User found with Email:  t@t.com  Sharing the Itinerary:  Test
+2023-04-25 02:18:24.102  [ERROR]   Exception occurred! Can't share with the specified User!
+2023-04-25 02:18:51.458  [DEBUG]   Prepare() request received with sequence id:  1682403531457 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:51.458  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403531457, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:18:51.460  [DEBUG]   Prepare() request received with sequence id:  1682403531457 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and Proposed value:  t@t.com
+2023-04-25 02:18:51.460  [DEBUG]   Accepting proposed value:  t@t.com , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and setting the accepted sequence id number to:  1682403531457
+2023-04-25 02:18:51.465  [DEBUG]   Learning and Committing the Value:  t@t.com  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:51.465  [DEBUG]   User found with Email:  t@t.com  Sharing the Itinerary:  Test
+2023-04-25 02:18:51.465  [ERROR]   Exception occurred! Can't share with the specified User!
+2023-04-25 02:19:02.144  [DEBUG]   Prepare() request received with sequence id:  1682403542143 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:19:02.145  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403542143, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:19:02.148  [DEBUG]   Prepare() request received with sequence id:  1682403542143 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and Proposed value:  s@s.com
+2023-04-25 02:19:02.148  [DEBUG]   Accepting proposed value:  s@s.com , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and setting the accepted sequence id number to:  1682403542143
+2023-04-25 02:19:02.152  [DEBUG]   Learning and Committing the Value:  s@s.com  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:19:02.152  [DEBUG]   User found with Email:  s@s.com  Sharing the Itinerary:  Shivam
+2023-04-25 02:19:02.152  [ERROR]   Exception occurred! Can't share with the specified User!
+2023-04-25 02:19:36.148  [DEBUG]   Prepare() request received with sequence id:  1682403576147 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:36.149  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403576147, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:19:36.152  [DEBUG]   Prepare() request received with sequence id:  1682403576147 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and Proposed value:  Ultra
+2023-04-25 02:19:36.152  [DEBUG]   Accepting proposed value:  Ultra , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and setting the accepted sequence id number to:  1682403576147
+2023-04-25 02:19:36.158  [DEBUG]   Learning and Committing the Value:  Ultra  for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:36.160  [DEBUG]   Successfully Deserialized the Itinerary:  Ultra
+2023-04-25 02:19:49.773  [DEBUG]   Prepare() request received with sequence id:  1682403589772 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:49.774  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403589772, acceptedSequenceNumber = 1682403576147, acceptedValue = '{"name":"Ultra","location":"Miami","description":"asdasdsadd","startDate":"Dec 23, 2023 12:00:00 AM","endDate":"Dec 25, 2023 12:00:00 AM","createdBy":{"name":"Test","emailId":"t@t.com","password":"123","listOfCreatedItinerary":[],"listOfSharedItinerary":[],"isLoggedIn":true,"mapOfSharedItineraries":{}},"listOfSharedWithUsers":[],"version":1}', accepted = true, status = 'Accepted'}
+2023-04-25 02:19:49.777  [DEBUG]   Prepare() request received with sequence id:  1682403589772 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and Proposed value:  Ultra
+2023-04-25 02:19:49.777  [DEBUG]   Accepting proposed value:  Ultra , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and setting the accepted sequence id number to:  1682403589772
+2023-04-25 02:19:49.782  [DEBUG]   Learning and Committing the Value:  Ultra  for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:49.782  [DEBUG]   No user found with Email:  {"name":"Ultra","location":"Miami","description":"asdasdsadd","startDate":"Dec 23, 2023 12:00:00 AM","endDate":"Dec 25, 2023 12:00:00 AM","createdBy":{"name":"Test","emailId":"t@t.com","password":"123","listOfCreatedItinerary":[],"listOfSharedItinerary":[],"isLoggedIn":true,"mapOfSharedItineraries":{}},"listOfSharedWithUsers":[],"version":1}
+2023-04-25 02:20:01.488  [DEBUG]   Prepare() request received with sequence id:  1682403601487 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:20:01.488  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403601487, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:20:01.491  [DEBUG]   Prepare() request received with sequence id:  1682403601487 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and Proposed value:  s@s.com
+2023-04-25 02:20:01.491  [DEBUG]   Accepting proposed value:  s@s.com , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and setting the accepted sequence id number to:  1682403601487
+2023-04-25 02:20:01.496  [DEBUG]   Learning and Committing the Value:  s@s.com  for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:20:01.496  [DEBUG]   User found with Email:  s@s.com  Sharing the Itinerary:  Shivam
+2023-04-25 02:20:01.497  [ERROR]   Exception occurred! Can't share with the specified User!

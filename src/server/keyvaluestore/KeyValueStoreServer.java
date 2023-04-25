@@ -17,7 +17,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import logs.Logger;
 import server.PaxosServer;
 import server.Promise;
@@ -81,7 +80,8 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   @Override
   public String startPaxos(String[] inputTokens, String operation) throws RemoteException {
 
-    // PUT,  1223123, TripName
+    // PUT,  1223123, ItJSON    JSON only for PUT and EDIT
+    // SHARE, 12233123, S@S.COM
 
     String key = inputTokens[1], value = null;
 
@@ -89,7 +89,12 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       value = inputTokens[2];
     }
 
-    String tempValue = parseJson(value);
+    String tempValue = null;
+    try {
+      tempValue = parseJson(value);
+    } catch (Exception e) {
+      tempValue = value;
+    }
 
     int minMajority = acceptors.size() / 2 + 1;
     ExecutorService executorService = Executors.newCachedThreadPool();
@@ -219,11 +224,14 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       logger.debug(true, "Consensus has been reached! Learning and Committing the value: ",
           tempValue, " for Key: ", key);
 
+      System.out.println("BEFORE LEARN:  Key: " + key + ", Value: " + tempValue + ", Op: " + operation);
       String response = learn(key, value, operation);
+      System.out.println("RESPONSE AFTER PAXOS LEARN: " + response);
 
       for (Map.Entry<String, PaxosServer> entry: acceptors.entrySet()) {
         if (!serverId.equals(entry.getKey())) {
           String finalValue = value;
+          System.out.println("PAXOS SERVERS FINAL VALUE: " + finalValue);
           executorService.submit(() -> entry.getValue().learn(key, finalValue, operation));
         }
       }
@@ -301,7 +309,14 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       return null;
     }
 
-    String tempValue = parseJson(value);
+    // TODO - how the value is Itinerary and not email of shared user
+
+    String tempValue = null;
+    try {
+      tempValue = parseJson(value);
+    } catch (Exception e) {
+      tempValue = value;
+    }
 
     logger.debug(true, "Prepare() request received with sequence id: ",
         String.valueOf(sequenceId), ", for Key: ", key, ", and Proposed value: ", tempValue);
@@ -337,9 +352,17 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
   @Override
   public String learn(String key, String value, String operation) throws RemoteException {
-    // operation = PUT / GET / DELETE / EDIT / SHARE
+    // operation = PUT / GET / DELETE / EDIT / SHARE 213123 s@s.com
 
-    String tempValue = parseJson(value);
+    System.out.println("IN LEARN BEFORE Parse:  Key: " + key + ", Value: " + value + ", Op: " + operation);
+    String tempValue = null;
+    try {
+      tempValue = parseJson(value);
+    } catch (Exception e) {
+      tempValue = value;
+    }
+
+    System.out.println("IN LEARN AFTER Parse:  Key: " + key + ", TempValue: " + tempValue + ", Op: " + operation);
 
     // Need to commit the accepted value
     logger.debug(true, "Learning and Committing the Value: ", tempValue,
@@ -410,45 +433,15 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     logger.debug(true, "Itinerary received from the Client: ", itinerary.getName());
 
     String itineraryId = generateId();
-    //String itineraryId = keyValueStore.addItinerary(itinerary, currentUser);
 
     // Converting itinerary object to string for PAXOS
     logger.debug(true, "Serializing the Itinerary: ",  itinerary.getName());
-
-    /*
-    String itineraryJson = null;
-    try {
-      // Create a new Callable object to serialize the itinerary
-      Callable<String> serializeItinerary = () -> new Gson().toJson(itinerary);
-
-      // Creating a new ExecutorService with a single thread
-      ExecutorService executor = Executors.newSingleThreadExecutor();
-
-      // Submitting the Callable object to the ExecutorService and get a Future object
-      Future<String> future = executor.submit(serializeItinerary);
-
-      // Wait for the serialization to complete and get the serialized JSON string
-      itineraryJson = future.get();
-
-      // Shutdown the ExecutorService
-      executor.shutdown();
-    } catch (ExecutionException | InterruptedException e) {
-      e.printStackTrace();
-    }
-    */
-
     String itineraryJson = new Gson().toJson(itinerary);
     logger.debug(true, "Successfully Serialized the Itinerary: ",  itinerary.getName());
 
     assert itineraryJson != null;
     String[] tokens = {"PUT", itineraryId, itineraryJson};
-
     String result = startPaxos(tokens, "PUT");
-
-    // TODO - Start paxos, internally if it has PUT, it'll convert to INSERT,
-    //  and create new if else for insert, over there call add to keystore
-
-    // TODO - Not receiving Itinerary ID on Client side
 
     logger.debug(true, "Sending response message to the Client: ", result);
     logger.debug(true, "Client Access the Created Itinerary of: ",

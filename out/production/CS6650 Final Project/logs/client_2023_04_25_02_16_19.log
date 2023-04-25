@@ -1,0 +1,82 @@
+2023-04-25 02:16:19.106  [DEBUG]   Starting the client:
+2023-04-25 02:16:19.106  [DEBUG]   Looking for RMI registry...
+2023-04-25 02:16:19.125  [DEBUG]   Found RMI registry!
+2023-04-25 02:16:19.125  [DEBUG]   Looking for the User Database server stub...
+2023-04-25 02:16:19.177  [DEBUG]   Found the User Database server stub!
+2023-04-25 02:16:22.217  [DEBUG]   Received Session request from user:  SignUp
+2023-04-25 02:16:26.462  [DEBUG]   Sending sign up request to the server:  Shivam|s@s.com|123
+2023-04-25 02:16:26.474  [DEBUG]   Response from server:  User Created
+2023-04-25 02:16:26.475  [DEBUG]   Looking for RMI registry...
+2023-04-25 02:16:26.475  [DEBUG]   Found RMI registry!
+2023-04-25 02:16:26.475  [DEBUG]   Looking for the Itinerary KeyValueStore server stub...
+2023-04-25 02:16:26.484  [DEBUG]   Found the Itinerary KeyValueStore server stub!
+2023-04-25 02:16:26.484  [DEBUG]   Client connected to the server
+2023-04-25 02:16:40.912  [DEBUG]   Received request from user:  put
+2023-04-25 02:16:40.915  [DEBUG]   Sending request to the server:  put
+2023-04-25 02:16:40.919  [DEBUG]   Response from server:  Enter Itinerary Details
+2023-04-25 02:16:54.655  [DEBUG]   Sending Itinerary request to the server:  Amazon
+2023-04-25 02:16:54.732  [DEBUG]   Response from server:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:16:54.732  [DEBUG]   Itinerary Added with Name: ' Amazon '  and you can access it using Unique ID:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:17:02.605  [DEBUG]   Received request from user:  get|b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:17:02.606  [DEBUG]   Sending request to the server:  get|b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:17:02.611  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: Amazon
+Location: Seattle
+Description: Internship!
+Start Date: Wed May 10 00:00:00 EDT 2023
+End Date: Sat Aug 05 00:00:00 EDT 2023
+Created by: Shivam
+List of Users with whom this Itinerary is shared with: 
+Version: 1
+
+2023-04-25 02:17:10.328  [DEBUG]   Received request from user:  share|b149669a-aee1-4763-b438-6d0fd214f8c1|t@t.com
+2023-04-25 02:17:10.329  [DEBUG]   Sending request to the server:  share|b149669a-aee1-4763-b438-6d0fd214f8c1|t@t.com
+2023-04-25 02:17:10.348  [DEBUG]   Response from server:  No User Found
+2023-04-25 02:18:24.084  [DEBUG]   Received request from user:  share|b149669a-aee1-4763-b438-6d0fd214f8c1|t@t.com
+2023-04-25 02:18:24.085  [DEBUG]   Sending request to the server:  share|b149669a-aee1-4763-b438-6d0fd214f8c1|t@t.com
+2023-04-25 02:18:24.101  [DEBUG]   Response from server:  Itinerary Successfully Shared
+2023-04-25 02:18:28.628  [DEBUG]   Received request from user:  get|b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:28.629  [DEBUG]   Sending request to the server:  get|b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:28.632  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: Amazon
+Location: Seattle
+Description: Internship!
+Start Date: Wed May 10 00:00:00 EDT 2023
+End Date: Sat Aug 05 00:00:00 EDT 2023
+Created by: Shivam
+List of Users with whom this Itinerary is shared with: [Test, t@t.com] 
+Version: 1
+
+2023-04-25 02:18:45.867  [DEBUG]   Received request from user:  get|b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:45.868  [DEBUG]   Sending request to the server:  get|b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:45.872  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: Amazon
+Location: Seattle
+Description: Internship!
+Start Date: Wed May 10 00:00:00 EDT 2023
+End Date: Sat Aug 05 00:00:00 EDT 2023
+Created by: Shivam
+List of Users with whom this Itinerary is shared with: [Test, t@t.com] 
+Version: 1
+
+2023-04-25 02:18:51.453  [DEBUG]   Received request from user:  share|b149669a-aee1-4763-b438-6d0fd214f8c1|t@t.com
+2023-04-25 02:18:51.453  [DEBUG]   Sending request to the server:  share|b149669a-aee1-4763-b438-6d0fd214f8c1|t@t.com
+2023-04-25 02:18:51.466  [DEBUG]   Response from server:  Itinerary is Already Shared
+2023-04-25 02:20:11.182  [DEBUG]   Received request from user:  get|d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:20:11.184  [DEBUG]   Sending request to the server:  get|d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:20:11.188  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: Ultra
+Location: Miami
+Description: asdasdsadd
+Start Date: Sat Dec 23 00:00:00 EST 2023
+End Date: Mon Dec 25 00:00:00 EST 2023
+Created by: Test
+List of Users with whom this Itinerary is shared with: 
+Version: 1
+
+2023-04-25 02:20:19.784  [DEBUG]   Received request from user:  x
+2023-04-25 02:20:19.785  [DEBUG]   Quitting the application.

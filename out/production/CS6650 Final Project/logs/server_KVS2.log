@@ -1,0 +1,144 @@
+2023-04-25 02:16:54.723  [DEBUG]   Prepare() request received with sequence id:  1682403414721 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:16:54.724  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403414721, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:16:54.728  [DEBUG]   Prepare() request received with sequence id:  1682403414721 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and Proposed value:  Amazon
+2023-04-25 02:16:54.729  [DEBUG]   Accepting proposed value:  Amazon , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and setting the accepted sequence id number to:  1682403414721
+2023-04-25 02:16:54.734  [DEBUG]   Learning and Committing the Value:  Amazon  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:16:54.735  [DEBUG]   Successfully Deserialized the Itinerary:  Amazon
+2023-04-25 02:17:10.336  [DEBUG]   Prepare() request received with sequence id:  1682403430334 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:17:10.337  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403430334, acceptedSequenceNumber = 1682403414721, acceptedValue = '{"name":"Amazon","location":"Seattle","description":"Internship!","startDate":"May 10, 2023 12:00:00 AM","endDate":"Aug 5, 2023 12:00:00 AM","createdBy":{"name":"Shivam","emailId":"s@s.com","password":"123","listOfCreatedItinerary":[],"listOfSharedItinerary":[],"isLoggedIn":true,"mapOfSharedItineraries":{}},"listOfSharedWithUsers":[],"version":1}', accepted = true, status = 'Accepted'}
+2023-04-25 02:17:10.344  [DEBUG]   Prepare() request received with sequence id:  1682403430334 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and Proposed value:  Amazon
+2023-04-25 02:17:10.344  [DEBUG]   Accepting proposed value:  Amazon , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and setting the accepted sequence id number to:  1682403430334
+2023-04-25 02:17:10.349  [DEBUG]   Learning and Committing the Value:  Amazon  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:17:10.350  [DEBUG]   No user found with Email:  {"name":"Amazon","location":"Seattle","description":"Internship!","startDate":"May 10, 2023 12:00:00 AM","endDate":"Aug 5, 2023 12:00:00 AM","createdBy":{"name":"Shivam","emailId":"s@s.com","password":"123","listOfCreatedItinerary":[],"listOfSharedItinerary":[],"isLoggedIn":true,"mapOfSharedItineraries":{}},"listOfSharedWithUsers":[],"version":1}
+2023-04-25 02:18:24.094  [DEBUG]   Prepare() request received with sequence id:  1682403504092 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:24.094  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403504092, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:18:24.097  [DEBUG]   Prepare() request received with sequence id:  1682403504092 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and Proposed value:  t@t.com
+2023-04-25 02:18:24.097  [DEBUG]   Accepting proposed value:  t@t.com , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1 , and setting the accepted sequence id number to:  1682403504092
+2023-04-25 02:18:24.101  [DEBUG]   Learning and Committing the Value:  t@t.com  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:24.102  [DEBUG]   User found with Email:  t@t.com  Sharing the Itinerary:  Test
+2023-04-25 02:18:24.102  [ERROR]   Exception occurred! Can't share with the specified User!
+2023-04-25 02:18:34.762  [DEBUG]   Message received from the Client:  get|b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:34.763  [DEBUG]   Found Itinerary Key :  b149669a-aee1-4763-b438-6d0fd214f8c1 and Itinerary Name Value :  Amazon
+2023-04-25 02:18:34.763  [DEBUG]   Sending response message to the Client:  Itinerary Details:
+
+Name: Amazon
+Location: Seattle
+Description: Internship!
+Start Date: Wed May 10 00:00:00 EDT 2023
+End Date: Sat Aug 05 00:00:00 EDT 2023
+Created by: Shivam
+List of Users with whom this Itinerary is shared with: 
+Version: 1
+
+2023-04-25 02:18:51.458  [DEBUG]   Prepare() request received with sequence id:  1682403531457 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:51.458  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403531457, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:18:51.459  [ERROR]   Acceptor KVS2  has failed!
+2023-04-25 02:18:51.465  [DEBUG]   Learning and Committing the Value:  t@t.com  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:18:51.465  [DEBUG]   User found with Email:  t@t.com  Sharing the Itinerary:  Test
+2023-04-25 02:18:51.466  [DEBUG]   You're not the Owner of this itinerary, so you can't share with other users
+2023-04-25 02:19:02.141  [DEBUG]   Message received from the Client:  share|b149669a-aee1-4763-b438-6d0fd214f8c1|s@s.com
+2023-04-25 02:19:02.143  [DEBUG]   Initiating PAXOS Phase 1
+2023-04-25 02:19:02.143  [DEBUG]   Sequence Number:  1682403542143
+2023-04-25 02:19:02.144  [DEBUG]   Prepare() request received with sequence id:  1682403542143 , for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:19:02.144  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403542143, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:19:02.146  [DEBUG]   Number of received Promises:  3
+2023-04-25 02:19:02.146  [DEBUG]   Initiating PAXOS Phase 2 with proposed value:  s@s.com
+2023-04-25 02:19:02.147  [ERROR]   Acceptor KVS2  has failed!
+2023-04-25 02:19:02.149  [DEBUG]   Number of Accepted Responses received:  2
+2023-04-25 02:19:02.149  [DEBUG]   Consensus has been reached! Learning and Committing the value:  s@s.com  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:19:02.150  [DEBUG]   Learning and Committing the Value:  s@s.com  for Key:  b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:19:02.150  [DEBUG]   User found with Email:  s@s.com  Sharing the Itinerary:  Shivam
+2023-04-25 02:19:02.151  [DEBUG]   You're not the Owner of this itinerary, so you can't share with other users
+2023-04-25 02:19:02.151  [DEBUG]   Sending response message to the Client:  You're not the Owner of this itinerary, so you can't share it with other users!
+2023-04-25 02:19:13.750  [DEBUG]   Message received from the Client:  get|b149669a-aee1-4763-b438-6d0fd214f8c1
+2023-04-25 02:19:13.751  [DEBUG]   Found Itinerary Key :  b149669a-aee1-4763-b438-6d0fd214f8c1 and Itinerary Name Value :  Amazon
+2023-04-25 02:19:13.751  [DEBUG]   Sending response message to the Client:  Itinerary Details:
+
+Name: Amazon
+Location: Seattle
+Description: Internship!
+Start Date: Wed May 10 00:00:00 EDT 2023
+End Date: Sat Aug 05 00:00:00 EDT 2023
+Created by: Shivam
+List of Users with whom this Itinerary is shared with: 
+Version: 1
+
+2023-04-25 02:19:25.929  [DEBUG]   Message received from the Client:  put
+2023-04-25 02:19:25.930  [DEBUG]   Sending response message to the Client:  Enter Itinerary Details
+2023-04-25 02:19:36.143  [DEBUG]   Itinerary received from the Client:  Ultra
+2023-04-25 02:19:36.143  [DEBUG]   Serializing the Itinerary:  Ultra
+2023-04-25 02:19:36.145  [DEBUG]   Successfully Serialized the Itinerary:  Ultra
+2023-04-25 02:19:36.147  [DEBUG]   Initiating PAXOS Phase 1
+2023-04-25 02:19:36.147  [DEBUG]   Sequence Number:  1682403576147
+2023-04-25 02:19:36.147  [DEBUG]   Prepare() request received with sequence id:  1682403576147 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:36.148  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403576147, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:19:36.150  [DEBUG]   Number of received Promises:  3
+2023-04-25 02:19:36.150  [DEBUG]   Initiating PAXOS Phase 2 with proposed value:  Ultra
+2023-04-25 02:19:36.152  [DEBUG]   Prepare() request received with sequence id:  1682403576147 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and Proposed value:  Ultra
+2023-04-25 02:19:36.153  [DEBUG]   Accepting proposed value:  Ultra , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and setting the accepted sequence id number to:  1682403576147
+2023-04-25 02:19:36.153  [DEBUG]   Number of Accepted Responses received:  3
+2023-04-25 02:19:36.153  [DEBUG]   Consensus has been reached! Learning and Committing the value:  Ultra  for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:36.155  [DEBUG]   Learning and Committing the Value:  Ultra  for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:36.156  [DEBUG]   Successfully Deserialized the Itinerary:  Ultra
+2023-04-25 02:19:36.156  [DEBUG]   Itinerary ' Ultra ' Added in the List of Created Itineraries of User:  Test
+2023-04-25 02:19:36.157  [DEBUG]   Sending response message to the Client:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:36.157  [DEBUG]   Client Access the Created Itinerary of:  Ultra , with Unique Key ID:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:42.330  [DEBUG]   Message received from the Client:  get|d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:42.331  [DEBUG]   Found Itinerary Key :  d8596f17-f37b-4743-bed3-edfe52173e5c and Itinerary Name Value :  Ultra
+2023-04-25 02:19:42.331  [DEBUG]   Sending response message to the Client:  Itinerary Details:
+
+Name: Ultra
+Location: Miami
+Description: asdasdsadd
+Start Date: Sat Dec 23 00:00:00 EST 2023
+End Date: Mon Dec 25 00:00:00 EST 2023
+Created by: Test
+List of Users with whom this Itinerary is shared with: 
+Version: 1
+
+2023-04-25 02:19:49.771  [DEBUG]   Message received from the Client:  share|d8596f17-f37b-4743-bed3-edfe52173e5c|s@s.com
+2023-04-25 02:19:49.772  [DEBUG]   Initiating PAXOS Phase 1
+2023-04-25 02:19:49.773  [DEBUG]   Sequence Number:  1682403589772
+2023-04-25 02:19:49.773  [DEBUG]   Prepare() request received with sequence id:  1682403589772 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:49.773  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403589772, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:19:49.774  [DEBUG]   Number of received Promises:  2
+2023-04-25 02:19:49.774  [DEBUG]   Initiating PAXOS Phase 2 with proposed value:  s@s.com
+2023-04-25 02:19:49.776  [DEBUG]   Prepare() request received with sequence id:  1682403589772 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and Proposed value:  Ultra
+2023-04-25 02:19:49.777  [DEBUG]   Accepting proposed value:  Ultra , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and setting the accepted sequence id number to:  1682403589772
+2023-04-25 02:19:49.778  [DEBUG]   Number of Accepted Responses received:  2
+2023-04-25 02:19:49.778  [DEBUG]   Consensus has been reached! Learning and Committing the value:  s@s.com  for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:49.780  [DEBUG]   Learning and Committing the Value:  Ultra  for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:19:49.780  [DEBUG]   No user found with Email:  {"name":"Ultra","location":"Miami","description":"asdasdsadd","startDate":"Dec 23, 2023 12:00:00 AM","endDate":"Dec 25, 2023 12:00:00 AM","createdBy":{"name":"Test","emailId":"t@t.com","password":"123","listOfCreatedItinerary":[],"listOfSharedItinerary":[],"isLoggedIn":true,"mapOfSharedItineraries":{}},"listOfSharedWithUsers":[],"version":1}
+2023-04-25 02:19:49.780  [DEBUG]   Sending response message to the Client:  No User Found
+2023-04-25 02:19:54.834  [DEBUG]   Message received from the Client:  share|s@s.com
+2023-04-25 02:19:54.835  [ERROR]   Invalid operation share
+2023-04-25 02:19:54.835  [DEBUG]   Sending response message to the Client:  Invalid operation: share. Only GET, DELETE, and EDIT are supported with Two operands.
+2023-04-25 02:20:01.486  [DEBUG]   Message received from the Client:  share|d8596f17-f37b-4743-bed3-edfe52173e5c|s@s.com
+2023-04-25 02:20:01.487  [DEBUG]   Initiating PAXOS Phase 1
+2023-04-25 02:20:01.487  [DEBUG]   Sequence Number:  1682403601487
+2023-04-25 02:20:01.488  [DEBUG]   Prepare() request received with sequence id:  1682403601487 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:20:01.488  [DEBUG]   Responding back to the prepare() request with:  Promise{sequenceNumber = 1682403601487, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 02:20:01.489  [DEBUG]   Number of received Promises:  3
+2023-04-25 02:20:01.489  [DEBUG]   Initiating PAXOS Phase 2 with proposed value:  s@s.com
+2023-04-25 02:20:01.490  [DEBUG]   Prepare() request received with sequence id:  1682403601487 , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and Proposed value:  s@s.com
+2023-04-25 02:20:01.490  [DEBUG]   Accepting proposed value:  s@s.com , for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c , and setting the accepted sequence id number to:  1682403601487
+2023-04-25 02:20:01.492  [DEBUG]   Number of Accepted Responses received:  3
+2023-04-25 02:20:01.493  [DEBUG]   Consensus has been reached! Learning and Committing the value:  s@s.com  for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:20:01.493  [DEBUG]   Learning and Committing the Value:  s@s.com  for Key:  d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:20:01.494  [DEBUG]   User found with Email:  s@s.com  Sharing the Itinerary:  Shivam
+2023-04-25 02:20:01.494  [DEBUG]   Current User:  Test  Shared User:  Shivam
+2023-04-25 02:20:01.494  [DEBUG]   Itinerary ' Ultra ' successfully shared with User:  Shivam
+2023-04-25 02:20:01.494  [DEBUG]   Sending response message to the Client:  Itinerary Successfully Shared
+2023-04-25 02:20:05.721  [DEBUG]   Message received from the Client:  get|d8596f17-f37b-4743-bed3-edfe52173e5c
+2023-04-25 02:20:05.722  [DEBUG]   Found Itinerary Key :  d8596f17-f37b-4743-bed3-edfe52173e5c and Itinerary Name Value :  Ultra
+2023-04-25 02:20:05.722  [DEBUG]   Sending response message to the Client:  Itinerary Details:
+
+Name: Ultra
+Location: Miami
+Description: asdasdsadd
+Start Date: Sat Dec 23 00:00:00 EST 2023
+End Date: Mon Dec 25 00:00:00 EST 2023
+Created by: Test
+List of Users with whom this Itinerary is shared with: [Shivam, s@s.com] 
+Version: 1
+

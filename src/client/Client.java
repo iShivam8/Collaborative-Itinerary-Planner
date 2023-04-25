@@ -136,7 +136,7 @@ public class Client {
         logger.debug(false, "Received request from user: ", request);
 
         if (this.prompt) {
-          this.prompt = false;
+          //this.prompt = false;
         }
 
         if (request != null) {
@@ -147,7 +147,6 @@ public class Client {
             // TODO - A Case where same user signs in different terminal.
             // Sol: Do not allow to sign in a different terminal
             this.user.setLoggedIn(false);
-
             break;
           }
 
