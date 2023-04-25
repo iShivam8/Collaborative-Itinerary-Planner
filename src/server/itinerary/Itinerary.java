@@ -17,7 +17,7 @@ public class Itinerary implements Serializable {
   // The user who created this itinerary
   private User createdBy;
 
-  // List of users with whom the itinerary is shared with
+  // List of users with whom this itinerary is shared with
   private final List<User> listOfSharedWithUsers;
 
   // To keep a track of changes
@@ -84,12 +84,15 @@ public class Itinerary implements Serializable {
   }
 
   public List<User> getListOfSharedWithUsers() {
-    return listOfSharedWithUsers;
+    return this.listOfSharedWithUsers;
   }
 
+  // Owner of the itinerary cannot add himself in this list
   public void setListOfSharedWithUsers(User sharedUser) {
-    if (!this.listOfSharedWithUsers.contains(sharedUser)) {
-      this.listOfSharedWithUsers.add(sharedUser);
+    if (!sharedUser.getEmailId().equals(this.createdBy.getEmailId())) {
+      if (!this.listOfSharedWithUsers.contains(sharedUser)) {
+        this.listOfSharedWithUsers.add(sharedUser);
+      }
     }
   }
 
@@ -97,8 +100,8 @@ public class Itinerary implements Serializable {
     return version;
   }
 
-  public void setVersion(int version) {
-    this.version = version;
+  public void updateVersion() {
+    this.version += 1;
   }
 
   @Override

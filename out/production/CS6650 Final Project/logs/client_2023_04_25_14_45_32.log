@@ -1,0 +1,48 @@
+2023-04-25 14:45:32.550  [DEBUG]   Starting the client:
+2023-04-25 14:45:32.551  [DEBUG]   Looking for RMI registry...
+2023-04-25 14:45:32.564  [DEBUG]   Found RMI registry!
+2023-04-25 14:45:32.565  [DEBUG]   Looking for the User Database server stub...
+2023-04-25 14:45:32.617  [DEBUG]   Found the User Database server stub!
+2023-04-25 14:45:44.718  [DEBUG]   Received Session request from user:  SignUp
+2023-04-25 14:45:49.119  [DEBUG]   Sending sign up request to the server:  Shiv|s@s.com|1234
+2023-04-25 14:45:49.128  [DEBUG]   Response from server:  User Created
+2023-04-25 14:45:49.129  [DEBUG]   Looking for RMI registry...
+2023-04-25 14:45:49.129  [DEBUG]   Found RMI registry!
+2023-04-25 14:45:49.130  [DEBUG]   Looking for the Itinerary KeyValueStore server stub...
+2023-04-25 14:45:49.139  [DEBUG]   Found the Itinerary KeyValueStore server stub!
+2023-04-25 14:45:49.139  [DEBUG]   Client connected to the server
+2023-04-25 14:45:50.309  [DEBUG]   Received request from user:  put
+2023-04-25 14:45:50.309  [DEBUG]   Sending request to the server:  put
+2023-04-25 14:45:50.313  [DEBUG]   Response from server:  Enter Itinerary Details
+2023-04-25 14:46:01.878  [DEBUG]   Sending Itinerary request to the server:  NYC TRIP
+2023-04-25 14:46:01.955  [DEBUG]   Response from server:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:01.955  [DEBUG]   Itinerary Added with Name: ' NYC TRIP '  and you can access it using Unique ID:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:06.701  [DEBUG]   Received request from user:  get|6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:06.702  [DEBUG]   Sending request to the server:  get|6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:06.706  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: NYC TRIP
+Location: NYC
+Description: NYCCCC
+Start Date: Wed Jan 01 00:00:00 EST 2025
+End Date: Thu Jan 01 00:00:00 EST 2026
+Created by: Shiv
+List of Users with whom this Itinerary is shared with: 
+Version: 1
+
+2023-04-25 14:46:20.876  [DEBUG]   Received request from user:  share|6368bf6c-58da-44d6-89d9-a976da2746d2|t@t.com
+2023-04-25 14:46:20.877  [DEBUG]   Sending request to the server:  share|6368bf6c-58da-44d6-89d9-a976da2746d2|t@t.com
+2023-04-25 14:46:20.892  [DEBUG]   Response from server:  Itinerary Successfully Shared
+2023-04-25 14:46:39.845  [DEBUG]   Received request from user:  get|6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:39.846  [DEBUG]   Sending request to the server:  get|6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:39.849  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: NYC TRIP
+Location: NYC
+Description: NYCCCC
+Start Date: Wed Jan 01 00:00:00 EST 2025
+End Date: Thu Jan 01 00:00:00 EST 2026
+Created by: Shiv
+List of Users with whom this Itinerary is shared with: [Test, t@t.com] 
+Version: 1
+

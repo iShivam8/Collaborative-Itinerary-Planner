@@ -1,0 +1,64 @@
+2023-04-25 14:45:50.311  [DEBUG]   Message received from the Client:  put
+2023-04-25 14:45:50.312  [DEBUG]   Sending response message to the Client:  Enter Itinerary Details
+2023-04-25 14:46:01.887  [DEBUG]   Itinerary received from the Client:  NYC TRIP
+2023-04-25 14:46:01.888  [DEBUG]   Serializing the Itinerary:  NYC TRIP
+2023-04-25 14:46:01.939  [DEBUG]   Successfully Serialized the Itinerary:  NYC TRIP
+2023-04-25 14:46:01.939  [DEBUG]   #KVS  KVS0 : Tokens received at startPaxos:  [PUT, 6368bf6c-58da-44d6-89d9-a976da2746d2, {"name":"NYC TRIP","location":"NYC","description":"NYCCCC","startDate":"Jan 1, 2025 12:00:00 AM","endDate":"Jan 1, 2026 12:00:00 AM","createdBy":{"name":"Shiv","emailId":"s@s.com","password":"1234","listOfCreatedItinerary":[],"listOfSharedItinerary":[],"isLoggedIn":true,"mapOfSharedItineraries":{}},"listOfSharedWithUsers":[],"version":1}]
+2023-04-25 14:46:01.943  [DEBUG]   Initiating PAXOS Phase 1
+2023-04-25 14:46:01.944  [DEBUG]   Sequence Number:  1682448361944
+2023-04-25 14:46:01.946  [DEBUG]   #KVS KVS0, Prepare() request received with sequence id:  1682448361944 , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:01.946  [DEBUG]   #KVS KVS0, Responding back to the prepare() request with:  Promise{sequenceNumber = 1682448361944, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 14:46:01.949  [DEBUG]   Number of received Promises:  3
+2023-04-25 14:46:01.949  [DEBUG]   Initiating PAXOS Phase 2 with proposed value:  NYC TRIP
+2023-04-25 14:46:01.951  [DEBUG]   #KVS KVS0, Prepare() request received with sequence id:  1682448361944 , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2 , and Proposed value:  NYC TRIP
+2023-04-25 14:46:01.951  [DEBUG]   Accepting proposed value:  NYC TRIP , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2 , and setting the accepted sequence id number to:  1682448361944
+2023-04-25 14:46:01.952  [DEBUG]   Number of Accepted Responses received:  3
+2023-04-25 14:46:01.952  [DEBUG]   Consensus has been reached! Learning and Committing the value:  NYC TRIP  for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:01.953  [DEBUG]   Learning and Committing the Value:  NYC TRIP  for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:01.954  [DEBUG]   Successfully Deserialized the Itinerary:  NYC TRIP
+2023-04-25 14:46:01.954  [DEBUG]   Itinerary ' NYC TRIP ' Added in the List of Created Itineraries of User:  Shiv
+2023-04-25 14:46:01.954  [DEBUG]   Sending response message to the Client:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:01.955  [DEBUG]   Client Access the Created Itinerary of:  NYC TRIP , with Unique Key ID:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:06.704  [DEBUG]   Message received from the Client:  get|6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:06.705  [DEBUG]   Found Itinerary Key :  6368bf6c-58da-44d6-89d9-a976da2746d2 and Itinerary Name Value :  NYC TRIP
+2023-04-25 14:46:06.706  [DEBUG]   Sending response message to the Client:  Itinerary Details:
+
+Name: NYC TRIP
+Location: NYC
+Description: NYCCCC
+Start Date: Wed Jan 01 00:00:00 EST 2025
+End Date: Thu Jan 01 00:00:00 EST 2026
+Created by: Shiv
+List of Users with whom this Itinerary is shared with: 
+Version: 1
+
+2023-04-25 14:46:20.879  [DEBUG]   Message received from the Client:  share|6368bf6c-58da-44d6-89d9-a976da2746d2|t@t.com
+2023-04-25 14:46:20.880  [DEBUG]   #KVS  KVS0 : Tokens received at startPaxos:  [share, 6368bf6c-58da-44d6-89d9-a976da2746d2, t@t.com]
+2023-04-25 14:46:20.882  [DEBUG]   Initiating PAXOS Phase 1
+2023-04-25 14:46:20.883  [DEBUG]   Sequence Number:  1682448380883
+2023-04-25 14:46:20.884  [DEBUG]   #KVS KVS0, Prepare() request received with sequence id:  1682448380883 , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:20.885  [DEBUG]   #KVS KVS0, Responding back to the prepare() request with:  Promise{sequenceNumber = 1682448380883, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 14:46:20.886  [DEBUG]   Number of received Promises:  3
+2023-04-25 14:46:20.887  [DEBUG]   Initiating PAXOS Phase 2 with proposed value:  t@t.com
+2023-04-25 14:46:20.889  [DEBUG]   #KVS KVS0, Prepare() request received with sequence id:  1682448380883 , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2 , and Proposed value:  t@t.com
+2023-04-25 14:46:20.889  [DEBUG]   Accepting proposed value:  t@t.com , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2 , and setting the accepted sequence id number to:  1682448380883
+2023-04-25 14:46:20.890  [DEBUG]   Number of Accepted Responses received:  3
+2023-04-25 14:46:20.890  [DEBUG]   Consensus has been reached! Learning and Committing the value:  t@t.com  for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:20.891  [DEBUG]   Learning and Committing the Value:  t@t.com  for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:20.891  [DEBUG]   User found with Email:  t@t.com  Sharing the Itinerary with:  Test
+2023-04-25 14:46:20.891  [DEBUG]   Current User:  Shiv  Shared User:  Test
+2023-04-25 14:46:20.892  [DEBUG]   Itinerary ' NYC TRIP ' successfully shared with User:  Test
+2023-04-25 14:46:20.892  [DEBUG]   Sending response message to the Client:  Itinerary Successfully Shared
+2023-04-25 14:46:39.847  [DEBUG]   Message received from the Client:  get|6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:39.848  [DEBUG]   Found Itinerary Key :  6368bf6c-58da-44d6-89d9-a976da2746d2 and Itinerary Name Value :  NYC TRIP
+2023-04-25 14:46:39.848  [DEBUG]   Sending response message to the Client:  Itinerary Details:
+
+Name: NYC TRIP
+Location: NYC
+Description: NYCCCC
+Start Date: Wed Jan 01 00:00:00 EST 2025
+End Date: Thu Jan 01 00:00:00 EST 2026
+Created by: Shiv
+List of Users with whom this Itinerary is shared with: [Test, t@t.com] 
+Version: 1
+

@@ -234,15 +234,11 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       logger.debug(true, "Consensus has been reached! Learning and Committing the value: ",
           tempValue, " for Key: ", key);
 
-      System.out.println("#KVS"+ this.serverId +", BEFORE LEARN:  Key: " + key + ", Value: " + value + ", Op: " + operation);
       String response = learn(key, value, operation);
-      System.out.println("#KVS"+ this.serverId +", RESPONSE AFTER PAXOS LEARN: " + response);
 
       for (Map.Entry<String, PaxosServer> entry: acceptors.entrySet()) {
         if (!serverId.equals(entry.getKey())) {
-          // TODO - FOr remaining instances the value is changes to Itinerary instead of email
           String finalValue = value;
-          System.out.println("PAXOS SERVERS FINAL VALUE: " + finalValue);
           executorService.submit(() -> entry.getValue().learn(key, finalValue, operation));
         }
       }
@@ -380,17 +376,12 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   public String learn(String key, String value, String operation) throws RemoteException {
     // operation = PUT / GET / DELETE / EDIT / SHARE 213123 s@s.com
 
-    // TODO - In other instance, the value is Itinerary object. instead of shared email id
-
-    //System.out.println("#KVS " + this.serverId + ", IN LEARN BEFORE Parse:  Key: " + key + ", Value: " + value + ", Op: " + operation);
     String tempValue = null;
     try {
       tempValue = parseJson(value);
     } catch (Exception e) {
       tempValue = value;
     }
-
-    //System.out.println("#KVS " + this.serverId + ", IN LEARN AFTER Parse:  Key: " + key + ", TempValue: " + tempValue + ", Op: " + operation);
 
     // Need to commit the accepted value
     logger.debug(true, "Learning and Committing the Value: ", tempValue,

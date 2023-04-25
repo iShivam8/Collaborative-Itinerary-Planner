@@ -2,6 +2,7 @@ package server.keyvaluestore;
 
 import com.google.gson.Gson;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import logs.Logger;
 import server.Server;
@@ -86,6 +87,7 @@ public class KeyValueStore {
    * After validating the token message received from the client.
    *
    * @param tokens - input message token received from the client
+   * @param currentUser - The user who invokes this method will be the current user
    * @return - response of the executed operation
    */
   synchronized String executeOperation(String[] tokens, User currentUser) {
@@ -107,6 +109,8 @@ public class KeyValueStore {
       Itinerary itinerary = new Gson().fromJson(tokens[2], Itinerary.class);
       logger.debug(true, "Successfully Deserialized the Itinerary: ", itinerary.getName());
 
+      User ownerUser = itinerary.getCreatedBy();
+
       //addItinerary(itinerary);
       // TODO - What if the KVS contains key already?
       //  Can we skip that and use this method for EDIT as well?
@@ -114,9 +118,9 @@ public class KeyValueStore {
       this.keyValueStore.put(tokens[1], itinerary);
 
       // Adding this itinerary in the list of created itinerary of the Current User
-      currentUser.setListOfCreatedItinerary(itinerary);
+      ownerUser.setListOfCreatedItinerary(itinerary);
       logger.debug(true, "Itinerary '", itinerary.getName(),
-          "' Added in the List of Created Itineraries of User: ", currentUser.getName());
+          "' Added in the List of Created Itineraries of User: ", ownerUser.getName());
 
       return tokens[1];
 
@@ -130,14 +134,25 @@ public class KeyValueStore {
       }
 
       Itinerary itinerary = keyValueStore.get(tokens[1]);
+      User ownerUser = itinerary.getCreatedBy();
 
-      // If the Itinerary is created by current user OR
+      // If the Itinerary is created by owner OR
       // whether the current user is in the list of shared user of itinerary
-      if (itinerary.getCreatedBy().getEmailId().equals(currentUser.getEmailId())
+      if (ownerUser.getEmailId().equals(currentUser.getEmailId())
           || itinerary.getListOfSharedWithUsers().contains(currentUser)) {
+
         logger.debug(true, "Found Itinerary Key : ", tokens[1],
             "and Itinerary Name Value : ", keyValueStore.get(tokens[1]).getName());
+
         return keyValueStore.get(tokens[1]).toString();
+      } else if (ownerUser.getMapOfSharedItineraries().containsKey(itinerary)) {
+        List<User> tempUser = ownerUser.getMapOfSharedItineraries().get(itinerary);
+        if (tempUser.contains(currentUser)) {
+          logger.debug(true, "Found Itinerary Key : ", tokens[1],
+              "and Itinerary Name Value : ", keyValueStore.get(tokens[1]).getName());
+
+          return keyValueStore.get(tokens[1]).toString();
+        }
       }
 
       logger.debug(true, "You're not the Owner of this itinerary or " +
@@ -175,12 +190,6 @@ public class KeyValueStore {
       }
       String sharedEmailId = tokens[2];
 
-      // TODO parse token 2 into gson, if yes then return.
-
-      //  TODO - After sharing for 1st time, tokens[2] is changing from email id to entire itinerary
-
-      // TODO - If current user wants to share the itinerary with himself, return cant do that
-
       // If no key i.e. Itinerary ID is found, return no itinerary found
       if (!keyValueStore.containsKey(itineraryId)) {
         logger.debug(true, "Itinerary Key : ", tokens[1], " not found in the store.");
@@ -189,19 +198,23 @@ public class KeyValueStore {
 
       // Else, if the specified Key is found, then search for User with specified email
       try {
-
         // If there is no account of the shared user email, return no user found
         if (!this.userDatabase.getUserDatabase().containsKey(sharedEmailId)) {
           logger.debug(true, "No user found with Email: ", tokens[2]);
           return "No User Found";
         }
 
-        if (currentUser.getEmailId().equals(sharedEmailId)) {
-          logger.debug(true, "Current User and Shared User are the same. Not proceeding.");
-          return "Same User can't share!";
-        }
-
         User sharedUser = userDatabase.fetchUser(sharedEmailId);
+        Itinerary itinerary = this.keyValueStore.get(itineraryId);
+
+        // Only the owner of the itinerary can share the itinerary with the shared user
+        User ownerUser = itinerary.getCreatedBy();
+
+        // If current user (owner) wants to share the itinerary with himself, return can't do that
+        if (ownerUser.getEmailId().equals(sharedEmailId)) {
+          logger.debug(true, "Current User and Shared User are the same. Not proceeding.");
+          return "Cannot share to own self.";
+        }
 
         //System.out.println("CURRENT USER: " + userDbServer.getUserDB().getUserDatabase().get(tokens[2]).getName());
         //System.out.println("SHARED USER: " + userDatabase.getUserDatabase().get(tokens[2]).getName());
@@ -210,8 +223,9 @@ public class KeyValueStore {
         //  and this time it is current user + shared user, so rejects!
         // TODO - Third server does not have any user.
 
-        System.out.println("CURRENT USER: " + currentUser.getName());
-        System.out.println("SHARED USER: " + sharedUser.getName());
+        // TODO - Current user will throw null if accessed by a server which is not logged in by a user
+        //System.out.println("CURRENT USER: " + currentUser.getName());
+        //System.out.println("SHARED USER: " + sharedUser.getName());
 
         // Else, if user is found, send itinerary id to that user to listOfSharedIts
         // If user is found in db, then share the key with that user
@@ -219,28 +233,25 @@ public class KeyValueStore {
             " Sharing the Itinerary with: ",
             userDbServer.getUserDB().getUserDatabase().get(tokens[2]).getName());
 
-        Itinerary itinerary = this.keyValueStore.get(itineraryId);
+        if (currentUser != null) {
+          // If the current user is not the owner of the itinerary, he cannot share it with other users
+          if (!currentUser.getEmailId().equals(ownerUser.getEmailId())) {
+            logger.debug(true, "You're not the Owner of this itinerary, " +
+                "so you can't share with other users");
+            return "You're not the Owner of this itinerary, so you can't share it with other users!";
+          }
 
-        // TODO - Current user gets null
+          logger.debug(true, "Current User: ", currentUser.getName(),
+              " Shared User: ", sharedUser.getName());
+        }
+
+        /*
         if (!currentUser.getEmailId().equals(itinerary.getCreatedBy().getEmailId())) {
           logger.debug(true, "You're not the Owner of this itinerary, " +
               "so you can't share with other users");
           return "You're not the Owner of this itinerary, so you can't share it with other users!";
         }
-
-        //User sharedUser = null;
-
-        //sharedUser = this.userDatabase.getUserDatabase().get(sharedEmailId);
-        //sharedUser = userDbServer.getUserDB().getUserDatabase().get(tokens[2]);
-
-        logger.debug(true, "Current User: ", currentUser.getName(),
-            " Shared User: ", sharedUser.getName());
-        System.out.println("Current User: " + currentUser.getName() +
-            ", Shared User: " + sharedUser.getName());
-
-        // Setting list of shared user for current user, and shared itinerary for the shared users
-        currentUser.addSharedUserToMap(itinerary, sharedUser);
-        //itinerary.setCreatedBy(currentUser);
+         */
 
         // Updates Shared Users list of itineraries
         if (itinerary.getListOfSharedWithUsers().contains(sharedUser)) {
@@ -250,8 +261,11 @@ public class KeyValueStore {
           return "Itinerary is Already Shared";
         } else {
 
-          // Adding the shared user to the itinerary created by Current user (owner)
+          // Adding the shared user to the itinerary created by owner
           itinerary.setListOfSharedWithUsers(sharedUser);
+
+          // Setting list of shared user for the owner user, and shared itinerary for the shared users
+          ownerUser.addSharedUserToMap(itinerary, sharedUser);
 
           // Adding the current itinerary as the Shared itinerary of the shared user
           // So that the shared user can know to which itinerary he has access to
@@ -259,12 +273,11 @@ public class KeyValueStore {
 
           logger.debug(true, "Itinerary '", itinerary.getName(),
               "' successfully shared with User: ", sharedUser.getName());
+
           return "Itinerary Successfully Shared";
         }
 
         // TODO - Although the Itinerary is shared, its not visible using get method
-
-        // TODO - First time it does not found the user, so no user found
 
       } catch (Exception e) {
         logger.error(true, "Exception occurred! Can't share with the specified User!");

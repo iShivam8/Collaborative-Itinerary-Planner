@@ -1,0 +1,14 @@
+2023-04-25 14:46:01.947  [DEBUG]   #KVS KVS2, Prepare() request received with sequence id:  1682448361944 , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:01.947  [DEBUG]   #KVS KVS2, Responding back to the prepare() request with:  Promise{sequenceNumber = 1682448361944, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 14:46:01.951  [DEBUG]   #KVS KVS2, Prepare() request received with sequence id:  1682448361944 , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2 , and Proposed value:  NYC TRIP
+2023-04-25 14:46:01.951  [DEBUG]   Accepting proposed value:  NYC TRIP , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2 , and setting the accepted sequence id number to:  1682448361944
+2023-04-25 14:46:01.956  [DEBUG]   Learning and Committing the Value:  NYC TRIP  for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:01.957  [DEBUG]   Successfully Deserialized the Itinerary:  NYC TRIP
+2023-04-25 14:46:01.957  [DEBUG]   Itinerary ' NYC TRIP ' Added in the List of Created Itineraries of User:  Shiv
+2023-04-25 14:46:20.884  [DEBUG]   #KVS KVS2, Prepare() request received with sequence id:  1682448380883 , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:20.885  [DEBUG]   #KVS KVS2, Responding back to the prepare() request with:  Promise{sequenceNumber = 1682448380883, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-25 14:46:20.889  [DEBUG]   #KVS KVS2, Prepare() request received with sequence id:  1682448380883 , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2 , and Proposed value:  t@t.com
+2023-04-25 14:46:20.889  [DEBUG]   Accepting proposed value:  t@t.com , for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2 , and setting the accepted sequence id number to:  1682448380883
+2023-04-25 14:46:20.893  [DEBUG]   Learning and Committing the Value:  t@t.com  for Key:  6368bf6c-58da-44d6-89d9-a976da2746d2
+2023-04-25 14:46:20.893  [DEBUG]   User found with Email:  t@t.com  Sharing the Itinerary with:  Test
+2023-04-25 14:46:20.894  [DEBUG]   Itinerary ' NYC TRIP ' successfully shared with User:  Test
