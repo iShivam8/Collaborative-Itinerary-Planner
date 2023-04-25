@@ -17,8 +17,8 @@ public class Itinerary implements Serializable {
   // The user who created this itinerary
   private User createdBy;
 
-  // List of users email id with whom the itinerary is shared with
-  private final List<String> listOfSharedUsersEmailId;
+  // List of users with whom the itinerary is shared with
+  private final List<User> listOfSharedWithUsers;
 
   // To keep a track of changes
   private int version;
@@ -31,7 +31,7 @@ public class Itinerary implements Serializable {
     this.endDate = endDate;
     this.description = description;
     this.createdBy = createdBy;
-    this.listOfSharedUsersEmailId = new ArrayList<>();
+    this.listOfSharedWithUsers = new ArrayList<>();
     this.version = 1;
   }
 
@@ -83,13 +83,13 @@ public class Itinerary implements Serializable {
     this.createdBy = createdBy;
   }
 
-  public List<String> getListOfSharedUsersEmailId() {
-    return this.listOfSharedUsersEmailId;
+  public List<User> getListOfSharedWithUsers() {
+    return listOfSharedWithUsers;
   }
 
-  public void setListOfSharedUsersEmailId(String sharedUsersEmailId) {
-    if (!this.listOfSharedUsersEmailId.contains(sharedUsersEmailId)) {
-      this.listOfSharedUsersEmailId.add(sharedUsersEmailId);
+  public void setListOfSharedWithUsers(User sharedUser) {
+    if (!this.listOfSharedWithUsers.contains(sharedUser)) {
+      this.listOfSharedWithUsers.add(sharedUser);
     }
   }
 
@@ -111,8 +111,7 @@ public class Itinerary implements Serializable {
         "End Date: " + endDate + '\n' +
         "Created by: " + createdBy.getName() + '\n' +
         "List of Users with whom this Itinerary is shared with: "
-        //+ fetchUserEmail(listOfSharedWithUsers) + '\n' +
-        + listOfSharedUsersEmailId + '\n' +
+        + fetchUserEmail(listOfSharedWithUsers) + '\n' +
         "Version: " + version + '\n';
   }
 

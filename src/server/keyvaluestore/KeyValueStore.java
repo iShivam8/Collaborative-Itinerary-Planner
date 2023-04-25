@@ -21,7 +21,7 @@ public class KeyValueStore {
    * Constructor of KeyValueStore that initializes the Key-Value Store.
    *
    * @param fileName - Filename for logger
-   * @param userDb
+   * @param userDb - Server userDb
    */
   public KeyValueStore(String fileName, String serverId, Server userDb) {
     this.keyValueStore = new ConcurrentHashMap<>();
@@ -134,7 +134,7 @@ public class KeyValueStore {
       // If the Itinerary is created by current user OR
       // whether the current user is in the list of shared user of itinerary
       if (itinerary.getCreatedBy().getEmailId().equals(currentUser.getEmailId())
-          || itinerary.getListOfSharedUsersEmailId().contains(currentUser.getEmailId())) {
+          || itinerary.getListOfSharedWithUsers().contains(currentUser)) {
         logger.debug(true, "Found Itinerary Key : ", tokens[1],
             "and Itinerary Name Value : ", keyValueStore.get(tokens[1]).getName());
         return keyValueStore.get(tokens[1]).toString();
@@ -239,7 +239,7 @@ public class KeyValueStore {
         //itinerary.setCreatedBy(currentUser);
 
         // Updates Shared Users list of itineraries
-        if (itinerary.getListOfSharedUsersEmailId().contains(sharedUser.getEmailId())) {
+        if (itinerary.getListOfSharedWithUsers().contains(sharedUser)) {
           logger.debug(true, "This Itinerary is already share with User: ",
               sharedUser.getName(), " Email: ", sharedUser.getEmailId());
 
@@ -247,7 +247,7 @@ public class KeyValueStore {
         } else {
 
           // Adding the shared user to the itinerary created by Current user (owner)
-          itinerary.setListOfSharedUsersEmailId(sharedUser.getEmailId());
+          itinerary.setListOfSharedWithUsers(sharedUser);
 
           // Adding the current itinerary as the Shared itinerary of the shared user
           // So that the shared user can know to which itinerary he has access to
