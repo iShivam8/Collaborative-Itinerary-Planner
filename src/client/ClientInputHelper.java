@@ -47,70 +47,85 @@ public class ClientInputHelper {
    * @return
    */
   static String fetchSignUpInput() {
-
-    // TODO - If invalid input, then keep asking user until valid inputs
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-    System.out.println("\nEnter the following Details to Register a New Account: ");
-    System.out.println("1] Enter Your First Name only");
-    System.out.println("2] Enter Your Email ID");
-    System.out.println("3] Enter Your Password");
-    System.out.println("\nPlease enter the above asked details: ");
+    while (true) {
+      try {
+        System.out.println("\nEnter the following Details to Register a New Account: ");
+        System.out.println("1] Enter Your First Name only");
+        System.out.println("2] Enter Your Email ID");
+        System.out.println("3] Enter Your Password (4-20 characters)");
+        System.out.println("\nPress Enter only after you have entered all inputs in one " +
+            "line with space in between: ");
 
-    try {
-      String userInput = bufferedReader.readLine();
+        String userInput = bufferedReader.readLine();
 
-      String[] array = userInput.split("\\s");
-      StringBuilder stringBuilder = new StringBuilder();
+        String[] array = userInput.split("\\s");
+        String firstName = array[0];
+        String email = array[1];
+        String password = array[2];
 
-      for (String str : array) {
-        if (str != null && str.length() != 0) {
-          stringBuilder.append(str).append("|");
+        if (firstName == null || firstName.isEmpty()) {
+          System.out.println("First Name cannot be empty!");
+          continue;
+        } else if (firstName.length() > 30) {
+          System.out.println("Name can't be more than 30 characters in length!");
+          continue;
         }
+
+        if (!isValidEmail(email)) {
+          System.out.println("Invalid email address!");
+          continue;
+        }
+
+        if (password.length() < 4 || password.length() > 20) {
+          System.out.println("Password should be between 4 and 20 characters!");
+          continue;
+        }
+
+        return firstName + "|" + email + "|" + password;
+      } catch (Exception e) {
+        System.out.println("Invalid inputs! Please try again!");
       }
-
-      return stringBuilder.substring(0, stringBuilder.length() - 1);
-    } catch (Exception e) {
-      System.out.println(
-          "Exception Occurred while taking Sign Up input details! Please try again!");
     }
-
-    return null;
   }
 
   /**
    * Method to take Login user input: Email & password.
    *
-   * @return
+   * @return - Login inputs: Email, Password
    */
   static String fetchLoginInput() {
-    // TODO - If invalid input, then keep asking user until valid inputs
-
-    System.out.println("\nEnter the following Credentials to Login: ");
-    System.out.println("1] Enter Your Email ID");
-    System.out.println("2] Enter Your Password");
-    System.out.println("\nPlease enter the above asked details: ");
-
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-    try {
-      String userInput = bufferedReader.readLine();
+    while (true) {
+      try {
+        System.out.println("\nEnter the following Credentials to Login: ");
+        System.out.println("1] Enter Your Email ID");
+        System.out.println("2] Enter Your Password");
+        System.out.println("\nPlease enter the above asked details in one line: ");
 
-      String[] array = userInput.split("\\s");
-      StringBuilder stringBuilder = new StringBuilder();
+        String userInput = bufferedReader.readLine();
 
-      for (String str : array) {
-        if (str != null && str.length() != 0) {
-          stringBuilder.append(str).append("|");
+        String[] array = userInput.split("\\s");
+        String email = array[0];
+        String password = array[1];
+
+        if (!isValidEmail(email)) {
+          System.out.println("Invalid email address!");
+          continue;
         }
+
+        if (password.length() < 4 || password.length() > 20) {
+          System.out.println("Password should be between 4 and 20 characters!");
+          continue;
+        }
+
+        return email + "|" + password;
+      } catch (Exception e) {
+        System.out.println("Invalid inputs! Please try again!");
       }
-
-      return stringBuilder.substring(0, stringBuilder.length() - 1);
-    } catch (Exception e) {
-      System.out.println("Exception Occurred while taking Login input details! Please try again!");
     }
-
-    return null;
   }
 
   /**
@@ -122,51 +137,61 @@ public class ClientInputHelper {
    */
   static String fetchUserOperationInput(boolean takeUserInput) {
 
-    // Keep taking the user input unless the boolean value turns false
-    if (takeUserInput) {
-      System.out.println("\nChoose from the following Requests: ");
-      System.out.println("1] Create a new Itinerary: PUT");
-      System.out.println("2] Get an Itinerary:       GET  (Itinerary-ID)");
-      System.out.println("3] Delete an Itinerary:    DELETE  (Itinerary-ID)");
-      System.out.println("4] Edit an Itinerary:      EDIT (Itinerary-ID)");
-      System.out.println("5] Share an Itinerary:     SHARE (Itinerary-ID) (Email id)\n");
-      // TODO - Implement User Profile Operations
-      System.out.println("User Profile Operations:");
-      // This will print all the itineraries that are created by this user,
-      // and with whom he has shared it with
-      System.out.println("a] List of Created and Shared Itineraries:        LIST CREATED");
-      // This will print out the itineraries that you have been invited to collaborate
-      // And you're not the owner but a collaborator for that Itinerary.
-      System.out.println("b] List of Collaborated Itineraries (Non-Owner):  LIST COLLAB");
-      System.out.println("Enter X to exit the Application and Logout!");
-    }
-
-    System.out.println("\nPlease enter your intended action: ");
-
-    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-
-    try {
-      String userInput = bufferedReader.readLine();
-
-      // If the user decides to quit the application
-      if (userInput.equalsIgnoreCase("X")) {
-        return userInput;
+    while (true) {
+      if (takeUserInput) {
+        System.out.println("\nChoose from the following Requests: ");
+        System.out.println("1] Create a new Itinerary: PUT");
+        System.out.println("2] Get an Itinerary:       GET  (Itinerary-ID)");
+        System.out.println("3] Delete an Itinerary:    DELETE  (Itinerary-ID)");
+        System.out.println("4] Edit an Itinerary:      EDIT (Itinerary-ID)");
+        System.out.println("5] Share an Itinerary:     SHARE (Itinerary-ID) (Email id)\n");
+        // TODO - Implement User Profile Operations
+        System.out.println("User Profile Operations:");
+        // This will print all the itineraries that are created by this user,
+        // and with whom he has shared it with
+        System.out.println("a] List of Created and Shared Itineraries:        LIST CREATED");
+        // This will print out the itineraries that you have been invited to collaborate
+        // And you're not the owner but a collaborator for that Itinerary.
+        System.out.println("b] List of Collaborated Itineraries (Non-Owner):  LIST COLLAB");
+        System.out.println("Enter X to exit the Application and Logout!");
       }
 
-      String[] array = userInput.split("\\s");
-      StringBuilder stringBuilder = new StringBuilder();
+      System.out.println("\nPlease enter your intended action: ");
 
-      for (String str : array) {
-        if (str != null && str.length() != 0) {
-          stringBuilder.append(str).append("|");
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+
+      try {
+        String userInput = bufferedReader.readLine();
+
+        // If the user decides to quit the application
+        if (userInput.equalsIgnoreCase("X")) {
+          return userInput;
         }
-      }
 
-      return stringBuilder.substring(0, stringBuilder.length() - 1);
-    } catch (Exception e) {
-      System.out.println("Exception Occurred! Incorrect User Input! Please try again!");
-      e.printStackTrace();
+        // Validating User Input
+        if (userInput.length() == 0) {
+          System.out.println("Input can't be blank! Please enter from the following requests!\n");
+          break;
+        }
+
+        String[] array = userInput.split("\\s");
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (String str : array) {
+          if (str != null && str.length() != 0) {
+            stringBuilder.append(str).append("|");
+          }
+        }
+
+        return stringBuilder.substring(0, stringBuilder.length() - 1);
+      } catch (Exception e) {
+        System.out.println("Exception Occurred! Incorrect User Input! Please try again!");
+        e.printStackTrace();
+      }
     }
+
+    // Keep taking the user input unless the boolean value turns false
+
 
     return null;
   }
@@ -179,29 +204,50 @@ public class ClientInputHelper {
    */
   static Itinerary fetchItineraryInput(User user) {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
     String name = null, location = null;
     Date startDate = null, endDate = null;
     String description = null;
 
-    // TODO - Validate all user inputs for character length. Do not allow to get input more than 100 chars
-
     // Take Trip Name
-    try {
-      System.out.println("1] Enter Itinerary Name: ");
-      name = br.readLine();
-    } catch (IOException e) {
-      System.out.println("Error reading Name Input!");
-      return null;
+    boolean isValidName = false;
+    while (!isValidName) {
+      try {
+        System.out.println("1] Enter Itinerary Name: ");
+        name = br.readLine();
+
+        if (name.length() > 30) {
+          System.out.println("Name can't be greater than 30 characters");
+          throw new IllegalArgumentException("Invalid Name!");
+        } else if (name.length() == 0) {
+          System.out.println("Name can't be blank!");
+          throw new IllegalArgumentException("Invalid Name!");
+        }
+
+        isValidName = true;
+      } catch (Exception e) {
+        System.out.println("Error reading Name Input!");
+      }
     }
 
     // Take Trip Location
-    try {
-      System.out.println("2] Enter Location: ");
-      location = br.readLine();
-    } catch (IOException e) {
-      System.out.println("Error reading Location Input!");
-      return null;
+    boolean isValidLocation = false;
+    while (!isValidLocation) {
+      try {
+        System.out.println("2] Enter Location: ");
+        location = br.readLine();
+
+        if (location.length() > 50) {
+          System.out.println("Location name can't be greater than 50 characters");
+          throw new IllegalArgumentException("Invalid Location Name!");
+        } else if (location.length() == 0) {
+          System.out.println("Location name can't be blank!");
+          throw new IllegalArgumentException("Invalid Location Name!");
+        }
+
+        isValidLocation = true;
+      } catch (Exception e) {
+        System.out.println("Error reading Location Input!");
+      }
     }
 
     // Taking startDate input
@@ -246,15 +292,28 @@ public class ClientInputHelper {
     }
 
     // Taking Itinerary Description
-    try {
-      System.out.println("5] Enter Itinerary Description: ");
-      description = br.readLine();
+    boolean isValidDescription = false;
+    while (!isValidDescription) {
+      try {
+        System.out.println("5] Enter Itinerary Description: ");
+        description = br.readLine();
 
-    } catch (Exception e) {
-      System.out.println("Exception Occurred while taking Itinerary Description details! " +
-          "Please try again!");
+        if (description.length() > 200) {
+          System.out.println("Description can't be greater than 200 characters");
+          throw new IllegalArgumentException("Invalid Description!");
+        } else if (description.length() == 0) {
+          System.out.println("Description can't be blank!");
+          throw new IllegalArgumentException("Invalid Description!");
+        }
+
+        isValidDescription = true;
+      } catch (Exception e) {
+        System.out.println("Exception Occurred while taking Itinerary Description details! " +
+            "Please try again!");
+      }
     }
 
+    // Creating the Itinerary
     try {
       return new Itinerary(name, location, startDate, endDate, description, user);
     } catch (Exception e) {
@@ -263,6 +322,13 @@ public class ClientInputHelper {
     }
 
     return null;
+  }
+
+  // Helper method to validate valid email
+  private static boolean isValidEmail(String email) {
+    // Regular expression for email validation
+    String regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    return email.matches(regex);
   }
 
   // Helper method to validate Start date

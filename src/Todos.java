@@ -3,7 +3,6 @@ public class Todos {
   // TODO - Remove src/ from every logs creator
 
   // TODO - Implement Profile Options
-  // TODO - Email Validate
   // TODO - EDIT functionality. Only Owner and Shared users can edit the itinerary
   // TODO - Change Unique ID generated format
   // TODO - Rename Method description in PaxosServer. Add edit, share
