@@ -9,7 +9,8 @@ public class UserDB {
   private final ConcurrentHashMap<String, User> userDatabase;
   private final Logger logger;
 
-  // This variable changes as per the latest logged in user
+  // This variable changes as per the latest logged-in user
+  // TODO - Remove this, and send the user to client
   private User currentLoggedInUser;
 
   public UserDB(String fileName, String serverId) {
@@ -80,7 +81,7 @@ public class UserDB {
         userDatabase.put(email, user);
 
         // TODO - Send the user to client
-        setLoggedInUser(user);
+        //setLoggedInUser(user);
 
         logger.debug(true, "Successfully created a new user with Email: ", email);
         return "User Created";
@@ -124,7 +125,7 @@ public class UserDB {
         user.setLoggedIn(true);
 
         // TODO send the logged in user to client
-        setLoggedInUser(user);
+        //setLoggedInUser(user);
 
         logger.debug(true, "User found with Email: ", email, ", and Name: ", user.getName());
         return "User Logged in";
@@ -142,6 +143,7 @@ public class UserDB {
     return "Error while logging in";
   }
 
+  /*
   private void setLoggedInUser(User user) {
     this.currentLoggedInUser = user;
   }
@@ -149,6 +151,21 @@ public class UserDB {
   // Helper method to return the logged-in user
   User getLoggedInUser() {
     return this.currentLoggedInUser;
+  }
+   */
+
+  /**
+   * Method to fetch Specified User via their Email id.
+   *
+   * @param emailId - Email id of the user
+   * @return - User object with specified email id
+   */
+  public User fetchUser(String emailId) {
+    if (!this.userDatabase.containsKey(emailId)) {
+      return null;
+    }
+
+    return this.userDatabase.get(emailId);
   }
 
   public ConcurrentHashMap<String, User> getUserDatabase() {

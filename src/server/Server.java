@@ -51,7 +51,7 @@ public interface Server extends Remote {
    *
    * @return - User
    */
-  User getUser() throws RemoteException;
+  User getUser(String emailId) throws RemoteException;
 
   UserDB getUserDB() throws RemoteException;
 }

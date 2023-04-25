@@ -59,15 +59,16 @@ public class UserDBServer implements Server {
   }
 
   @Override
-  public User getUser() {
+  public User getUser(String emailId) {
+    User user = this.userDB.fetchUser(emailId);
 
-    if (userDB.getLoggedInUser().isLoggedIn()) {
-      logger.debug(true, "Found the Logged in user: ", userDB.getLoggedInUser().getName());
-      return userDB.getLoggedInUser();
+    if (user == null) {
+      logger.error(true, "Can't find logged in user with Email: ", emailId);
+      return null;
     }
 
-    logger.error(true, "Can't find logged in user!");
-    return null;
+    logger.debug(true, "Found the Logged in user: ", user.getName());
+    return user;
   }
 
   // Below methods are implemented in KeyValueStoreServer

@@ -33,11 +33,15 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   private static final int MAXIMUM_PAXOS_RETRIES = 10;
   private final String serverId;
   private final Logger logger;
+  // We can use the userDbServer to access User Database
+  private final Server userDbServer;
 
   private User user;
 
   public KeyValueStoreServer(String serverId, Server userDb) {
-    this.keyValueStore = new KeyValueStore("src/logs/server_" + serverId + ".log", serverId, userDb);
+    this.keyValueStore = new KeyValueStore("src/logs/server_" + serverId
+        + ".log", serverId, userDb);
+    this.userDbServer = userDb;
     this.acceptors = new HashMap<>();
     this.metadata = new HashMap<>();
     this.serverId = serverId;
@@ -463,7 +467,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public User getUser() {
+  public User getUser(String emailId) {
     logger.debug(true, "Is it running this server?");
     return null;
   }

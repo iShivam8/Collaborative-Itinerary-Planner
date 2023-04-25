@@ -66,30 +66,43 @@ public class Client {
       String signupOrLoginInput = fetchSignupOrLoginInput();
       logger.debug(false, "Received Session request from user: ", signupOrLoginInput);
 
-      if (signupOrLoginInput != null) {
-        String response = null;
+      String response = null;
+      String emailId = null;
 
-        if (signupOrLoginInput.equalsIgnoreCase("Signup")) {
-          String signUpInput = fetchSignUpInput();
-          logger.debug(false, "Sending sign up request to the server: ", signUpInput);
-          response = userDbServer.signUp(signUpInput);
-        } else if (signupOrLoginInput.equalsIgnoreCase("Login")) {
-          String loginInput = fetchLoginInput();
-          logger.debug(false, "Sending login request to the server: ", loginInput);
-          response = userDbServer.login(loginInput);
-        }
+      if (signupOrLoginInput.equalsIgnoreCase("Signup")) {
+        String  signUpInput = fetchSignUpInput();
 
-        if (response != null) {
-          if (response.contains("User Created") || response.contains("User Logged in")) {
-            this.setSignedIn(true);
-            this.user = userDbServer.getUser();
-            this.user.setLoggedIn(true);
-          }
-        }
+        assert signUpInput != null;
+        String[] tokens = parseMessage(signUpInput);
+        emailId = tokens[1];
 
-        logger.debug(false, "Response from server: ", response);
-        System.out.println("Response from server: " + response);
+        logger.debug(false, "Sending sign up request to the server: ", signUpInput);
+        response = userDbServer.signUp(signUpInput);
+      } else if (signupOrLoginInput.equalsIgnoreCase("Login")) {
+        String loginInput = fetchLoginInput();
+
+        assert loginInput != null;
+        String[] tokens = parseMessage(loginInput);
+        emailId = tokens[0];
+
+        logger.debug(false, "Sending login request to the server: ", loginInput);
+        response = userDbServer.login(loginInput);
       }
+
+      if (response != null) {
+        if (response.contains("User Created")) {
+          this.setSignedIn(true);
+          this.user = userDbServer.getUser(emailId);
+          this.user.setLoggedIn(true);
+        } else if (response.contains("User Logged in")) {
+          this.setSignedIn(true);
+          this.user = userDbServer.getUser(emailId);
+          this.user.setLoggedIn(true);
+        }
+      }
+
+      logger.debug(false, "Response from server: ", response);
+      System.out.println("Response from server: " + response);
 
     } catch (Exception e) {
       logger.error(false, "Error connecting to RMI registry and while fetching the" +
@@ -134,10 +147,6 @@ public class Client {
         // Request contains the input entered by the client for any operation
         String request = fetchUserOperationInput(prompt);
         logger.debug(false, "Received request from user: ", request);
-
-        if (this.prompt) {
-          //this.prompt = false;
-        }
 
         if (request != null) {
           if (request.equalsIgnoreCase("x")) {
@@ -206,5 +215,15 @@ public class Client {
 
   void setSignedIn(boolean signedIn) {
     isSignedIn = signedIn;
+  }
+
+  /**
+   * Parse the tokens from the input message which is pipe separated.
+   *
+   * @param message - input message
+   * @return - array containing tokens
+   */
+  String[] parseMessage(String message) {
+    return message.split("\\|");
   }
 }

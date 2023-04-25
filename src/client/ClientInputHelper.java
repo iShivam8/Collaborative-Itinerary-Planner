@@ -18,30 +18,27 @@ import server.user.User;
 public class ClientInputHelper {
 
   static String fetchSignupOrLoginInput() {
-
-    // TODO - If invalid input, then keep asking user until valid inputs
-
-    System.out.println("\nChoose from the following Requests: ");
-    System.out.println("1] Sign Up for New Account: Enter - Signup");
-    System.out.println("2] Log In your Account: Enter - Login");
-    System.out.println("\nPlease enter your intended action: ");
-
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-    try {
-      String userInput = bufferedReader.readLine().trim();
+    while (true) {
+      System.out.println("\nChoose from the following Requests: ");
+      System.out.println("1] Sign Up for New Account: Enter - Signup");
+      System.out.println("2] Log In your Account: Enter - Login");
+      System.out.println("\nPlease enter your intended action: ");
 
-      if (userInput.equalsIgnoreCase("Signup") || userInput.equals("1")) {
-        return "SignUp";
-      } else if (userInput.equalsIgnoreCase("Login") || userInput.equals("2")) {
-        return "LogIn";
+      try {
+        String userInput = bufferedReader.readLine().trim();
+        if (userInput.equalsIgnoreCase("Signup") || userInput.equals("1")) {
+          return "SignUp";
+        } else if (userInput.equalsIgnoreCase("Login") || userInput.equals("2")) {
+          return "LogIn";
+        } else {
+          System.out.println("Incorrect Sign In Inputs! Please try again!");
+        }
+      } catch (Exception e) {
+        System.out.println("Incorrect Sign In Inputs! Please try again!");
       }
-
-    } catch (Exception e) {
-      System.out.println("Exception Occurred! Incorrect Sign In Inputs! Please try again!");
     }
-
-    return null;
   }
 
   /**
@@ -52,13 +49,13 @@ public class ClientInputHelper {
   static String fetchSignUpInput() {
 
     // TODO - If invalid input, then keep asking user until valid inputs
+    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
     System.out.println("\nEnter the following Details to Register a New Account: ");
     System.out.println("1] Enter Your First Name only");
     System.out.println("2] Enter Your Email ID");
     System.out.println("3] Enter Your Password");
     System.out.println("\nPlease enter the above asked details: ");
-    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
     try {
       String userInput = bufferedReader.readLine();
@@ -66,7 +63,7 @@ public class ClientInputHelper {
       String[] array = userInput.split("\\s");
       StringBuilder stringBuilder = new StringBuilder();
 
-      for (String str: array) {
+      for (String str : array) {
         if (str != null && str.length() != 0) {
           stringBuilder.append(str).append("|");
         }
@@ -74,7 +71,8 @@ public class ClientInputHelper {
 
       return stringBuilder.substring(0, stringBuilder.length() - 1);
     } catch (Exception e) {
-      System.out.println("Exception Occurred while taking Sign Up input details! Please try again!");
+      System.out.println(
+          "Exception Occurred while taking Sign Up input details! Please try again!");
     }
 
     return null;
@@ -101,7 +99,7 @@ public class ClientInputHelper {
       String[] array = userInput.split("\\s");
       StringBuilder stringBuilder = new StringBuilder();
 
-      for (String str: array) {
+      for (String str : array) {
         if (str != null && str.length() != 0) {
           stringBuilder.append(str).append("|");
         }
@@ -158,7 +156,7 @@ public class ClientInputHelper {
       String[] array = userInput.split("\\s");
       StringBuilder stringBuilder = new StringBuilder();
 
-      for (String str: array) {
+      for (String str : array) {
         if (str != null && str.length() != 0) {
           stringBuilder.append(str).append("|");
         }
@@ -185,6 +183,8 @@ public class ClientInputHelper {
     String name = null, location = null;
     Date startDate = null, endDate = null;
     String description = null;
+
+    // TODO - Validate all user inputs for character length. Do not allow to get input more than 100 chars
 
     // Take Trip Name
     try {
@@ -250,19 +250,6 @@ public class ClientInputHelper {
       System.out.println("5] Enter Itinerary Description: ");
       description = br.readLine();
 
-      /*
-      //For taking continuous input
-
-      try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-        String line;
-        while ((line = reader.readLine()) != null && line.length() > 0) {
-          description.append(line).append("\n");
-        }
-      } catch (IOException e) {
-        System.out.println("Error occurred while taking Itinerary Description input!");
-      }
-      */
-
     } catch (Exception e) {
       System.out.println("Exception Occurred while taking Itinerary Description details! " +
           "Please try again!");
@@ -278,12 +265,13 @@ public class ClientInputHelper {
     return null;
   }
 
+  // Helper method to validate Start date
   private static void validateStartDate(Date startDate) {
     // Get today's date
     LocalDate today = LocalDate.now();
     LocalDate startLocalDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-    if(startLocalDate.isBefore(today)) {
+    if (startLocalDate.isBefore(today)) {
       System.out.println("Start date cannot be before today's date.");
       throw new DateTimeException("Start date cannot be before today's date.");
     }
@@ -291,14 +279,14 @@ public class ClientInputHelper {
 
   // Helper method to validate End date
   private static void validateEndDate(Date startDate, Date endDate) {
-     if (endDate.compareTo(startDate) < 0) {
+    if (endDate.compareTo(startDate) < 0) {
       // end date is before start date
       System.out.println("End date cannot be before start date");
       throw new DateTimeException("End date cannot be before start date");
     } else if (startDate.compareTo(endDate) > 0) {
-       // start date is after end date
-       System.out.println("Start date cannot be after end date");
-       throw new DateTimeException("tart date cannot be after end date");
-     }
+      // start date is after end date
+      System.out.println("Start date cannot be after end date");
+      throw new DateTimeException("tart date cannot be after end date");
+    }
   }
 }
