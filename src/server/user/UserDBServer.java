@@ -86,7 +86,7 @@ public class UserDBServer implements Server {
 
   // Below methods are implemented in KeyValueStoreServer
   @Override
-  public String executeOperation(String inputMessage, String currentUserEmailId) throws RemoteException {
+  public String executeOperation(String inputMessage) throws RemoteException {
     return null;
   }
 

@@ -320,8 +320,8 @@ public class ClientInputHelper {
       } else if (enterOrUpdate.equalsIgnoreCase("UPDATE")) {
         Itinerary itinerary =
             new Itinerary(name, location, startDate, endDate, description, user.getEmailId());
-        itinerary.updateVersion();
         itinerary.setPrevItineraryId(previousItineraryId);
+        itinerary.updateVersion();
         return itinerary;
       }
     } catch (Exception e) {

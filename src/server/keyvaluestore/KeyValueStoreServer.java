@@ -417,13 +417,13 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     String result;
 
     assert stringCompleteOperation != null;
-    result = this.keyValueStore.executeOperation(stringCompleteOperation, null);
+    result = this.keyValueStore.executeOperation(stringCompleteOperation);
     metadata.remove(key);
     return result;
   }
 
   @Override
-  public String executeOperation(String inputMessage, String currentUserEmailId)
+  public String executeOperation(String inputMessage)
       throws IOException, ClassNotFoundException {
 
     // InputMessages:  Put;   EDIT|123;    Get|123;    Delete|123;   Share|123|a@a.com;
@@ -441,7 +441,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     } else if (validatedResponse[0].contains("PAXOS")) {
       result = startPaxos(tokens, validatedResponse[1]);
     } else {
-      result = this.keyValueStore.executeOperation(tokens, currentUserEmailId);
+      result = this.keyValueStore.executeOperation(tokens);
     }
 
     logger.debug(true, "Sending response message to the Client: ", result);
@@ -453,7 +453,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     logger.debug(true, "Itinerary received from the Client: ", itinerary.getName());
 
     String itineraryId = null;
-    if (itinerary.getVersion() == 1) {
+    if (itinerary.getVersion() < 1) {
       itineraryId = generateId();
     } else {
       itineraryId = itinerary.getPrevItineraryId();

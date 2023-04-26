@@ -107,7 +107,7 @@ public class KeyValueStore {
    * ?currentUserEmailId - The user who invokes this method will be the current user
    * @return - response of the executed operation
    */
-  synchronized String executeOperation(String[] tokens, String currentUserEmailI)
+  synchronized String executeOperation(String[] tokens)
       throws IOException, ClassNotFoundException {
 
     // Tokens:  Put --> INSERT;    Get|123;    Delete|123;    EDIT|123;   Share|123|a@a.com;
@@ -135,7 +135,7 @@ public class KeyValueStore {
       logger.debug(true, "Successfully Deserialized the Itinerary: ", itinerary.getName());
 
       // Update Call
-      if (itinerary.getVersion() > 1) {
+      if (itinerary.getVersion() >= 1) {
         // Fetch old id, and update it with new itinerary
         String oldItineraryId = itinerary.getPrevItineraryId();
 
@@ -153,7 +153,9 @@ public class KeyValueStore {
         updatedItinerary.updateListOfSharedUsers(
             this.keyValueStore.get(oldItineraryId).getListOfSharedWithUsers());
         updatedItinerary.setPrevItineraryId(itinerary.getPrevItineraryId());
-        updatedItinerary.setVersion(itinerary.getVersion());
+        // First get the version of the stored Itinerary, and then update it
+        updatedItinerary.setVersion(this.keyValueStore.get(oldItineraryId).getVersion());
+        updatedItinerary.updateVersion();
 
         // Updated the old itinerary with an updated one
         this.keyValueStore.put(oldItineraryId, updatedItinerary);
@@ -169,6 +171,8 @@ public class KeyValueStore {
       // TODO - What if the KVS contains key already?
       //  Can we skip that and use this method for EDIT as well?
 
+      itinerary.updateVersion();
+      System.out.println("tokens[1]: " + tokens[1]);
       this.keyValueStore.put(tokens[1], itinerary);
       ownerUser.addSharedUserToMap(itinerary, null);
 

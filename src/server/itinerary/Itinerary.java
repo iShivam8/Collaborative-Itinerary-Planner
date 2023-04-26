@@ -35,7 +35,7 @@ public class Itinerary implements Serializable {
     this.description = description;
     this.createdBy = createdBy;
     this.listOfSharedWithUsers = new ArrayList<>();
-    this.version = 1;
+    this.version = 0;
     this.prevItineraryId = null;
   }
 

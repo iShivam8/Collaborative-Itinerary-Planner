@@ -3,7 +3,6 @@ package server;
 import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Set;
 import server.itinerary.Itinerary;
 import server.user.User;
@@ -19,7 +18,7 @@ public interface Server extends Remote {
    * @return - Response of the executed operation to the client.
    * @throws RemoteException
    */
-  String executeOperation(String inputMessage, String currentUserEmailId) throws IOException,
+  String executeOperation(String inputMessage) throws IOException,
       ClassNotFoundException;
 
   /**
