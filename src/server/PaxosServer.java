@@ -1,5 +1,6 @@
 package server;
 
+import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -20,14 +21,15 @@ public interface PaxosServer extends Remote {
 
   /**
    * This method is used to start and initiate the PAXOS algorithm.
-   * It is invoked when the server receives any PUT, DELETE, SHARE update operations.
+   * It is invoked when the server receives any PUT, DELETE, SHARE, EDIT update operations.
    * And the server would then act as the proposer for the algorithm.
    *
-   * @param inputTokens - input operation token of PUT, DELETE, SHARE operations
-   * @return - Result of PUT and DELETE operation after PAXOS is completed.
+   * @param inputTokens - input operation token of PUT, DELETE, SHARE, EDIT operations
+   * @return - Result of PUT, DELETE, SHARE, EDIT operation after PAXOS is completed.
    * @throws RemoteException
    */
-  String startPaxos(String[] inputTokens, String operation) throws RemoteException;
+  String startPaxos(String[] inputTokens, String operation)
+      throws IOException, ClassNotFoundException;
 
   /**
    * Proposer uses this method for sending prepare(sequenceId) message of PAXOS.
@@ -62,5 +64,6 @@ public interface PaxosServer extends Remote {
    * @return - Result of PUT and DELETE operations when the commit actually occurs.
    * @throws RemoteException
    */
-  String learn(String key, String value, String operation) throws RemoteException;
+  String learn(String key, String value, String operation)
+      throws IOException, ClassNotFoundException;
 }

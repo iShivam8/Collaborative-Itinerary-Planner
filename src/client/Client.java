@@ -5,6 +5,7 @@ import static client.ClientInputHelper.fetchLoginInput;
 import static client.ClientInputHelper.fetchSignUpInput;
 import static client.ClientInputHelper.fetchUserOperationInput;
 import static client.ClientInputHelper.fetchSignupOrLoginInput;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -181,7 +182,8 @@ public class Client {
   }
 
   // Helper method to send Itinerary Inputs from the client to server
-  private void sendItineraryToServer(String enterOrUpdate, String previousItineraryId) throws RemoteException {
+  private void sendItineraryToServer(String enterOrUpdate, String previousItineraryId)
+      throws IOException, ClassNotFoundException {
     // Ask for user input for itinerary details
     Itinerary itinerary = fetchItineraryInput(this.user, enterOrUpdate, previousItineraryId);
 

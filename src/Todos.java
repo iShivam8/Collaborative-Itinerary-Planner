@@ -2,7 +2,13 @@ public class Todos {
 
   // TODO - Remove src/ from every logs creator
 
-  // TODO - Implement Profile Options
+  // TODO - Authorization access issue: Even if one owner shares an itinerary, the other user cannot see it
+
+  // TODO - Objects are always changing: user, itinerary
+  // TODO - Itinerary after update are different
+  // TODO - List Collab shows two times the same Itinerary
+
+  // TODO - Implement Profile Options: LIST CREATED Not working
   // TODO - EDIT functionality. Only Owner and Shared users can edit the itinerary
   // TODO - Change Unique ID generated format
   // TODO - Rename Method description in PaxosServer. Add edit, share

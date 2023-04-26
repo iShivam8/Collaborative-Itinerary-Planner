@@ -1,5 +1,6 @@
 package server;
 
+import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import server.itinerary.Itinerary;
@@ -16,7 +17,8 @@ public interface Server extends Remote {
    * @return - Response of the executed operation to the client.
    * @throws RemoteException
    */
-  String executeOperation(String inputMessage, User user) throws RemoteException;
+  String executeOperation(String inputMessage, User user) throws IOException,
+      ClassNotFoundException;
 
   /**
    * Method that adds a new itinerary in the KeyValueStore after getting the trip details
@@ -26,7 +28,7 @@ public interface Server extends Remote {
    * @return - Response whether the object is successfully added or not
    * @throws RemoteException
    */
-  String putItinerary(Itinerary itinerary) throws RemoteException;
+  String putItinerary(Itinerary itinerary) throws IOException, ClassNotFoundException;
 
   /**
    * Method used to allow the client to create a new account.

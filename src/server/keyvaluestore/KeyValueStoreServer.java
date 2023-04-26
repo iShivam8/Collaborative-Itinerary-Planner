@@ -1,12 +1,18 @@
 package server.keyvaluestore;
 
 import static server.keyvaluestore.UniqueIdGenerator.generateId;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +22,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import com.google.gson.Gson;
 import logs.Logger;
 import server.PaxosServer;
 import server.Promise;
@@ -37,10 +42,10 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   private final Server userDbServer;
   private User user;
 
-  public KeyValueStoreServer(String serverId, Server userDb) {
+  public KeyValueStoreServer(String serverId, Server userDbServer) {
     this.keyValueStore = new KeyValueStore("src/logs/server_" + serverId
-        + ".log", serverId, userDb);
-    this.userDbServer = userDb;
+        + ".log", serverId, userDbServer);
+    this.userDbServer = userDbServer;
     this.acceptors = new HashMap<>();
     this.metadata = new HashMap<>();
     this.serverId = serverId;
@@ -81,13 +86,10 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public String startPaxos(String[] inputTokens, String operation) throws RemoteException {
+  public String startPaxos(String[] inputTokens, String operation)
+      throws IOException, ClassNotFoundException {
 
-    // PUT,  1223123, ItJSON    JSON only for PUT and EDIT
-    // SHARE, 12233123, S@S.COM
-
-    logger.debug(true, "#KVS ", serverId, ": Tokens received at startPaxos: ",
-        Arrays.toString(inputTokens));
+    // PUT,  1223123, ItByteSized     Serialized Byte Array only for PUT and EDIT
 
     String key = inputTokens[1], value = null;
 
@@ -97,7 +99,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
     String tempValue = null;
     try {
-      tempValue = parseJson(value);
+      tempValue = parseByteArray(value);
     } catch (Exception e) {
       tempValue = value;
     }
@@ -127,7 +129,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
       List<Callable<Promise>> prepareTasks = new ArrayList<>();
 
-      for (PaxosServer paxosServer: acceptors.values()) {
+      for (PaxosServer paxosServer : acceptors.values()) {
         prepareTasks.add(() -> paxosServer.prepare(sequenceNumber, key, operation));
       }
 
@@ -138,7 +140,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
         List<Future<Promise>> prepareResponses = executorService
             .invokeAll(prepareTasks, 30, TimeUnit.SECONDS);
 
-        for (Future<Promise> result: prepareResponses) {
+        for (Future<Promise> result : prepareResponses) {
           Promise promise = result.get();
 
           if (promise != null) {
@@ -156,7 +158,6 @@ public class KeyValueStoreServer implements Server, PaxosServer {
               if (promise.getAccepted()
                   && promise.getAcceptedSequenceNumber() > maxSequenceNumber) {
                 maxSequenceNumber = promise.getAcceptedSequenceNumber();
-                // TODO - Value getting updated?
                 value = promise.getAcceptedValue();
               }
             }
@@ -187,9 +188,8 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       List<Callable<Boolean>> proposeTasks = new ArrayList<>();
       logger.debug(true, "Initiating PAXOS Phase 2 with proposed value: ", tempValue);
 
-      for (PaxosServer acceptor: acceptors.values()) {
+      for (PaxosServer acceptor : acceptors.values()) {
         String finalValue = value;
-        // TODO - Need to change key or value?
         proposeTasks.add(() -> acceptor.propose(sequenceNumber, key, finalValue, operation));
       }
 
@@ -199,7 +199,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
         List<Future<Boolean>> proposeResponses = executorService
             .invokeAll(proposeTasks, 30, TimeUnit.SECONDS);
 
-        for (Future<Boolean> result: proposeResponses) {
+        for (Future<Boolean> result : proposeResponses) {
           Boolean isAccepted = result.get();
 
           // To track how many Acceptors have accepted the Proposal
@@ -234,7 +234,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
       String response = learn(key, value, operation);
 
-      for (Map.Entry<String, PaxosServer> entry: acceptors.entrySet()) {
+      for (Map.Entry<String, PaxosServer> entry : acceptors.entrySet()) {
         if (!serverId.equals(entry.getKey())) {
           String finalValue = value;
           executorService.submit(() -> entry.getValue().learn(key, finalValue, operation));
@@ -247,17 +247,6 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     logger.error(true, "Error! Consensus could Not be reached even after " +
         "Maximum number of tries!");
     return "Failed";
-  }
-
-  // Helper method to parse the JSON object and fetch the Itinerary Name for logging purpose
-  private String parseJson(String jsonValue) {
-    if (jsonValue != null) {
-      Gson gson = new Gson();
-      Itinerary itinerary = gson.fromJson(jsonValue, Itinerary.class);
-      return itinerary.getName();
-    }
-
-    return null;
   }
 
   // Helper method to generate current system time as the sequence id number
@@ -276,7 +265,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     }
      */
 
-    logger.debug(true, "#KVS "+serverId+", Prepare() request received with sequence id: ",
+    logger.debug(true, "#KVS " + serverId + ", Prepare() request received with sequence id: ",
         String.valueOf(sequenceId), ", for Key: ", key);
 
 
@@ -309,14 +298,15 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       metadata.get(key).setStatus("Promised");
     }
 
-    logger.debug(true, "#KVS "+serverId+", Responding back to the prepare() request with: ",
+    logger.debug(true, "#KVS " + serverId + ", Responding back to the prepare() request with: ",
         metadata.get(key).toString());
 
     return new Promise(metadata.get(key));
   }
 
   @Override
-  public Boolean propose(long sequenceId, String key, String value, String operation) throws RemoteException {
+  public Boolean propose(long sequenceId, String key, String value, String operation)
+      throws RemoteException {
 
     /*
     // For Random failures
@@ -326,16 +316,14 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     }
      */
 
-    System.out.println("#KVS " + this.serverId + ", PROPOSE START:  Key: " + key + ", Value: " + value);
-
     String tempValue = null;
     try {
-      tempValue = parseJson(value);
+      tempValue = parseByteArray(value);
     } catch (Exception e) {
       tempValue = value;
     }
 
-    logger.debug(true, "#KVS "+serverId+", Prepare() request received with sequence id: ",
+    logger.debug(true, "#KVS " + serverId + ", Prepare() request received with sequence id: ",
         String.valueOf(sequenceId), ", for Key: ", key, ", and Proposed value: ", tempValue);
 
     if (!metadata.containsKey(key)) {
@@ -361,20 +349,32 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
     metadata.get(key).setStatus("Accepted");
     metadata.get(key).setAccepted(true);
-    System.out.println("#KVS " + this.serverId + ", PROPOSE END:  Key: " + key + ", Value: " + value);
     metadata.get(key).setAcceptedValue(value);
     metadata.get(key).setAcceptedSequenceNumber(sequenceId);
 
     return true;
   }
 
+  // Helper method to parse the Byte Array object and fetch the Itinerary Name for logging purpose
+  private String parseByteArray(String value) throws IOException, ClassNotFoundException {
+    if (value != null) {
+      byte[] decodedBytes = Base64.getDecoder().decode(value);
+      ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(decodedBytes));
+      Itinerary deserializedItinerary = (Itinerary) ois.readObject();
+      return deserializedItinerary.getName();
+    }
+
+    return null;
+  }
+
   @Override
-  public String learn(String key, String value, String operation) throws RemoteException {
+  public String learn(String key, String value, String operation)
+      throws IOException, ClassNotFoundException {
     // operation = PUT / GET / DELETE / EDIT / SHARE 213123 s@s.com
 
     String tempValue = null;
     try {
-      tempValue = parseJson(value);
+      tempValue = parseByteArray(value);
     } catch (Exception e) {
       tempValue = value;
     }
@@ -424,10 +424,11 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public String executeOperation(String inputMessage, User currentUser) throws RemoteException {
+  public String executeOperation(String inputMessage, User currentUser)
+      throws IOException, ClassNotFoundException {
 
-    // InputMessage:  Put;   EDIT|123;    Get|123;    Delete|123;   Share|123|a@a.com;
-    // LIST|CREATED;          LIST|COLLAB
+    // InputMessages:  Put;   EDIT|123;    Get|123;    Delete|123;   Share|123|a@a.com;
+                  //   LIST|CREATED;       LIST|COLLAB
     logger.debug(true, "Message received from the Client: ", inputMessage);
     this.user = currentUser;
 
@@ -450,7 +451,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public String putItinerary(Itinerary itinerary) throws RemoteException {
+  public String putItinerary(Itinerary itinerary) throws IOException, ClassNotFoundException {
     logger.debug(true, "Itinerary received from the Client: ", itinerary.getName());
 
     String itineraryId = null;
@@ -461,9 +462,18 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     }
 
     // Converting itinerary object to string for PAXOS
-    logger.debug(true, "Serializing the Itinerary: ",  itinerary.getName());
-    String itineraryJson = new Gson().toJson(itinerary);
-    logger.debug(true, "Successfully Serialized the Itinerary: ",  itinerary.getName());
+    logger.debug(true, "Serializing the Itinerary: ", itinerary.getName());
+
+    // Convert Itinerary object to byte array
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    ObjectOutputStream oos = new ObjectOutputStream(bos);
+    oos.writeObject(itinerary);
+    byte[] bytes = bos.toByteArray();
+
+    // Convert byte array to base64-encoded string
+    String itineraryJson = Base64.getEncoder().encodeToString(bytes);
+
+    logger.debug(true, "Successfully Serialized the Itinerary: ", itinerary.getName());
 
     assert itineraryJson != null;
     String[] tokens = {"PUT", itineraryId, itineraryJson};
@@ -490,7 +500,6 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
   @Override
   public User getUser(String emailId) {
-    logger.debug(true, "Is it running this server?");
     return null;
   }
 

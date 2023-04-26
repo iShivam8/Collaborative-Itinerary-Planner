@@ -1,9 +1,10 @@
 package server.keyvaluestore;
 
-import com.google.gson.Gson;
-import java.rmi.RemoteException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import logs.Logger;
 import server.Server;
@@ -11,12 +12,15 @@ import server.itinerary.Itinerary;
 import server.user.User;
 import server.user.UserDB;
 
+/**
+ * KeyValueStore that stores the Itinerary in a Concurrent HashMap with
+ * Key: Itinerary ID,  Value: Itinerary.
+ */
 public class KeyValueStore {
 
   // KeyValueStore that stores Unique ID as Key, and Itinerary Object as value
   private final ConcurrentHashMap<String, Itinerary> keyValueStore;
   private final Logger logger;
-  private final Server userDbServer;
   private UserDB userDatabase;
 
   /**
@@ -27,12 +31,11 @@ public class KeyValueStore {
    */
   public KeyValueStore(String fileName, String serverId, Server userDb) {
     this.keyValueStore = new ConcurrentHashMap<>();
-    this.userDbServer = userDb;
     this.logger = new Logger(fileName, serverId);
 
     try {
-      this.userDatabase = this.userDbServer.getUserDB();
-    } catch (RemoteException e) {
+      this.userDatabase = userDb.getUserDB();
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
@@ -103,9 +106,11 @@ public class KeyValueStore {
    * @param currentUser - The user who invokes this method will be the current user
    * @return - response of the executed operation
    */
-  synchronized String executeOperation(String[] tokens, User currentUser) {
+  synchronized String executeOperation(String[] tokens, User currentUser)
+      throws IOException, ClassNotFoundException {
 
     // Tokens:  Put --> INSERT;    Get|123;    Delete|123;    EDIT|123;   Share|123|a@a.com;
+    //          LIST CREATED       LIST COLLAB
 
     if (tokens[0].equalsIgnoreCase("PUT")) {
       // Need to update in User class, the list of Itineraries
@@ -116,20 +121,21 @@ public class KeyValueStore {
       // tokens[1] contains unique Key ID
       // tokens[2] contains serialized itinerary
 
-      // Deserializing Itinerary JSON object back to Itinerary
-      Itinerary itinerary = new Gson().fromJson(tokens[2], Itinerary.class);
+      // Deserializing the Itinerary Byte Sized array object back to Itinerary
+      byte[] decodedBytes = Base64.getDecoder().decode(tokens[2]);
+      ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(decodedBytes));
+      Itinerary itinerary = (Itinerary) ois.readObject();
+
       logger.debug(true, "Successfully Deserialized the Itinerary: ", itinerary.getName());
 
       // Update Call
       if (itinerary.getVersion() > 1) {
-        // Fetch old id, and update it with new it
+        // Fetch old id, and update it with new itinerary
         String oldItineraryId = itinerary.getPrevItineraryId();
-        // This is an update call
-        //Itinerary oldItinerary = this.keyValueStore.get(oldItineraryId);
 
         // Preserving the previous Unique ID, but updating the Itinerary object
         this.keyValueStore.put(oldItineraryId, itinerary);
-        // TODO - After updating once, the version does not change
+        // TODO - After updating once, the version does not change -> Due to mismatch of object
         return oldItineraryId;
       }
 
@@ -291,7 +297,7 @@ public class KeyValueStore {
         // If user is found in db, then share the key with that user
         logger.debug(true, "User found with Email: ", tokens[2],
             " Sharing the Itinerary with: ",
-            userDbServer.getUserDB().getUserDatabase().get(tokens[2]).getName());
+            this.userDatabase.getUserDatabase().get(tokens[2]).getName());
 
         if (currentUser != null) {
           // If the current user is not the owner of the itinerary, he cannot share it with other users
