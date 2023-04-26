@@ -1,6 +1,8 @@
 package server.user;
 
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Set;
 import logs.Logger;
 import server.Server;
 import server.itinerary.Itinerary;
@@ -46,7 +48,7 @@ public class UserDBServer implements Server {
     if (validatedResponse.startsWith("Invalid")) {
       result = validatedResponse;
     } else if (validatedResponse.contains("Valid Input")) {
-      result = userDB.loginUser(tokens);
+      result = this.userDB.loginUser(tokens);
     }
 
     logger.debug(true, "Sending response message to the Client: ", result);
@@ -54,8 +56,19 @@ public class UserDBServer implements Server {
   }
 
   @Override
+  public String logout(String emailId) {
+    logger.debug(true, "Logout Info received from the Client: ", emailId);
+    return this.userDB.logout(emailId);
+  }
+
+  @Override
   public UserDB getUserDB() throws RemoteException {
     return this.userDB;
+  }
+
+  @Override
+  public Set<String> getSetOfLoggedInUsers() throws RemoteException {
+    return this.userDB.getListOfLoggedInUsers();
   }
 
   @Override
@@ -68,7 +81,7 @@ public class UserDBServer implements Server {
     }
 
     logger.debug(true, "Found the Logged in user: ", user.getName());
-    return user;
+    return this.userDB.fetchUser(emailId);
   }
 
   // Below methods are implemented in KeyValueStoreServer

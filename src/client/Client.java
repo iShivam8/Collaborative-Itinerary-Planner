@@ -27,12 +27,9 @@ public class Client {
   private final int serverId;
   private final Logger logger;
   private boolean prompt = true;
-
-  private Server userDbServer, keyValueStoreServer;
-
   private User user;
-  // TODO - Use any fields from below to keep a track of whether the client is signed in or not
   private boolean isSignedIn;
+  private Server userDbServer, keyValueStoreServer;
 
   /**
    * Constructor for client and initializes the client object.
@@ -89,19 +86,43 @@ public class Client {
       }
 
       if (response != null) {
-        if (response.contains("User Created")) {
-          this.setSignedIn(true);
+        if (response.equals("User already Logged-in")) {
+          logger.debug(false, "User is already logged-in on "
+              + "a different terminal. First logout then try to sign-in again!");
+          System.out.println("User is already logged-in on "
+              + "a different terminal. First logout then try to sign-in again!");
+          this.user = this.userDbServer.getUser(emailId);
+          this.setSignedIn(false);
+          return;
+        }
+
+        if (response.equals("User Created")) {
           this.user = this.userDbServer.getUser(emailId);
           this.user.setLoggedIn(true);
-        } else if (response.contains("User Logged in")) {
           this.setSignedIn(true);
+        } else if (response.equals("User Logged in")) {
           this.user = this.userDbServer.getUser(emailId);
+
+          if (this.userDbServer.getSetOfLoggedInUsers()
+              .contains(this.user.getEmailId())) {
+            logger.debug(false, "User is already logged-in on "
+                + "a different terminal. First logout then try to sign-in again!");
+            System.out.println("User is already logged-in on "
+                + "a different terminal. First logout then try to sign-in again!");
+            return;
+          }
+
           this.user.setLoggedIn(true);
+          this.setSignedIn(true);
         }
       }
 
       logger.debug(false, "Response from server: ", response);
       System.out.println("Response from server: " + response);
+
+      if (this.isSignedIn && this.user.isLoggedIn()) {
+        run();
+      }
 
     } catch (Exception e) {
       logger.error(false, "Error connecting to RMI registry and while fetching the" +
@@ -116,7 +137,7 @@ public class Client {
    * This method starts the Client. It tries to locate the RMI registry and fetch server stub
    * from it. After that, it invokes remote method of the server stub in order to interact with it.
    */
-  void run() {
+  private void run() {
 
     try {
       logger.debug(false, "Looking for RMI registry...");
@@ -150,10 +171,9 @@ public class Client {
           if (request.equalsIgnoreCase("x")) {
             logger.debug(false, "Quitting the application.");
             this.setSignedIn(false);
-
-            // TODO - A Case where same user signs in different terminal.
-            // Sol: Do not allow to sign in a different terminal
             this.user.setLoggedIn(false);
+            String logoutResponse = this.userDbServer.logout(this.user.getEmailId());
+            logger.debug(true, "Logout response received from Server: ", logoutResponse);
             break;
           }
 
@@ -214,12 +234,26 @@ public class Client {
     }
   }
 
-  public boolean isSignedIn() {
-    return isSignedIn;
+  boolean isSignedIn() {
+    return this.isSignedIn;
   }
 
   void setSignedIn(boolean signedIn) {
-    isSignedIn = signedIn;
+    this.isSignedIn = signedIn;
+  }
+
+  void logout() throws RemoteException {
+
+    if (this.user == null || this.userDbServer == null) {
+      return;
+    }
+
+    logger.debug(false, "Quitting the application.");
+    System.out.println("Quitting the application...");
+    this.setSignedIn(false);
+    this.user.setLoggedIn(false);
+    String logoutResponse = this.userDbServer.logout(this.user.getEmailId());
+    logger.debug(true, "Logout response received from Server: ", logoutResponse);
   }
 
   /**

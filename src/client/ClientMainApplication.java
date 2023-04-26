@@ -1,5 +1,7 @@
 package client;
 
+import java.rmi.RemoteException;
+
 /**
  * Entry gateway for the client application.
  */
@@ -31,21 +33,19 @@ public class ClientMainApplication {
       }
     }
 
-    // TODO - If a user is already signed in, do not allow to sign in from another client terminal
-    // We can use a temporary list, to keep track of signed in users.
-    // If a user is found in that list, do not allow to sign in that user
-    if (!client.isSignedIn()) {
+    client.signIn();
 
-      client.signIn();
-
-      // If the client is logged in with valid credentials, then only run the client
-      if (client.isSignedIn()) {
-        client.run();
-      } else {
-        System.out.println("Invalid Credentials!");
+    Client finalClient = client;
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      @Override
+      public void run() {
+        // your code to logout the user
+        try {
+          finalClient.logout();
+        } catch (RemoteException e) {
+          e.printStackTrace();
+        }
       }
-    } else {
-      System.out.println("This User is already signed in to a different terminal! Cannot sign in again");
-    }
+    });
   }
 }

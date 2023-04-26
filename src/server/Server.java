@@ -3,6 +3,8 @@ package server;
 import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Set;
 import server.itinerary.Itinerary;
 import server.user.User;
 import server.user.UserDB;
@@ -56,4 +58,14 @@ public interface Server extends Remote {
   User getUser(String emailId) throws RemoteException;
 
   UserDB getUserDB() throws RemoteException;
+
+  Set<String> getSetOfLoggedInUsers() throws RemoteException;
+
+  /**
+   * Method to Log out the specified user from the server.
+   *
+   * @param emailId - Email id of the user to logout
+   * @return - String specifying whether the user is logout or not
+   */
+  String logout(String emailId) throws RemoteException;
 }

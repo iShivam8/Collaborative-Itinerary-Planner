@@ -1,5 +1,7 @@
 package server.user;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import logs.Logger;
 
@@ -11,10 +13,12 @@ public class UserDB {
   // User Database with Key: Email, and Value: User object
   private final ConcurrentHashMap<String, User> userDatabase;
   private final Logger logger;
+  private final Set<String> loggedInUsersEmailId;
 
   public UserDB(String fileName, String serverId) {
     this.userDatabase = new ConcurrentHashMap<>();
     this.logger = new Logger(fileName, serverId);
+    this.loggedInUsersEmailId = new HashSet<>();
   }
 
   /**
@@ -81,6 +85,9 @@ public class UserDB {
         // Add the newly created user in User database
         userDatabase.put(email, user);
 
+        // Added the current user in Logged-in User
+        this.loggedInUsersEmailId.add(user.getEmailId());
+
         // TODO - Send the user to client
         //setLoggedInUser(user);
 
@@ -113,7 +120,7 @@ public class UserDB {
         return "User Not Found";
       }
 
-      User user = userDatabase.get(email);
+      User user = this.userDatabase.get(email);
 
       if (user == null) {
         logger.debug(true, "No user exists with email: ", email, " Create a new " +
@@ -121,9 +128,16 @@ public class UserDB {
         return "User not found";
       }
 
+      if (this.loggedInUsersEmailId.contains(email)) {
+        logger.debug(true, "User ", user.getName(), " is already logged-in on " +
+            "a different terminal. First logout then try to sign-in again!");
+        return "User already Logged-in";
+      }
+
       if (user.getPassword().equals(password)) {
         // Sign in user: Correct Email, Password
         user.setLoggedIn(true);
+        this.userDatabase.get(email).setLoggedIn(true);
 
         logger.debug(true, "User found with Email: ", email, ", and Name: ", user.getName());
         return "User Logged in";
@@ -159,6 +173,8 @@ public class UserDB {
     return this.userDatabase;
   }
 
+
+
   /**
    * Parse the tokens from the input message which is pipe separated.
    *
@@ -167,5 +183,28 @@ public class UserDB {
    */
   String[] parseMessage(String message) {
     return message.split("\\|");
+  }
+
+  /**
+   * Method to log out the specified user.
+   *
+   * @param emailId - email id of the user
+   * @return - Response of logout
+   */
+  String logout(String emailId) {
+    if (!this.userDatabase.containsKey(emailId)) {
+      logger.error(true, "User with Email: ", emailId, " Not found!");
+      return "User Not Found";
+    }
+
+    User user = this.userDatabase.get(emailId);
+    this.userDatabase.get(emailId).setLoggedIn(false);
+    this.loggedInUsersEmailId.remove(emailId);
+    logger.debug(true, "User: ", user.getName(), " Successfully Logged out!");
+    return "User Successfully Logged Out!";
+  }
+
+  Set<String> getListOfLoggedInUsers() {
+    return this.loggedInUsersEmailId;
   }
 }
