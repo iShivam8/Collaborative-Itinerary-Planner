@@ -319,6 +319,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   public Boolean propose(long sequenceId, String key, String value, String operation) throws RemoteException {
 
     /*
+    // For Random failures
     if (ThreadLocalRandom.current().nextInt(0, 10) == 0) {
       logger.error(true, "Acceptor", serverId, " has failed!");
       return null;
@@ -326,9 +327,6 @@ public class KeyValueStoreServer implements Server, PaxosServer {
      */
 
     System.out.println("#KVS " + this.serverId + ", PROPOSE START:  Key: " + key + ", Value: " + value);
-
-
-    // TODO - how the value is Itinerary and not email of shared user
 
     String tempValue = null;
     try {
@@ -455,7 +453,12 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   public String putItinerary(Itinerary itinerary) throws RemoteException {
     logger.debug(true, "Itinerary received from the Client: ", itinerary.getName());
 
-    String itineraryId = generateId();
+    String itineraryId = null;
+    if (itinerary.getVersion() == 1) {
+      itineraryId = generateId();
+    } else {
+      itineraryId = itinerary.getPrevItineraryId();
+    }
 
     // Converting itinerary object to string for PAXOS
     logger.debug(true, "Serializing the Itinerary: ",  itinerary.getName());

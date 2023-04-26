@@ -54,12 +54,12 @@ public class UserDBServer implements Server {
   }
 
   @Override
-  public UserDB getUserDB() {
+  public UserDB getUserDB() throws RemoteException {
     return this.userDB;
   }
 
   @Override
-  public User getUser(String emailId) {
+  public User getUser(String emailId) throws RemoteException {
     User user = this.userDB.fetchUser(emailId);
 
     if (user == null) {
@@ -68,7 +68,7 @@ public class UserDBServer implements Server {
     }
 
     logger.debug(true, "Found the Logged in user: ", user.getName());
-    return this.userDB.fetchUser(emailId);
+    return user;
   }
 
   // Below methods are implemented in KeyValueStoreServer

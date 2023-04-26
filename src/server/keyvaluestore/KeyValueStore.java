@@ -120,6 +120,19 @@ public class KeyValueStore {
       Itinerary itinerary = new Gson().fromJson(tokens[2], Itinerary.class);
       logger.debug(true, "Successfully Deserialized the Itinerary: ", itinerary.getName());
 
+      // Update Call
+      if (itinerary.getVersion() > 1) {
+        // Fetch old id, and update it with new it
+        String oldItineraryId = itinerary.getPrevItineraryId();
+        // This is an update call
+        //Itinerary oldItinerary = this.keyValueStore.get(oldItineraryId);
+
+        // Preserving the previous Unique ID, but updating the Itinerary object
+        this.keyValueStore.put(oldItineraryId, itinerary);
+        // TODO - After updating once, the version does not change
+        return oldItineraryId;
+      }
+
       // TODO - The user is different due to diff Itinerary
       User ownerUser = itinerary.getCreatedBy();
 
@@ -182,18 +195,49 @@ public class KeyValueStore {
       //  0       1
       // EDIT  123123213
 
-      if (keyValueStore.containsKey(tokens[1])) {
+      String itineraryId = tokens[1];
+
+      // If No Itinerary found with key
+      if (!keyValueStore.containsKey(tokens[1])) {
+        logger.debug(true, "Itinerary Key : ", tokens[1], " not found in the store.");
+        return "Itinerary Not found";
+      }
+
+      if (currentUser == null) {
+        logger.error(true, "Current User is Null");
+        return "User can't Edit this Itinerary";
+      }
+
+      Itinerary itinerary = this.keyValueStore.get(itineraryId);
+      User ownerUser = itinerary.getCreatedBy();
+
+      // TODO - Checking  for authorization
+      // If the current user is owner of the itinerary
+      // OR Itinerary contains the current user as collaborator
+      // Then allow access to edit
+      if (itinerary.getListOfSharedWithUsers().contains(currentUser)
+          || currentUser.getListOfSharedItinerary().contains(itinerary)
+          || currentUser.getListOfCreatedItinerary().contains(itinerary)
+          || currentUser.getEmailId().equals(ownerUser.getEmailId())) { // TODO - Objects won't be equal so might need to use names
+        // Access Granted
+
         logger.debug(true, "Found Itinerary Key : ", tokens[1],
             "and Itinerary Name Value : ", keyValueStore.get(tokens[1]).getName());
 
         // TODO - Enable Put operation
+        // TODO - Show previous Itinerary
+
+        // TODO - While updating, the Key should remain same!!!
 
         // TODO - If the itinerary is in the createdList or SharedList of the current user, then only he will be able to edit it
-        return "Update Itinerary Details";
+        // Shares the current It Id to preserver the Unique Key ID for the updated Itinerary
+        return "Update Itinerary Details|" + itineraryId ;
 
       } else {
-        logger.debug(true, "Itinerary Key : ", tokens[1], " not found in the store.");
-        return "Itinerary Not found";
+        // No Authorization
+        logger.error(true, "User: ", currentUser.getName(),
+            " does not have access to Itinerary: ", itinerary.getName());
+        return "No Authorization access to Edit";
       }
 
     }

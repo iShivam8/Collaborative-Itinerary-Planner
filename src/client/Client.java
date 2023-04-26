@@ -58,7 +58,7 @@ public class Client {
       logger.debug(false, "Found RMI registry!");
 
       logger.debug(false, "Looking for the User Database server stub...");
-      userDbServer = (Server) registry.lookup("UserDB");
+      this.userDbServer = (Server) registry.lookup("UserDB");
       logger.debug(false, "Found the User Database server stub!");
 
       // Server asks for Log in Sign up
@@ -165,9 +165,11 @@ public class Client {
           if (response != null) {
             // Execute Operation from server sent this response because of PUT method
             if (response.equalsIgnoreCase("Enter Itinerary Details")) {
-              sendItineraryToServer();
-            } else if (response.equalsIgnoreCase("Update Itinerary Details")) {
-              // TODO - for EDIT?
+              sendItineraryToServer("ENTER", null);
+            } else if (response.contains("Update Itinerary Details")) {
+              String[] updateResponse = parseMessage(response);
+              // updateResponse[1] = Previous Itinerary id
+              sendItineraryToServer("UPDATE", updateResponse[1]);
             }
           }
         }
@@ -179,9 +181,9 @@ public class Client {
   }
 
   // Helper method to send Itinerary Inputs from the client to server
-  private void sendItineraryToServer() throws RemoteException {
+  private void sendItineraryToServer(String enterOrUpdate, String previousItineraryId) throws RemoteException {
     // Ask for user input for itinerary details
-    Itinerary itinerary = fetchItineraryInput(user);
+    Itinerary itinerary = fetchItineraryInput(this.user, enterOrUpdate, previousItineraryId);
 
     // To carry on getting continuous input from user for the 5 operations
     this.prompt = true;

@@ -23,6 +23,8 @@ public class Itinerary implements Serializable {
   // To keep a track of changes
   private int version;
 
+  private String prevItineraryId;
+
   public Itinerary(String name, String location, Date startDate,
                    Date endDate, String description, User createdBy) {
     this.name = name;
@@ -33,6 +35,15 @@ public class Itinerary implements Serializable {
     this.createdBy = createdBy;
     this.listOfSharedWithUsers = new ArrayList<>();
     this.version = 1;
+    this.prevItineraryId = null;
+  }
+
+  public String getPrevItineraryId() {
+    return this.prevItineraryId;
+  }
+
+  public void setPrevItineraryId(String prevItineraryId) {
+    this.prevItineraryId = prevItineraryId;
   }
 
   public String getName() {

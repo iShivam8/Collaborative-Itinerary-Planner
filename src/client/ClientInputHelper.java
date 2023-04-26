@@ -202,7 +202,7 @@ public class ClientInputHelper {
    * @param user - current user who's creating the itinerary
    * @return - Itineirary object with all the trip details
    */
-  static Itinerary fetchItineraryInput(User user) {
+  static Itinerary fetchItineraryInput(User user, String enterOrUpdate, String previousItineraryId) {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     String name = null, location = null;
     Date startDate = null, endDate = null;
@@ -315,7 +315,14 @@ public class ClientInputHelper {
 
     // Creating the Itinerary
     try {
-      return new Itinerary(name, location, startDate, endDate, description, user);
+      if (enterOrUpdate.equalsIgnoreCase("ENTER")) {
+        return new Itinerary(name, location, startDate, endDate, description, user);
+      } else if (enterOrUpdate.equalsIgnoreCase("UPDATE")) {
+        Itinerary itinerary = new Itinerary(name, location, startDate, endDate, description, user);
+        itinerary.updateVersion();
+        itinerary.setPrevItineraryId(previousItineraryId);
+        return itinerary;
+      }
     } catch (Exception e) {
       System.out.println("Error while creating a new Itinerary! Please try Again!");
       e.printStackTrace();
