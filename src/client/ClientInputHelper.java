@@ -316,9 +316,10 @@ public class ClientInputHelper {
     // Creating the Itinerary
     try {
       if (enterOrUpdate.equalsIgnoreCase("ENTER")) {
-        return new Itinerary(name, location, startDate, endDate, description, user);
+        return new Itinerary(name, location, startDate, endDate, description, user.getEmailId());
       } else if (enterOrUpdate.equalsIgnoreCase("UPDATE")) {
-        Itinerary itinerary = new Itinerary(name, location, startDate, endDate, description, user);
+        Itinerary itinerary =
+            new Itinerary(name, location, startDate, endDate, description, user.getEmailId());
         itinerary.updateVersion();
         itinerary.setPrevItineraryId(previousItineraryId);
         return itinerary;

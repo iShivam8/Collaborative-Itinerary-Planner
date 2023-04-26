@@ -40,7 +40,6 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   private final Logger logger;
   // We can use the userDbServer to access User Database
   private final Server userDbServer;
-  private User user;
 
   public KeyValueStoreServer(String serverId, Server userDbServer) {
     this.keyValueStore = new KeyValueStore("src/logs/server_" + serverId
@@ -418,19 +417,18 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     String result;
 
     assert stringCompleteOperation != null;
-    result = keyValueStore.executeOperation(stringCompleteOperation, this.user);
+    result = this.keyValueStore.executeOperation(stringCompleteOperation, null);
     metadata.remove(key);
     return result;
   }
 
   @Override
-  public String executeOperation(String inputMessage, User currentUser)
+  public String executeOperation(String inputMessage, String currentUserEmailId)
       throws IOException, ClassNotFoundException {
 
     // InputMessages:  Put;   EDIT|123;    Get|123;    Delete|123;   Share|123|a@a.com;
                   //   LIST|CREATED;       LIST|COLLAB
     logger.debug(true, "Message received from the Client: ", inputMessage);
-    this.user = currentUser;
 
     String result;
     String[] tokens = keyValueStore.parseMessage(inputMessage);
@@ -443,7 +441,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     } else if (validatedResponse[0].contains("PAXOS")) {
       result = startPaxos(tokens, validatedResponse[1]);
     } else {
-      result = keyValueStore.executeOperation(tokens, currentUser);
+      result = this.keyValueStore.executeOperation(tokens, currentUserEmailId);
     }
 
     logger.debug(true, "Sending response message to the Client: ", result);

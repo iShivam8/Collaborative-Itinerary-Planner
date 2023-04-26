@@ -8,7 +8,7 @@ public class Todos {
   // TODO - Itinerary after update are different
   // TODO - List Collab shows two times the same Itinerary
 
-  // TODO - Implement Profile Options: LIST CREATED Not working
+  // TODO - Implement Profile Options: LIST CREATED throws multiple same values, and =[null] one time created has list size 3
   // TODO - EDIT functionality. Only Owner and Shared users can edit the itinerary
   // TODO - Change Unique ID generated format
   // TODO - Rename Method description in PaxosServer. Add edit, share
@@ -23,4 +23,14 @@ public class Todos {
 
   // SHARE
   // TODO - When a user shares It, the other users get call does not reflect the list of shared user
+
+  // Update
+  // Version is not getting updated after 2
+
+
+  // FUTURE
+  // To show who updated the last itinerary
+
+  // In learn, we have a keyStore.executeOperation() where we pass the user.
+  // What happens if it is invoked by a server instance which does not have a user; user == null
 }

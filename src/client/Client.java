@@ -157,9 +157,11 @@ public class Client {
             break;
           }
 
+          // TODO - If user is null i.e. a server instance where the user is not logged in, handle that
+
           logger.debug(false, "Sending request to the server: ", request);
           // Server executes the user inputs and sends the response
-          String response = keyValueStoreServer.executeOperation(request, this.user);
+          String response = this.keyValueStoreServer.executeOperation(request, this.user.getEmailId());
           logger.debug(false, "Response from server: ", response);
           System.out.println("Response from server: " + response);
 
@@ -194,7 +196,7 @@ public class Client {
       // Add the itinerary in the KeyValueStore
       logger.debug(false, "Sending Itinerary request to the server: ",
           itinerary.getName());
-      String itineraryResponse = keyValueStoreServer.putItinerary(itinerary);
+      String itineraryResponse = this.keyValueStoreServer.putItinerary(itinerary);
       logger.debug(false, "Response from server: ", itineraryResponse);
       //System.out.println("Response from server: " + itineraryResponse);
 

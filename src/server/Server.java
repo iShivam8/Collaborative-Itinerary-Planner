@@ -17,7 +17,7 @@ public interface Server extends Remote {
    * @return - Response of the executed operation to the client.
    * @throws RemoteException
    */
-  String executeOperation(String inputMessage, User user) throws IOException,
+  String executeOperation(String inputMessage, String currentUserEmailId) throws IOException,
       ClassNotFoundException;
 
   /**

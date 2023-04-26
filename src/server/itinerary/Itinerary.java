@@ -14,19 +14,20 @@ public class Itinerary implements Serializable {
   private String name, location, description;
   private Date startDate, endDate;
 
-  // The user who created this itinerary
-  private User createdBy;
+  // The user email who created this itinerary
+  private String createdBy;
 
-  // List of users with whom this itinerary is shared with
-  private final List<User> listOfSharedWithUsers;
+  // List of users email id with whom this itinerary is shared with
+  // TODO - only add user email, and not the entire user object, and while fetching
+  //  - use the KVS + userDb, and fetch user object with email
+  private List<String> listOfSharedWithUsers;
 
   // To keep a track of changes
   private int version;
-
   private String prevItineraryId;
 
   public Itinerary(String name, String location, Date startDate,
-                   Date endDate, String description, User createdBy) {
+                   Date endDate, String description, String createdBy) {
     this.name = name;
     this.location = location;
     this.startDate = startDate;
@@ -86,23 +87,24 @@ public class Itinerary implements Serializable {
     this.endDate = endDate;
   }
 
-  public User getCreatedBy() {
-    return createdBy;
+  // Returns the email id of the user who created this itinerary
+  public String getCreatedBy() {
+    return this.createdBy;
   }
 
-  public void setCreatedBy(User createdBy) {
+  public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
   }
 
-  public List<User> getListOfSharedWithUsers() {
+  public List<String> getListOfSharedWithUsers() {
     return this.listOfSharedWithUsers;
   }
 
   // Owner of the itinerary cannot add himself in this list
-  public void setListOfSharedWithUsers(User sharedUser) {
-    if (!sharedUser.getEmailId().equals(this.createdBy.getEmailId())) {
-      if (!this.listOfSharedWithUsers.contains(sharedUser)) {
-        this.listOfSharedWithUsers.add(sharedUser);
+  public void setListOfSharedWithUsers(String sharedUserEmail) {
+    if (!sharedUserEmail.equals(this.createdBy)) {
+      if (!this.listOfSharedWithUsers.contains(sharedUserEmail)) {
+        this.listOfSharedWithUsers.add(sharedUserEmail);
       }
     }
   }
@@ -115,6 +117,10 @@ public class Itinerary implements Serializable {
     this.version += 1;
   }
 
+  public void setVersion(int newVersion) {
+    this.version = newVersion;
+  }
+
   @Override
   public String toString() {
     return "Itinerary Details:\n\n" +
@@ -123,9 +129,9 @@ public class Itinerary implements Serializable {
         "Description: " + description + '\n' +
         "Start Date: " + startDate + '\n' +
         "End Date: " + endDate + '\n' +
-        "Created by: " + createdBy.getName() + '\n' +
+        "Created by: " + createdBy + '\n' +
         "List of Users with whom this Itinerary is shared with: "
-        + fetchUserEmail(listOfSharedWithUsers) + '\n' +
+        + listOfSharedWithUsers + '\n' +
         "Version: " + version + '\n';
   }
 
@@ -140,5 +146,10 @@ public class Itinerary implements Serializable {
     }
 
     return stringBuilder.toString();
+  }
+
+  // This method updates the current list of shared user in the UPDATE call
+  public void updateListOfSharedUsers(List<String> listOfSharedWithUsers) {
+    this.listOfSharedWithUsers = listOfSharedWithUsers;
   }
 }

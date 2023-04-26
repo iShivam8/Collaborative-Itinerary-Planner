@@ -23,8 +23,8 @@ public class User implements Serializable {
   // TODO - User should be able to see with whom he has shared the itineraries
   // TODO - The shared user must be able to retract the shared itinerary
 
-  // Current User can access, which itinerary is shared with which users
-  private final Map<Itinerary, List<User>> mapOfSharedItineraries;
+  // Current User can access, which itinerary is shared with which user email id
+  private final Map<Itinerary, List<String>> mapOfSharedItineraries;
 
   public User(String name, String emailId, String password) {
     this.name = name;
@@ -84,18 +84,18 @@ public class User implements Serializable {
   // Method to add shared users to the map of current users
   // So that the current user can see, with whom who he has shared the specified itinerary
   // THIS IF FOR CURRENT USER - who is the owner of created itinerary
-  public void addSharedUserToMap(Itinerary itinerary, User sharedUser) {
+  public void addSharedUserToMap(Itinerary itinerary, String sharedUserEmailId) {
     if (this.mapOfSharedItineraries.containsKey(itinerary)) {
-      List<User> existingUsers = this.mapOfSharedItineraries.get(itinerary);
-      existingUsers.add(sharedUser);
-      this.mapOfSharedItineraries.put(itinerary, existingUsers);
+      List<String> existingUsersEmailId = this.mapOfSharedItineraries.get(itinerary);
+      existingUsersEmailId.add(sharedUserEmailId);
+      this.mapOfSharedItineraries.put(itinerary, existingUsersEmailId);
     } else {
-      List<User> tempListOfUser = new ArrayList<>();
-      tempListOfUser.add(sharedUser);
-      this.mapOfSharedItineraries.put(itinerary, tempListOfUser);
+      List<String> tempListOfUserEmailId = new ArrayList<>();
+      tempListOfUserEmailId.add(sharedUserEmailId);
+      this.mapOfSharedItineraries.put(itinerary, tempListOfUserEmailId);
     }
   }
-  public Map<Itinerary, List<User>> getMapOfSharedItineraries() {
+  public Map<Itinerary, List<String>> getMapOfSharedItineraries() {
     return this.mapOfSharedItineraries;
   }
 }
