@@ -1,0 +1,32 @@
+2023-04-26 20:25:21.235  [DEBUG]   Starting the client:
+2023-04-26 20:25:21.236  [DEBUG]   Looking for RMI registry...
+2023-04-26 20:25:21.291  [DEBUG]   Found RMI registry!
+2023-04-26 20:25:21.292  [DEBUG]   Looking for the User Database server stub...
+2023-04-26 20:25:21.387  [DEBUG]   Found the User Database server stub!
+2023-04-26 20:25:23.281  [DEBUG]   Received Session request from user:  SignUp
+2023-04-26 20:25:50.000  [DEBUG]   Sending sign up request to the server:  ali|s4remi@gmail.com|12345
+2023-04-26 20:25:50.012  [DEBUG]   Response from server:  User Created
+2023-04-26 20:25:50.013  [DEBUG]   Looking for RMI registry...
+2023-04-26 20:25:50.013  [DEBUG]   Found RMI registry!
+2023-04-26 20:25:50.014  [DEBUG]   Looking for the Itinerary KeyValueStore server stub...
+2023-04-26 20:25:50.023  [DEBUG]   Found the Itinerary KeyValueStore server stub!
+2023-04-26 20:25:50.023  [DEBUG]   Client connected to the server
+2023-04-26 20:26:43.213  [DEBUG]   Received request from user:  put
+2023-04-26 20:26:43.214  [DEBUG]   Sending request to the server:  put
+2023-04-26 20:26:43.218  [DEBUG]   Response from server:  Enter Itinerary Details
+2023-04-26 20:27:38.008  [DEBUG]   Sending Itinerary request to the server:  hiking
+2023-04-26 20:27:38.065  [DEBUG]   Response from server:  34f4c432-66dc-434a-b7d5-f883ecd3f838
+2023-04-26 20:27:38.074  [DEBUG]   Itinerary Added with Name: ' hiking '  and you can access it using Unique ID:  34f4c432-66dc-434a-b7d5-f883ecd3f838
+2023-04-26 20:28:21.847  [DEBUG]   Received request from user:  get|34f4c432-66dc-434a-b7d5-f883ecd3f838
+2023-04-26 20:28:21.847  [DEBUG]   Sending request to the server:  get|34f4c432-66dc-434a-b7d5-f883ecd3f838
+2023-04-26 20:28:21.877  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: hiking
+Location: seattle
+Description: we are going to visit the waterfall cs6650
+Start Date: Thu Apr 27 00:00:00 PDT 2023
+End Date: Thu Apr 27 00:00:00 PDT 2023
+Created by: s4remi@gmail.com
+List of Users with whom this Itinerary is shared with: []
+Version: 1
+
