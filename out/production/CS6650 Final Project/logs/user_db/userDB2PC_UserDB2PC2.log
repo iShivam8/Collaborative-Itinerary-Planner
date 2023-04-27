@@ -1,0 +1,76 @@
+2023-04-27 04:20:33.176  [DEBUG]   Transaction  5f14d857-af35-41fa-a549-4be72b22b20d : canCommit() invoked
+2023-04-27 04:20:33.178  [DEBUG]   Transaction  5f14d857-af35-41fa-a549-4be72b22b20d : Created transaction log [Prepared to commit, UserDB2PC0, Shivam, s@s.com, 1234, 0]
+2023-04-27 04:20:33.183  [DEBUG]   Transaction  5f14d857-af35-41fa-a549-4be72b22b20d : doCommit() invoked
+2023-04-27 04:20:33.185  [DEBUG]   Transaction 5f14d857-af35-41fa-a549-4be72b22b20d : Transaction log [Committed, UserDB2PC0, Shivam, s@s.com, 1234, 0]
+2023-04-27 04:20:41.475  [DEBUG]   Transaction  e4bac6c3-8a94-4064-a284-01f42104638d : canCommit() invoked
+2023-04-27 04:20:41.476  [DEBUG]   Transaction  e4bac6c3-8a94-4064-a284-01f42104638d : Created transaction log [Prepared to commit, UserDB2PC1, Test, t@t.com, 1234, 0]
+2023-04-27 04:20:41.481  [DEBUG]   Transaction  e4bac6c3-8a94-4064-a284-01f42104638d : doCommit() invoked
+2023-04-27 04:20:41.483  [DEBUG]   Transaction e4bac6c3-8a94-4064-a284-01f42104638d : Transaction log [Committed, UserDB2PC1, Test, t@t.com, 1234, 0]
+2023-04-27 04:22:30.566  [DEBUG]   Transaction  274907f3-ab4f-49aa-a16d-a1d139f61929 : canCommit() invoked
+2023-04-27 04:22:30.568  [DEBUG]   Transaction  274907f3-ab4f-49aa-a16d-a1d139f61929 : Created transaction log [Prepared to commit, UserDB2PC0, LOGOUT, s@s.com, null, 0]
+2023-04-27 04:22:30.571  [DEBUG]   Transaction  274907f3-ab4f-49aa-a16d-a1d139f61929 : doCommit() invoked
+2023-04-27 04:22:30.573  [DEBUG]   Transaction 274907f3-ab4f-49aa-a16d-a1d139f61929 : Transaction log [Committed, UserDB2PC0, LOGOUT, s@s.com, null, 0]
+2023-04-27 04:22:38.799  [DEBUG]   Transaction  98c840b4-3719-42a8-a11c-c6da23c4dbd7 : canCommit() invoked
+2023-04-27 04:22:38.800  [DEBUG]   Transaction  98c840b4-3719-42a8-a11c-c6da23c4dbd7 : Created transaction log [Prepared to commit, UserDB2PC1, LOGOUT, t@t.com, null, 0]
+2023-04-27 04:22:38.803  [DEBUG]   Transaction  98c840b4-3719-42a8-a11c-c6da23c4dbd7 : doCommit() invoked
+2023-04-27 04:22:38.806  [DEBUG]   Transaction 98c840b4-3719-42a8-a11c-c6da23c4dbd7 : Transaction log [Committed, UserDB2PC1, LOGOUT, t@t.com, null, 0]
+2023-04-27 04:26:01.796  [DEBUG]   Transaction  81e02dea-f390-438f-82eb-4dcd5ad622b6 : canCommit() invoked
+2023-04-27 04:26:01.797  [DEBUG]   Transaction  81e02dea-f390-438f-82eb-4dcd5ad622b6 : Created transaction log [Prepared to commit, UserDB2PC1, Test, t@t.com, 1234, 0]
+2023-04-27 04:26:01.801  [DEBUG]   Transaction  81e02dea-f390-438f-82eb-4dcd5ad622b6 : doCommit() invoked
+2023-04-27 04:26:01.805  [DEBUG]   Transaction 81e02dea-f390-438f-82eb-4dcd5ad622b6 : Transaction log [Committed, UserDB2PC1, Test, t@t.com, 1234, 0]
+2023-04-27 04:26:10.089  [DEBUG]   Transaction  d106afd0-090f-420f-9d30-a1a4e2e505d8 : canCommit() invoked
+2023-04-27 04:26:10.090  [DEBUG]   Transaction  d106afd0-090f-420f-9d30-a1a4e2e505d8 : Created transaction log [Prepared to commit, UserDB2PC0, Shivam, s@s.com, 1234, 0]
+2023-04-27 04:26:10.095  [DEBUG]   Transaction  d106afd0-090f-420f-9d30-a1a4e2e505d8 : doCommit() invoked
+2023-04-27 04:26:10.098  [DEBUG]   Transaction d106afd0-090f-420f-9d30-a1a4e2e505d8 : Transaction log [Committed, UserDB2PC0, Shivam, s@s.com, 1234, 0]
+2023-04-27 04:27:39.306  [DEBUG]   SignUp Info received from the Client:  Random|r@r.com|1234
+2023-04-27 04:27:39.309  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : Initiating 2PC with coordinator as  UserDB2PC2
+2023-04-27 04:27:39.313  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : canCommit() invoked
+2023-04-27 04:27:39.313  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : Created transaction log [Prepared to commit, UserDB2PC2, Random, r@r.com, 1234, 0]
+2023-04-27 04:27:39.316  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : Voting phase completed
+2023-04-27 04:27:39.316  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : Votes:  [true, true, true]
+2023-04-27 04:27:39.316  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : Starting commits.
+2023-04-27 04:27:39.316  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : doCommit() invoked
+2023-04-27 04:27:39.318  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : haveCommitted() invoked
+2023-04-27 04:27:39.318  [DEBUG]   Transaction c163db33-e1ec-49af-a292-6b6cb2bd4a87 : Transaction log [Committed, UserDB2PC2, Random, r@r.com, 1234, 0]
+2023-04-27 04:27:39.321  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : Waiting for commit responses
+2023-04-27 04:27:39.321  [DEBUG]   Sending response message to the Client:  User Created
+2023-04-27 04:27:39.322  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : haveCommitted() invoked
+2023-04-27 04:27:39.323  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : haveCommitted() invoked
+2023-04-27 04:27:39.323  [DEBUG]   Transaction  c163db33-e1ec-49af-a292-6b6cb2bd4a87 : Received all commit responses. Removing transaction.
+2023-04-27 04:27:45.978  [DEBUG]   Transaction  b978eb21-db63-4320-aa7a-5971272f5d35 : canCommit() invoked
+2023-04-27 04:27:45.979  [DEBUG]   Transaction  b978eb21-db63-4320-aa7a-5971272f5d35 : Created transaction log [Prepared to commit, UserDB2PC1, Test, t@t.com, 1234, 0]
+2023-04-27 04:27:45.983  [DEBUG]   Transaction  b978eb21-db63-4320-aa7a-5971272f5d35 : doCommit() invoked
+2023-04-27 04:27:45.985  [DEBUG]   Transaction b978eb21-db63-4320-aa7a-5971272f5d35 : Transaction log [Committed, UserDB2PC1, Test, t@t.com, 1234, 0]
+2023-04-27 04:27:53.853  [DEBUG]   Transaction  edbd5122-6776-4b21-8e5e-47b41424e483 : canCommit() invoked
+2023-04-27 04:27:53.855  [DEBUG]   Transaction  edbd5122-6776-4b21-8e5e-47b41424e483 : Created transaction log [Prepared to commit, UserDB2PC0, Shivam, s@s.com, 1234, 0]
+2023-04-27 04:27:53.860  [DEBUG]   Transaction  edbd5122-6776-4b21-8e5e-47b41424e483 : doCommit() invoked
+2023-04-27 04:27:53.863  [DEBUG]   Transaction edbd5122-6776-4b21-8e5e-47b41424e483 : Transaction log [Committed, UserDB2PC0, Shivam, s@s.com, 1234, 0]
+2023-04-27 04:30:04.309  [DEBUG]   Transaction  e2f3c16c-1614-4c69-9999-c7c0902242f9 : canCommit() invoked
+2023-04-27 04:30:04.309  [DEBUG]   Transaction  e2f3c16c-1614-4c69-9999-c7c0902242f9 : Created transaction log [Prepared to commit, UserDB2PC1, LOGOUT, t@t.com, null, 0]
+2023-04-27 04:30:04.312  [DEBUG]   Transaction  e2f3c16c-1614-4c69-9999-c7c0902242f9 : doCommit() invoked
+2023-04-27 04:30:04.315  [DEBUG]   Transaction e2f3c16c-1614-4c69-9999-c7c0902242f9 : Transaction log [Committed, UserDB2PC1, LOGOUT, t@t.com, null, 0]
+2023-04-27 04:30:17.752  [DEBUG]   Transaction  93991420-616b-47c6-a61c-0139ee7dc505 : canCommit() invoked
+2023-04-27 04:30:17.753  [DEBUG]   Transaction  93991420-616b-47c6-a61c-0139ee7dc505 : Created transaction log [Prepared to commit, UserDB2PC1, Forth, f@f.com, 1234, 0]
+2023-04-27 04:30:17.756  [DEBUG]   Transaction  93991420-616b-47c6-a61c-0139ee7dc505 : doCommit() invoked
+2023-04-27 04:30:17.758  [DEBUG]   Transaction 93991420-616b-47c6-a61c-0139ee7dc505 : Transaction log [Committed, UserDB2PC1, Forth, f@f.com, 1234, 0]
+2023-04-27 04:30:26.785  [DEBUG]   Transaction  baa263fd-55bb-4b61-a604-cc1c470e9a57 : canCommit() invoked
+2023-04-27 04:30:26.785  [DEBUG]   Transaction  baa263fd-55bb-4b61-a604-cc1c470e9a57 : Created transaction log [Prepared to commit, UserDB2PC1, LOGOUT, f@f.com, null, 0]
+2023-04-27 04:30:26.788  [DEBUG]   Transaction  baa263fd-55bb-4b61-a604-cc1c470e9a57 : doCommit() invoked
+2023-04-27 04:30:26.790  [DEBUG]   Transaction baa263fd-55bb-4b61-a604-cc1c470e9a57 : Transaction log [Committed, UserDB2PC1, LOGOUT, f@f.com, null, 0]
+2023-04-27 04:30:29.005  [DEBUG]   Transaction  55a39005-824f-4854-9748-4c9166f1d233 : canCommit() invoked
+2023-04-27 04:30:29.005  [DEBUG]   Transaction  55a39005-824f-4854-9748-4c9166f1d233 : Created transaction log [Prepared to commit, UserDB2PC0, LOGOUT, s@s.com, null, 0]
+2023-04-27 04:30:29.007  [DEBUG]   Transaction  55a39005-824f-4854-9748-4c9166f1d233 : doCommit() invoked
+2023-04-27 04:30:29.008  [DEBUG]   Transaction 55a39005-824f-4854-9748-4c9166f1d233 : Transaction log [Committed, UserDB2PC0, LOGOUT, s@s.com, null, 0]
+2023-04-27 04:30:31.191  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : Initiating 2PC with coordinator as  UserDB2PC2
+2023-04-27 04:30:31.192  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : canCommit() invoked
+2023-04-27 04:30:31.193  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : Created transaction log [Prepared to commit, UserDB2PC2, LOGOUT, r@r.com, null, 0]
+2023-04-27 04:30:31.194  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : Voting phase completed
+2023-04-27 04:30:31.194  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : Votes:  [true, true, true]
+2023-04-27 04:30:31.194  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : Starting commits.
+2023-04-27 04:30:31.195  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : doCommit() invoked
+2023-04-27 04:30:31.195  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : haveCommitted() invoked
+2023-04-27 04:30:31.195  [DEBUG]   Transaction c1b7d293-d8fa-49f3-9722-1093991d10a8 : Transaction log [Committed, UserDB2PC2, LOGOUT, r@r.com, null, 0]
+2023-04-27 04:30:31.196  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : Waiting for commit responses
+2023-04-27 04:30:31.197  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : haveCommitted() invoked
+2023-04-27 04:30:31.199  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : haveCommitted() invoked
+2023-04-27 04:30:31.199  [DEBUG]   Transaction  c1b7d293-d8fa-49f3-9722-1093991d10a8 : Received all commit responses. Removing transaction.

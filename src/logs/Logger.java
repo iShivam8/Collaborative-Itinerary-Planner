@@ -25,15 +25,6 @@ public class Logger {
   }
 
   /**
-   * Logger for logging transactions in 2PC.
-   *
-   * @param filename - filename of the file to be used as log file
-   */
-  public Logger(String filename) {
-    this.filename = filename;
-  }
-
-  /**
    * Logs message to log file as per the current timestamp and log type.
    *
    * @param type - type of log: error or debug

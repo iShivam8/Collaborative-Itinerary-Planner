@@ -1,0 +1,22 @@
+2023-04-27 04:30:09.684  [DEBUG]   Starting the client:
+2023-04-27 04:30:09.685  [DEBUG]   Looking for RMI registry...
+2023-04-27 04:30:09.867  [DEBUG]   Found RMI registry!
+2023-04-27 04:30:09.868  [DEBUG]   Looking for the User Database server stub...
+2023-04-27 04:30:09.930  [DEBUG]   Found the User Database server stub!
+2023-04-27 04:30:11.872  [DEBUG]   Received Session request from user:  SignUp
+2023-04-27 04:30:17.748  [DEBUG]   Sending sign up request to the server:  Forth|f@f.com|1234
+2023-04-27 04:30:17.762  [DEBUG]   Response from server:  User Created
+2023-04-27 04:30:17.762  [DEBUG]   Looking for RMI registry...
+2023-04-27 04:30:17.763  [DEBUG]   Found RMI registry!
+2023-04-27 04:30:17.763  [DEBUG]   Looking for the Itinerary KeyValueStore server stub...
+2023-04-27 04:30:17.770  [DEBUG]   Found the Itinerary KeyValueStore server stub!
+2023-04-27 04:30:17.771  [DEBUG]   Client connected to the server
+2023-04-27 04:30:19.922  [DEBUG]   Received request from user:  get|1362b205-80cb-4900-ae70-1716c267b658
+2023-04-27 04:30:19.923  [DEBUG]   Sending request to the server:  get|1362b205-80cb-4900-ae70-1716c267b658
+2023-04-27 04:30:19.926  [DEBUG]   Response from server:  No Authorization Access
+2023-04-27 04:30:24.789  [DEBUG]   Received request from user:  delete|1362b205-80cb-4900-ae70-1716c267b658
+2023-04-27 04:30:24.790  [DEBUG]   Sending request to the server:  delete|1362b205-80cb-4900-ae70-1716c267b658
+2023-04-27 04:30:24.798  [DEBUG]   Response from server:  You are not the owner or you don't have access to Delete this itinerary!
+2023-04-27 04:30:26.780  [DEBUG]   Received request from user:  x
+2023-04-27 04:30:26.781  [DEBUG]   Quitting the application.
+2023-04-27 04:30:26.788  [DEBUG]   Logout response received from Server:  User Successfully Logged Out!

@@ -1,0 +1,31 @@
+2023-04-27 04:20:22.907  [DEBUG]   Starting the client:
+2023-04-27 04:20:22.907  [DEBUG]   Looking for RMI registry...
+2023-04-27 04:20:22.924  [DEBUG]   Found RMI registry!
+2023-04-27 04:20:22.924  [DEBUG]   Looking for the User Database server stub...
+2023-04-27 04:20:22.978  [DEBUG]   Found the User Database server stub!
+2023-04-27 04:20:37.787  [DEBUG]   Received Session request from user:  SignUp
+2023-04-27 04:20:41.470  [DEBUG]   Sending sign up request to the server:  Test|t@t.com|1234
+2023-04-27 04:20:41.487  [DEBUG]   Response from server:  User Created
+2023-04-27 04:20:41.487  [DEBUG]   Looking for RMI registry...
+2023-04-27 04:20:41.487  [DEBUG]   Found RMI registry!
+2023-04-27 04:20:41.488  [DEBUG]   Looking for the Itinerary KeyValueStore server stub...
+2023-04-27 04:20:41.497  [DEBUG]   Found the Itinerary KeyValueStore server stub!
+2023-04-27 04:20:41.497  [DEBUG]   Client connected to the server
+2023-04-27 04:21:19.840  [DEBUG]   Received request from user:  get|d80aa650-2fcd-4398-b992-43093bae1da9
+2023-04-27 04:21:19.842  [DEBUG]   Sending request to the server:  get|d80aa650-2fcd-4398-b992-43093bae1da9
+2023-04-27 04:21:19.846  [DEBUG]   Response from server:  No Authorization Access
+2023-04-27 04:21:23.376  [DEBUG]   Received request from user:  edit|d80aa650-2fcd-4398-b992-43093bae1da9
+2023-04-27 04:21:23.377  [DEBUG]   Sending request to the server:  edit|d80aa650-2fcd-4398-b992-43093bae1da9
+2023-04-27 04:21:23.386  [DEBUG]   Response from server:  No Authorization access to Edit
+2023-04-27 04:21:29.517  [DEBUG]   Received request from user:  share|d80aa650-2fcd-4398-b992-43093bae1da9|t@t.com
+2023-04-27 04:21:29.518  [DEBUG]   Sending request to the server:  share|d80aa650-2fcd-4398-b992-43093bae1da9|t@t.com
+2023-04-27 04:21:29.527  [DEBUG]   Response from server:  You're not the Owner of this itinerary, so you can't share it with other users!
+2023-04-27 04:21:35.172  [DEBUG]   Received request from user:  delete|d80aa650-2fcd-4398-b992-43093bae1da9
+2023-04-27 04:21:35.173  [DEBUG]   Sending request to the server:  delete|d80aa650-2fcd-4398-b992-43093bae1da9
+2023-04-27 04:21:35.181  [DEBUG]   Response from server:  No Itinerary Found
+2023-04-27 04:21:47.446  [DEBUG]   Received request from user:  delete|d80aa650-2fcd-4398-b992-43093bae1da9
+2023-04-27 04:21:47.447  [DEBUG]   Sending request to the server:  delete|d80aa650-2fcd-4398-b992-43093bae1da9
+2023-04-27 04:21:47.453  [DEBUG]   Response from server:  No Itinerary Found
+2023-04-27 04:22:38.794  [DEBUG]   Received request from user:  x
+2023-04-27 04:22:38.795  [DEBUG]   Quitting the application.
+2023-04-27 04:22:38.803  [DEBUG]   Logout response received from Server:  User Successfully Logged Out!

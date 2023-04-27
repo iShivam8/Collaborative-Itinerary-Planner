@@ -1,0 +1,38 @@
+2023-04-27 04:27:28.133  [DEBUG]   Starting the client:
+2023-04-27 04:27:28.134  [DEBUG]   Looking for RMI registry...
+2023-04-27 04:27:28.150  [DEBUG]   Found RMI registry!
+2023-04-27 04:27:28.150  [DEBUG]   Looking for the User Database server stub...
+2023-04-27 04:27:28.209  [DEBUG]   Found the User Database server stub!
+2023-04-27 04:27:48.258  [DEBUG]   Received Session request from user:  SignUp
+2023-04-27 04:27:53.847  [DEBUG]   Sending sign up request to the server:  Shivam|s@s.com|1234
+2023-04-27 04:27:53.865  [DEBUG]   Response from server:  User Created
+2023-04-27 04:27:53.866  [DEBUG]   Looking for RMI registry...
+2023-04-27 04:27:53.866  [DEBUG]   Found RMI registry!
+2023-04-27 04:27:53.866  [DEBUG]   Looking for the Itinerary KeyValueStore server stub...
+2023-04-27 04:27:53.873  [DEBUG]   Found the Itinerary KeyValueStore server stub!
+2023-04-27 04:27:53.873  [DEBUG]   Client connected to the server
+2023-04-27 04:27:57.633  [DEBUG]   Received request from user:  put
+2023-04-27 04:27:57.633  [DEBUG]   Sending request to the server:  put
+2023-04-27 04:27:57.636  [DEBUG]   Response from server:  Enter Itinerary Details
+2023-04-27 04:28:08.678  [DEBUG]   Sending Itinerary request to the server:  T1 by S
+2023-04-27 04:28:08.707  [DEBUG]   Response from server:  1362b205-80cb-4900-ae70-1716c267b658
+2023-04-27 04:28:08.707  [DEBUG]   Itinerary Added with Name: ' T1 by S '  and you can access it using Unique ID:  1362b205-80cb-4900-ae70-1716c267b658
+2023-04-27 04:28:12.941  [DEBUG]   Received request from user:  list|created
+2023-04-27 04:28:12.942  [DEBUG]   Sending request to the server:  list|created
+2023-04-27 04:28:12.945  [DEBUG]   Response from server:  
+Itinerary Id: 1362b205-80cb-4900-ae70-1716c267b658 Itinerary Name: T1 by S   
+
+2023-04-27 04:29:36.710  [DEBUG]   Received request from user:  share|1362b205-80cb-4900-ae70-1716c267b658|t@t.com
+2023-04-27 04:29:36.711  [DEBUG]   Sending request to the server:  share|1362b205-80cb-4900-ae70-1716c267b658|t@t.com
+2023-04-27 04:29:36.720  [DEBUG]   Response from server:  Itinerary Successfully Shared
+2023-04-27 04:29:42.160  [DEBUG]   Received request from user:  list|collab
+2023-04-27 04:29:42.161  [DEBUG]   Sending request to the server:  list|collab
+2023-04-27 04:29:42.164  [DEBUG]   Response from server:  
+2023-04-27 04:29:47.561  [DEBUG]   Received request from user:  list|created
+2023-04-27 04:29:47.562  [DEBUG]   Sending request to the server:  list|created
+2023-04-27 04:29:47.565  [DEBUG]   Response from server:  
+Itinerary Id: 1362b205-80cb-4900-ae70-1716c267b658 Itinerary Name: T1 by S   
+
+2023-04-27 04:30:28.998  [DEBUG]   Received request from user:  x
+2023-04-27 04:30:29.000  [DEBUG]   Quitting the application.
+2023-04-27 04:30:29.008  [DEBUG]   Logout response received from Server:  User Successfully Logged Out!

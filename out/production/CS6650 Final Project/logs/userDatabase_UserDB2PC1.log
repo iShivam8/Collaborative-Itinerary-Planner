@@ -1,0 +1,15 @@
+2023-04-27 04:20:41.472  [DEBUG]   SignUp Info received from the Client:  Test|t@t.com|1234
+2023-04-27 04:20:41.480  [DEBUG]   Sending response message to the Client:  User Created
+2023-04-27 04:20:41.482  [DEBUG]   Found the Logged in user:  Test
+2023-04-27 04:22:38.797  [DEBUG]   Logout Info received from the Client:  t@t.com
+2023-04-27 04:26:01.786  [DEBUG]   SignUp Info received from the Client:  Test|t@t.com|1234
+2023-04-27 04:26:01.803  [DEBUG]   Sending response message to the Client:  User Created
+2023-04-27 04:26:01.804  [DEBUG]   Found the Logged in user:  Test
+2023-04-27 04:27:45.974  [DEBUG]   SignUp Info received from the Client:  Test|t@t.com|1234
+2023-04-27 04:27:45.983  [DEBUG]   Sending response message to the Client:  User Created
+2023-04-27 04:27:45.984  [DEBUG]   Found the Logged in user:  Test
+2023-04-27 04:30:04.304  [DEBUG]   Logout Info received from the Client:  t@t.com
+2023-04-27 04:30:17.750  [DEBUG]   SignUp Info received from the Client:  Forth|f@f.com|1234
+2023-04-27 04:30:17.756  [DEBUG]   Sending response message to the Client:  User Created
+2023-04-27 04:30:17.758  [DEBUG]   Found the Logged in user:  Forth
+2023-04-27 04:30:26.782  [DEBUG]   Logout Info received from the Client:  f@f.com
