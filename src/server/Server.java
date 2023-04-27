@@ -32,7 +32,7 @@ public interface Server extends Remote {
    * @return - Response whether the object is successfully added or not
    * @throws RemoteException
    */
-  String putItinerary(Itinerary itinerary) throws IOException, ClassNotFoundException;
+  String putItinerary(Itinerary itinerary, String clientEmailId) throws IOException, ClassNotFoundException;
 
   /**
    * Method used to allow the client to create a new account.

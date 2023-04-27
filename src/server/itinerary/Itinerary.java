@@ -114,6 +114,7 @@ public class Itinerary implements Serializable {
   }
 
   // This method updates the current list of shared user in the UPDATE call
+  // For updating the previous itinerary's shared list with new one
   public void updateListOfSharedUsers(List<String> listOfSharedWithUsers) {
     this.listOfSharedWithUsers = listOfSharedWithUsers;
   }

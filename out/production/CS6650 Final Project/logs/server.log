@@ -1,8 +1,0 @@
-2023-04-27 02:03:22.237  [DEBUG]   Starting the servers...
-2023-04-27 02:03:22.238  [DEBUG]   Creating RMI registry on port: 1099
-2023-04-27 02:03:22.468  [DEBUG]   Server bounded with stub UserDB2PC 0 to RMI Registry.
-2023-04-27 02:03:22.472  [DEBUG]   Server bounded with stub KVS0, to RMI Registry.
-2023-04-27 02:03:22.472  [DEBUG]   Server bounded with stub UserDB2PC 1 to RMI Registry.
-2023-04-27 02:03:22.473  [DEBUG]   Server bounded with stub KVS1, to RMI Registry.
-2023-04-27 02:03:22.473  [DEBUG]   Server bounded with stub UserDB2PC 2 to RMI Registry.
-2023-04-27 02:03:22.473  [DEBUG]   Server bounded with stub KVS2, to RMI Registry.

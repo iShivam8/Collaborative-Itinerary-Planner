@@ -40,8 +40,6 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   private final Logger logger;
   // We can use the userDbServer to access User Database
 
-  private String tempClientEmailId;
-
   public KeyValueStoreServer(String serverId, Server userDbServer) {
     this.keyValueStore = new KeyValueStore("src/logs/server_" + serverId
         + ".log", serverId, userDbServer);
@@ -85,7 +83,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public String startPaxos(String[] inputTokens, String operation)
+  public String startPaxos(String[] inputTokens, String operation, String clientEmailId)
       throws IOException, ClassNotFoundException {
 
     // PUT,  1223123, ItByteSized     Serialized Byte Array only for PUT and EDIT
@@ -129,7 +127,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       List<Callable<Promise>> prepareTasks = new ArrayList<>();
 
       for (PaxosServer paxosServer : acceptors.values()) {
-        prepareTasks.add(() -> paxosServer.prepare(sequenceNumber, key, operation));
+        prepareTasks.add(() -> paxosServer.prepare(sequenceNumber, key, operation, clientEmailId));
       }
 
       int promises = 0;
@@ -189,7 +187,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
       for (PaxosServer acceptor : acceptors.values()) {
         String finalValue = value;
-        proposeTasks.add(() -> acceptor.propose(sequenceNumber, key, finalValue, operation));
+        proposeTasks.add(() -> acceptor.propose(sequenceNumber, key, finalValue, operation, clientEmailId));
       }
 
       int totalAcceptedResponses = 0;
@@ -231,12 +229,12 @@ public class KeyValueStoreServer implements Server, PaxosServer {
       logger.debug(true, "Consensus has been reached! Learning and Committing the value: ",
           tempValue, " for Key: ", key);
 
-      String response = learn(key, value, operation);
+      String response = learn(key, value, operation, clientEmailId);
 
       for (Map.Entry<String, PaxosServer> entry : acceptors.entrySet()) {
         if (!serverId.equals(entry.getKey())) {
           String finalValue = value;
-          executorService.submit(() -> entry.getValue().learn(key, finalValue, operation));
+          executorService.submit(() -> entry.getValue().learn(key, finalValue, operation, clientEmailId));
         }
       }
 
@@ -254,7 +252,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public Promise prepare(long sequenceId, String key, String operation) throws RemoteException {
+  public Promise prepare(long sequenceId, String key, String operation, String clientEmailId) throws RemoteException {
 
     /*
     // Random failure
@@ -304,16 +302,8 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public Boolean propose(long sequenceId, String key, String value, String operation)
+  public Boolean propose(long sequenceId, String key, String value, String operation, String clientEmailId)
       throws RemoteException {
-
-    /*
-    // For Random failures
-    if (ThreadLocalRandom.current().nextInt(0, 10) == 0) {
-      logger.error(true, "Acceptor", serverId, " has failed!");
-      return null;
-    }
-     */
 
     String tempValue = null;
     try {
@@ -355,7 +345,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   }
 
   @Override
-  public String learn(String key, String value, String operation)
+  public String learn(String key, String value, String operation, String clientemailId)
       throws IOException, ClassNotFoundException {
     // operation = PUT / GET / DELETE / EDIT / SHARE 213123 s@s.com
 
@@ -405,7 +395,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     String result;
 
     assert stringCompleteOperation != null;
-    result = this.keyValueStore.executeOperation(stringCompleteOperation, getTemporaryClientEmailId());
+    result = this.keyValueStore.executeOperation(stringCompleteOperation, clientemailId);
     metadata.remove(key);
     return result;
   }
@@ -419,7 +409,6 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     logger.debug(true, "Message received from the Client: ", inputMessage);
 
     String result;
-    setTemporaryClientId(clientEmailId);
     String[] tokens = keyValueStore.parseMessage(inputMessage);
     String[] validatedResponse = keyValueStore.validateTokens(tokens);
     // validatedResponse[0] = (Valid/Invalid + PAXOS);
@@ -428,7 +417,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     if (validatedResponse[0].startsWith("Invalid")) {
       result = validatedResponse[0];
     } else if (validatedResponse[0].contains("PAXOS")) {
-      result = startPaxos(tokens, validatedResponse[1]);
+      result = startPaxos(tokens, validatedResponse[1], clientEmailId);
     } else {
       result = this.keyValueStore.executeOperation(tokens, clientEmailId);
     }
@@ -437,16 +426,8 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     return result;
   }
 
-  private void setTemporaryClientId(String tempClientEmailId) {
-    this.tempClientEmailId = tempClientEmailId;
-  }
-
-  private String getTemporaryClientEmailId() {
-    return this.tempClientEmailId;
-  }
-
   @Override
-  public String putItinerary(Itinerary itinerary) throws IOException, ClassNotFoundException {
+  public String putItinerary(Itinerary itinerary, String clientEmailId) throws IOException, ClassNotFoundException {
     logger.debug(true, "Itinerary received from the Client: ", itinerary.getName());
 
     String itineraryId = null;
@@ -472,7 +453,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
 
     assert itineraryJson != null;
     String[] tokens = {"PUT", itineraryId, itineraryJson};
-    String result = startPaxos(tokens, "PUT");
+    String result = startPaxos(tokens, "PUT", clientEmailId);
 
     logger.debug(true, "Sending response message to the Client: ", result);
     logger.debug(true, "Client Access the Created Itinerary of: ",

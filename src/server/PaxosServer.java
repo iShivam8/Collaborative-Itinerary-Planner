@@ -28,7 +28,7 @@ public interface PaxosServer extends Remote {
    * @return - Result of PUT, DELETE, SHARE, EDIT operation after PAXOS is completed.
    * @throws RemoteException
    */
-  String startPaxos(String[] inputTokens, String operation)
+  String startPaxos(String[] inputTokens, String operation, String clientEmailId)
       throws IOException, ClassNotFoundException;
 
   /**
@@ -41,7 +41,7 @@ public interface PaxosServer extends Remote {
    *           null if Acceptor fails
    * @throws RemoteException
    */
-  Promise prepare(long sequenceId, String key, String operation) throws RemoteException;
+  Promise prepare(long sequenceId, String key, String operation, String clientEmailId) throws RemoteException;
 
   /**
    * Proposer's uses this method for sending propose(sequenceId, proposedValue) message of PAXOS.
@@ -54,7 +54,7 @@ public interface PaxosServer extends Remote {
    *           null if Acceptor fails
    * @throws RemoteException
    */
-  Boolean propose(long sequenceId, String key, String value, String operation) throws RemoteException;
+  Boolean propose(long sequenceId, String key, String value, String operation, String clientEmailId) throws RemoteException;
 
   /**
    * This method is used so all the Acceptors can learn the given value and commit their updates.
@@ -64,6 +64,6 @@ public interface PaxosServer extends Remote {
    * @return - Result of PUT, DELETE, EDIT, SHARE operations when the commit actually occurs.
    * @throws RemoteException
    */
-  String learn(String key, String value, String operation)
+  String learn(String key, String value, String operation, String clientEmailId)
       throws IOException, ClassNotFoundException;
 }

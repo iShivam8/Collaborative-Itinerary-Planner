@@ -28,7 +28,7 @@ public class KeyValueStore {
    * Constructor of KeyValueStore that initializes the Key-Value Store.
    *
    * @param fileName - Filename for logger
-   * @param userDb - Server userDb
+   * @param userDb   - Server userDb
    */
   public KeyValueStore(String fileName, String serverId, Server userDb) {
     this.keyValueStore = new ConcurrentHashMap<>();
@@ -76,11 +76,11 @@ public class KeyValueStore {
               "Invalid operation: " + tokens[0] + " ", tokens[1], " Only CREATED and COLLAB " +
               "are supported with LIST operands."};
         }
-      }
-      else {
+      } else {
         logger.error(true, "Invalid operation", tokens[0]);
         return new String[] {
-            "Invalid operation: " + tokens[0] + ". Only GET, DELETE, EDIT, and LIST are supported " +
+            "Invalid operation: " + tokens[0] +
+                ". Only GET, DELETE, EDIT, and LIST are supported " +
                 "with Two operands."};
       }
     } else if (tokens.length == 3) {
@@ -103,7 +103,7 @@ public class KeyValueStore {
    * This method executes the 5 operations: PUT, GET, DELETE, EDIT, SHARE
    * After validating the token message received from the client.
    *
-   * @param tokens - input message token received from the client
+   * @param tokens        - input message token received from the client
    * @param clientEmailId - The user who invokes this method will be the current client user
    * @return - response of the executed operation
    */
@@ -120,8 +120,7 @@ public class KeyValueStore {
       // Need to update in User class, the list of Itineraries
       // USER <--> Itinerary
       return "Enter Itinerary Details";
-    }
-    else if (tokens[0].equalsIgnoreCase("INSERT")) {
+    } else if (tokens[0].equalsIgnoreCase("INSERT")) {
       // tokens[1] contains unique Key ID
       // tokens[2] contains serialized itinerary
 
@@ -134,6 +133,9 @@ public class KeyValueStore {
 
       // Update Call
       if (itinerary.getVersion() >= 1) {
+
+        // I first need to check if the user who is modifying it is owner or not, then call update created by
+
         // Fetch old id, and update it with new itinerary
         String oldItineraryId = itinerary.getPrevItineraryId();
 
@@ -146,7 +148,7 @@ public class KeyValueStore {
         updatedItinerary.setDescription(itinerary.getDescription());
         updatedItinerary.setStartDate(itinerary.getStartDate());
         updatedItinerary.setEndDate(itinerary.getEndDate());
-        updatedItinerary.setCreatedBy(itinerary.getCreatedBy());
+        //updatedItinerary.setCreatedBy(itinerary.getCreatedBy());
         // Before putting the updated itinerary, gets the stored Itinerary list of shared user
         updatedItinerary.updateListOfSharedUsers(
             this.keyValueStore.get(oldItineraryId).getListOfSharedWithUsers());
@@ -164,14 +166,13 @@ public class KeyValueStore {
         return oldItineraryId;
       }
 
-      // TODO - The user is different due to diff Itinerary
       User ownerUser = this.userDatabase.fetchUser(itinerary.getCreatedBy());
 
       itinerary.updateVersion();
       this.keyValueStore.put(tokens[1], itinerary);
 
       // Adding this itinerary in the list of created itinerary of the Current User
-      ownerUser.setListOfCreatedItinerary(itinerary.getItineraryId());
+      ownerUser.setListOfCreatedItinerary(tokens[1]);
       // Adding this itinerary id in the Map of Shared user itinerary - with shared user as null
       //ownerUser.addSharedUserToMap(itinerary.getItineraryId(), null);
 
@@ -182,12 +183,11 @@ public class KeyValueStore {
 
       return tokens[1];
 
-    }
-    else if (tokens[0].equalsIgnoreCase("GET")) {
+    } else if (tokens[0].equalsIgnoreCase("GET")) {
       // The Token[1] is the Random unique ID generated. Should it be int or string?
 
       // If Itinerary is not in the store
-      if (!keyValueStore.containsKey(tokens[1])) {
+      if (!this.keyValueStore.containsKey(tokens[1])) {
         logger.debug(true, "Itinerary Key : ", tokens[1], " not found in the store.");
         return "Itinerary Not found";
       }
@@ -196,14 +196,16 @@ public class KeyValueStore {
       User ownerUser = this.userDatabase.fetchUser(itinerary.getCreatedBy());
 
       // Code for No Authorization
+      /*
       logger.debug(true, "Found Itinerary Key : ", tokens[1],
           "and Itinerary Name Value : ", this.keyValueStore.get(tokens[1]).getName());
       return this.keyValueStore.get(tokens[1]).toString();
+      */
 
       // If the Itinerary is created by owner OR
       // whether the current user is in the list of shared user of itinerary
       // This if for Authorization
-      /*
+
       if (ownerUser.getEmailId().equals(clientEmailId)
           || itinerary.getListOfSharedWithUsers().contains(clientEmailId)) {
 
@@ -226,10 +228,8 @@ public class KeyValueStore {
       logger.debug(true, "You're not the Owner of this itinerary or " +
           "You don't have access to it as a collaborator!");
       return "No Authorization Access";
-      */
 
-    }
-    else if (tokens[0].equalsIgnoreCase("EDIT")) {
+    } else if (tokens[0].equalsIgnoreCase("EDIT")) {
       //  0       1
       // EDIT  123123213
       String itineraryId = tokens[1];
@@ -253,7 +253,7 @@ public class KeyValueStore {
       //printAllUsersAndHisCreatedItineraries();
 
       // Code for no authorization
-      return "Update Itinerary Details|" + itineraryId ;
+      return "Update Itinerary Details|" + itineraryId;
 
       // TODO - Checking  for authorization
       // If the current user is owner of the itinerary
@@ -283,8 +283,7 @@ public class KeyValueStore {
       }
       */
 
-    }
-    else if (tokens[0].equalsIgnoreCase("SHARE")) {
+    } else if (tokens[0].equalsIgnoreCase("SHARE")) {
       //   0      1       2
       // SHARE|1223123|s@s.com
 
@@ -301,8 +300,6 @@ public class KeyValueStore {
         return "Itinerary Not found";
       }
 
-      // TODO - i have the key, find the it with this key, update the shared list of that itinerary with the shared user email
-
       // Else, if the specified Key is found, then search for User with specified email
       try {
         // If there is no account of the shared user email, return no user found
@@ -316,7 +313,6 @@ public class KeyValueStore {
         // Only the owner of the itinerary can share the itinerary with the shared user
         User ownerUser = this.userDatabase.fetchUser(itinerary.getCreatedBy());
         User sharedUser = this.userDatabase.fetchUser(sharedEmailId);
-        //User currentUser = this.userDatabase.fetchUser(clientEmailId);
 
         // If current user (owner) wants to share the itinerary with himself, return can't do that
         if (ownerUser.getEmailId().equals(sharedEmailId)) {
@@ -335,19 +331,18 @@ public class KeyValueStore {
             " Sharing the Itinerary with: ", sharedUser.getName());
 
         // TODO - DO I even need this - for Authorization?
-        /*
-        if (currentUser != null) {
-          // If the current user is not the owner of the itinerary, he cannot share it with other users
-          if (!currentUser.getEmailId().equals(ownerUser.getEmailId())) {
-            logger.debug(true, "You're not the Owner of this itinerary, " +
-                "so you can't share with other users");
-            return "You're not the Owner of this itinerary, so you can't share it with other users!";
-          }
-
-          logger.debug(true, "Current User: ", currentUser.getName(),
-              " Shared User: ", sharedUser.getName());
+        User currentUser = this.userDatabase.fetchUser(clientEmailId);
+        System.out.println("CURRENT USER IN SHARE: " + currentUser.getName());
+        // If the current user is not the owner of the itinerary, he cannot share it with other users
+        if (!currentUser.getEmailId().equals(ownerUser.getEmailId())) {
+          logger.debug(true, "You're not the Owner of this itinerary, " +
+              "so you can't share with other users");
+          return "You're not the Owner of this itinerary, so you can't share it with other users!";
         }
-         */
+
+        logger.debug(true, "Current User: ", currentUser.getName(),
+            " Shared User: ", sharedUser.getName());
+
 
         // Updates Shared Users list of itineraries
         if (itinerary.getListOfSharedWithUsers().contains(sharedUser.getEmailId())) {
@@ -361,11 +356,11 @@ public class KeyValueStore {
           itinerary.setListOfSharedWithUsers(sharedUser.getEmailId());
 
           // Setting list of shared user for the owner user, and shared itinerary for the shared users
-          ownerUser.addSharedUserToMap(itinerary.getItineraryId(), sharedUser.getEmailId());
+          ownerUser.addSharedUserToMap(tokens[1], sharedUser.getEmailId());
 
           // Adding the current itinerary as the Shared itinerary of the shared user
           // So that the shared user can know to which itinerary he has access to
-          sharedUser.setListOfSharedItinerary(itinerary.getItineraryId());
+          sharedUser.setListOfSharedItinerary(tokens[1]);
 
           logger.debug(true, "Itinerary '", itinerary.getName(),
               "' successfully shared with User: ", sharedUser.getName());
@@ -381,8 +376,7 @@ public class KeyValueStore {
         return "Can't share with specified User";
       }
 
-    }
-    else if (tokens[0].equalsIgnoreCase("DELETE")) {
+    } else if (tokens[0].equalsIgnoreCase("DELETE")) {
       // TODO - Authorization for Delete
       if (keyValueStore.containsKey(tokens[1])) {
         logger.debug(true, "Deleted key :", tokens[1], " from the store.");
@@ -394,11 +388,7 @@ public class KeyValueStore {
 
         return "Key Not Found";
       }
-    }
-
-    else {
-
-      /*
+    } else {
       // Requires Authorization
       // LIST
       if (clientEmailId == null) {
@@ -415,25 +405,25 @@ public class KeyValueStore {
         System.out.println("List Size: " + currentClientUser.getListOfCreatedItinerary().size());
 
         //return printUserCreatedItineraryMap(currentClientUser.getMapOfSharedItineraries());
-        return printListOfCreatedItineraries(currentClientUser.getListOfCreatedItinerary());
+        return printListOfCreatedOrSharedItineraries(currentClientUser.getListOfCreatedItinerary());
       } else {
         // COLLAB
-        return currentClientUser.getListOfSharedItinerary().toString();
+        return printListOfCreatedOrSharedItineraries(currentClientUser.getListOfSharedItinerary());
       }
-       */
+
     }
 
-    return "INVALID OPERATION - Under Development";
+    //return "INVALID OPERATION - Under Development";
   }
 
   // Helper method to print list of created itineraries by the user
-  private String printListOfCreatedItineraries(List<String> listOfCreatedItinerary) {
+  private String printListOfCreatedOrSharedItineraries(List<String> listOfCreatedItinerary) {
     StringBuilder sb = new StringBuilder();
 
-    for (String str: listOfCreatedItinerary) {
-      Itinerary itinerary = this.keyValueStore.get(str);
+    for (String itineraryKeyId : listOfCreatedItinerary) {
+      Itinerary itinerary = this.keyValueStore.get(itineraryKeyId);
       sb.append("Itinerary Id: ");
-      sb.append(str);
+      sb.append(itineraryKeyId);
       sb.append(" Itinerary Name: ");
       sb.append(itinerary.getName());
       sb.append("   ");
@@ -448,7 +438,7 @@ public class KeyValueStore {
     // {[asdasd: [s@s.com]], [asdasd: [s@s.com]]}
     StringBuilder sb = new StringBuilder();
 
-    for (Map.Entry<String, List<String>> entry: mapOfSharedItineraries.entrySet()) {
+    for (Map.Entry<String, List<String>> entry : mapOfSharedItineraries.entrySet()) {
       System.out.println();
       Itinerary itinerary = this.keyValueStore.get(entry.getKey());
       List<String> listOfEmailIds = entry.getValue();
@@ -456,7 +446,7 @@ public class KeyValueStore {
       sb.append(itinerary.getName());
       sb.append(" - Shared with - ");
 
-      for (String str: listOfEmailIds) {
+      for (String str : listOfEmailIds) {
         sb.append(str);
         sb.append("  ");
       }
@@ -479,20 +469,21 @@ public class KeyValueStore {
 
   // This method uses the stored Itinerary and prints all the users who has access to that itinerary
   private void printAllUsersAndHisCreatedItineraries() {
-    for (Map.Entry<String, Itinerary> e: this.keyValueStore.entrySet()) {
+    for (Map.Entry<String, Itinerary> e : this.keyValueStore.entrySet()) {
       System.out.println();
       String tripName = e.getValue().getName();
       System.out.println("Key: " + e.getKey() + ",  Value: " + tripName);
       System.out.println("User who created " + tripName + ": " + e.getValue().getCreatedBy());
       List<String> sharedUsers = e.getValue().getListOfSharedWithUsers();
-      System.out.println("List of users with whom " + tripName + " is shared with: " + printUsersEmail(sharedUsers));
+      System.out.println("List of users with whom " + tripName + " is shared with: " +
+          printUsersEmail(sharedUsers));
       System.out.println();
     }
   }
 
   private String printUsersEmail(List<String> sharedUsers) {
     StringBuilder stringBuilder = new StringBuilder();
-    for (String userEmailId: sharedUsers) {
+    for (String userEmailId : sharedUsers) {
       stringBuilder.append(userEmailId);
       stringBuilder.append(" ");
     }

@@ -1,8 +1,0 @@
-2023-04-27 02:07:12.484  [DEBUG]   Starting the client:
-2023-04-27 02:07:12.485  [DEBUG]   Looking for RMI registry...
-2023-04-27 02:07:12.698  [DEBUG]   Found RMI registry!
-2023-04-27 02:07:12.699  [DEBUG]   Looking for the User Database server stub...
-2023-04-27 02:07:12.754  [DEBUG]   Found the User Database server stub!
-2023-04-27 02:07:14.649  [DEBUG]   Received Session request from user:  SignUp
-2023-04-27 02:07:20.134  [DEBUG]   Sending sign up request to the server:  Random|s@s.com|1234
-2023-04-27 02:07:20.149  [DEBUG]   Response from server:  User already Exists

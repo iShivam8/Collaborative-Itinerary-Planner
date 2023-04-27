@@ -214,10 +214,8 @@ public class Client {
       // Add the itinerary in the KeyValueStore
       logger.debug(false, "Sending Itinerary request to the server: ",
           itinerary.getName());
-      String itineraryResponse = this.keyValueStoreServer.putItinerary(itinerary);
+      String itineraryResponse = this.keyValueStoreServer.putItinerary(itinerary, this.user.getEmailId());
       logger.debug(false, "Response from server: ", itineraryResponse);
-      //System.out.println("Response from server: " + itineraryResponse);
-
 
       if (itineraryResponse.startsWith("Error")) {
         System.out.println("Response from server: " + itineraryResponse);

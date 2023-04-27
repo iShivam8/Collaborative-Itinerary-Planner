@@ -379,7 +379,7 @@ public class UserDBServer implements Server, TwoPCServer {
   }
 
   @Override
-  public String putItinerary(Itinerary itinerary) throws RemoteException {
+  public String putItinerary(Itinerary itinerary, String clientEmailId) throws RemoteException {
     return null;
   }
 }
