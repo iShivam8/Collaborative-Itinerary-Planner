@@ -1,4 +1,0 @@
-2023-04-27 04:27:39.306  [DEBUG]   SignUp Info received from the Client:  Random|r@r.com|1234
-2023-04-27 04:27:39.321  [DEBUG]   Sending response message to the Client:  User Created
-2023-04-27 04:27:39.322  [DEBUG]   Found the Logged in user:  Random
-2023-04-27 04:30:31.190  [DEBUG]   Logout Info received from the Client:  r@r.com

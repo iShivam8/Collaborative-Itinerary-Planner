@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="Client:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Client_jar</output-path>
+    <root id="root">
+      <element id="archive" name="CS6650 Final Project.jar">
+        <element id="module-output" name="CS6650 Final Project" />
+      </element>
+    </root>
+  </artifact>
+</component>
