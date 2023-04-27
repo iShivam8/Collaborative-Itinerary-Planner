@@ -1,0 +1,16 @@
+2023-04-27 02:03:27.927  [DEBUG]   Starting the client:
+2023-04-27 02:03:27.928  [DEBUG]   Looking for RMI registry...
+2023-04-27 02:03:27.950  [DEBUG]   Found RMI registry!
+2023-04-27 02:03:27.950  [DEBUG]   Looking for the User Database server stub...
+2023-04-27 02:03:28.014  [DEBUG]   Found the User Database server stub!
+2023-04-27 02:03:29.543  [DEBUG]   Received Session request from user:  SignUp
+2023-04-27 02:03:34.102  [DEBUG]   Sending sign up request to the server:  Shivam|s@s.com|1234
+2023-04-27 02:03:34.132  [DEBUG]   Response from server:  User Created
+2023-04-27 02:03:34.132  [DEBUG]   Looking for RMI registry...
+2023-04-27 02:03:34.133  [DEBUG]   Found RMI registry!
+2023-04-27 02:03:34.133  [DEBUG]   Looking for the Itinerary KeyValueStore server stub...
+2023-04-27 02:03:34.139  [DEBUG]   Found the Itinerary KeyValueStore server stub!
+2023-04-27 02:03:34.139  [DEBUG]   Client connected to the server
+2023-04-27 02:03:56.058  [DEBUG]   Received request from user:  x
+2023-04-27 02:03:56.060  [DEBUG]   Quitting the application.
+2023-04-27 02:03:56.070  [DEBUG]   Logout response received from Server:  User Successfully Logged Out!

@@ -72,10 +72,14 @@ public class UserDB {
     if (tokens.length == 3) {
       return signUpUser(tokens);
     } else if (tokens.length == 2) {
+      if (tokens[0].equals("LOGOUT")) {
+        return logout(tokens[1]);
+      }
+
       return loginUser(tokens);
-    } else {
-      return logout(tokens[0]);
     }
+
+    return null;
   }
 
   /**

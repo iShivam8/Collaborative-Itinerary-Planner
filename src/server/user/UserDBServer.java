@@ -89,7 +89,6 @@ public class UserDBServer implements Server, TwoPCServer {
     if (validatedResponse.startsWith("Invalid")) {
       result = validatedResponse;
     } else if (validatedResponse.contains("2PC")) {
-      //result = this.userDB.signUpUser(tokens);
       result = start2PC(tokens);
     }
 
@@ -110,7 +109,6 @@ public class UserDBServer implements Server, TwoPCServer {
     if (validatedResponse.startsWith("Invalid")) {
       result = validatedResponse;
     } else if (validatedResponse.contains("2PC")) {
-      //result = this.userDB.loginUser(tokens);
       result = start2PC(tokens);
     }
 
@@ -121,8 +119,7 @@ public class UserDBServer implements Server, TwoPCServer {
   @Override
   public String logout(String emailId) throws RemoteException {
     logger.debug(true, "Logout Info received from the Client: ", emailId);
-    //return this.userDB.logout(emailId);
-    return start2PC(new String[] {emailId});
+    return start2PC(new String[] {"LOGOUT", emailId});
   }
 
   @Override
@@ -340,9 +337,6 @@ public class UserDBServer implements Server, TwoPCServer {
     int operationSize = (log[4] == null) ? 2 : 3;
     String[] operation = new String[operationSize];
     System.arraycopy(log, 2, operation, 0, operationSize);
-    System.out.println("OPERATION i.e. SIGNUP INFO: " + Arrays.toString(operation));
-    // TODO
-
     String response = this.userDB.executeOperation(operation);
     log[0] = "Committed";
 

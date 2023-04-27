@@ -1,0 +1,25 @@
+2023-04-27 02:04:01.279  [DEBUG]   Starting the client:
+2023-04-27 02:04:01.279  [DEBUG]   Looking for RMI registry...
+2023-04-27 02:04:01.298  [DEBUG]   Found RMI registry!
+2023-04-27 02:04:01.298  [DEBUG]   Looking for the User Database server stub...
+2023-04-27 02:04:01.364  [DEBUG]   Found the User Database server stub!
+2023-04-27 02:04:04.965  [DEBUG]   Received Session request from user:  LogIn
+2023-04-27 02:04:09.022  [DEBUG]   Sending login request to the server:  s@s.com|1234
+2023-04-27 02:04:09.039  [DEBUG]   Response from server:  User Logged in
+2023-04-27 02:04:09.040  [DEBUG]   Looking for RMI registry...
+2023-04-27 02:04:09.040  [DEBUG]   Found RMI registry!
+2023-04-27 02:04:09.040  [DEBUG]   Looking for the Itinerary KeyValueStore server stub...
+2023-04-27 02:04:09.047  [DEBUG]   Found the Itinerary KeyValueStore server stub!
+2023-04-27 02:04:09.047  [DEBUG]   Client connected to the server
+2023-04-27 02:04:33.752  [DEBUG]   Received request from user:  put
+2023-04-27 02:04:33.754  [DEBUG]   Sending request to the server:  put
+2023-04-27 02:04:33.757  [DEBUG]   Response from server:  Enter Itinerary Details
+2023-04-27 02:04:44.194  [DEBUG]   Sending Itinerary request to the server:  Shiv 1
+2023-04-27 02:04:44.223  [DEBUG]   Response from server:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:04:44.223  [DEBUG]   Itinerary Added with Name: ' Shiv 1 '  and you can access it using Unique ID:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:04:54.107  [DEBUG]   Received request from user:  list|created
+2023-04-27 02:04:54.108  [DEBUG]   Sending request to the server:  list|created
+2023-04-27 02:04:54.111  [DEBUG]   Response from server:  INVALID OPERATION - Under Development
+2023-04-27 02:05:00.690  [DEBUG]   Received request from user:  x
+2023-04-27 02:05:00.691  [DEBUG]   Quitting the application.
+2023-04-27 02:05:00.699  [DEBUG]   Logout response received from Server:  User Successfully Logged Out!

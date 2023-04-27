@@ -87,15 +87,3 @@ public class ServerMainApplication {
     }
   }
 }
-
-
-/*
-      logger.debug(true, "Creating RMI Registry at port: ", String.valueOf(port));
-      //Registry registry = LocateRegistry.createRegistry(port);
-
-      Server userDb = new UserDBServer("UserDB");
-      Server userDbServerStub = (Server) UnicastRemoteObject.exportObject(userDb, port);
-      registry.rebind("UserDB", userDbServerStub);
-
-      logger.debug(true, "Server bounded with stub UserDB to RMI Registry.");
-       */

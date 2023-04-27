@@ -1,0 +1,8 @@
+2023-04-27 02:03:47.575  [DEBUG]   Starting the client:
+2023-04-27 02:03:47.576  [DEBUG]   Looking for RMI registry...
+2023-04-27 02:03:47.591  [DEBUG]   Found RMI registry!
+2023-04-27 02:03:47.591  [DEBUG]   Looking for the User Database server stub...
+2023-04-27 02:03:47.657  [DEBUG]   Found the User Database server stub!
+2023-04-27 02:03:48.672  [DEBUG]   Received Session request from user:  LogIn
+2023-04-27 02:03:52.425  [DEBUG]   Sending login request to the server:  s@s.com|1234
+2023-04-27 02:03:52.437  [DEBUG]   User is already logged-in on a different terminal. First logout then try to sign-in again!

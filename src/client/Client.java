@@ -177,8 +177,6 @@ public class Client {
             break;
           }
 
-          // TODO - If user is null i.e. a server instance where the user is not logged in, handle that
-
           logger.debug(false, "Sending request to the server: ", request);
           // Server executes the user inputs and sends the response
           String response = this.keyValueStoreServer.executeOperation(request, this.user.getEmailId());

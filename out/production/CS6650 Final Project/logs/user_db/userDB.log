@@ -1,3 +1,45 @@
-2023-04-27 01:50:22.840  [DEBUG]   Successfully created a new user with Email:  s@s.com
-2023-04-27 01:50:22.845  [DEBUG]   Successfully created a new user with Email:  s@s.com
-2023-04-27 01:50:22.845  [DEBUG]   Successfully created a new user with Email:  s@s.com
+2023-04-27 01:59:48.124  [DEBUG]   Successfully created a new user with Email:  s@s.com
+2023-04-27 01:59:48.129  [DEBUG]   Successfully created a new user with Email:  s@s.com
+2023-04-27 01:59:48.129  [DEBUG]   Successfully created a new user with Email:  s@s.com
+2023-04-27 01:59:59.651  [DEBUG]   User  Shivam  is already logged-in on a different terminal. First logout then try to sign-in again!
+2023-04-27 01:59:59.653  [DEBUG]   User  Shivam  is already logged-in on a different terminal. First logout then try to sign-in again!
+2023-04-27 01:59:59.654  [DEBUG]   User  Shivam  is already logged-in on a different terminal. First logout then try to sign-in again!
+2023-04-27 02:00:05.051  [DEBUG]   User Not Found with Email:  Logout
+2023-04-27 02:00:05.053  [DEBUG]   User Not Found with Email:  Logout
+2023-04-27 02:00:05.054  [DEBUG]   User Not Found with Email:  Logout
+2023-04-27 02:01:33.855  [DEBUG]   Successfully created a new user with Email:  s@s.com
+2023-04-27 02:01:33.858  [DEBUG]   Successfully created a new user with Email:  s@s.com
+2023-04-27 02:01:33.858  [DEBUG]   Successfully created a new user with Email:  s@s.com
+2023-04-27 02:03:34.119  [DEBUG]   Successfully created a new user with Email:  s@s.com
+2023-04-27 02:03:34.124  [DEBUG]   Successfully created a new user with Email:  s@s.com
+2023-04-27 02:03:34.124  [DEBUG]   Successfully created a new user with Email:  s@s.com
+2023-04-27 02:03:52.435  [DEBUG]   User  Shivam  is already logged-in on a different terminal. First logout then try to sign-in again!
+2023-04-27 02:03:52.437  [DEBUG]   User  Shivam  is already logged-in on a different terminal. First logout then try to sign-in again!
+2023-04-27 02:03:52.437  [DEBUG]   User  Shivam  is already logged-in on a different terminal. First logout then try to sign-in again!
+2023-04-27 02:03:56.067  [DEBUG]   User:  Shivam  Successfully Logged out!
+2023-04-27 02:03:56.070  [DEBUG]   User:  Shivam  Successfully Logged out!
+2023-04-27 02:03:56.070  [DEBUG]   User:  Shivam  Successfully Logged out!
+2023-04-27 02:04:09.030  [DEBUG]   User found with Email:  s@s.com , and Name:  Shivam
+2023-04-27 02:04:09.032  [DEBUG]   User found with Email:  s@s.com , and Name:  Shivam
+2023-04-27 02:04:09.032  [DEBUG]   User found with Email:  s@s.com , and Name:  Shivam
+2023-04-27 02:05:00.697  [DEBUG]   User:  Shivam  Successfully Logged out!
+2023-04-27 02:05:00.699  [DEBUG]   User:  Shivam  Successfully Logged out!
+2023-04-27 02:05:00.700  [DEBUG]   User:  Shivam  Successfully Logged out!
+2023-04-27 02:05:13.034  [DEBUG]   User found with Email:  s@s.com , and Name:  Shivam
+2023-04-27 02:05:13.036  [DEBUG]   User found with Email:  s@s.com , and Name:  Shivam
+2023-04-27 02:05:13.036  [DEBUG]   User found with Email:  s@s.com , and Name:  Shivam
+2023-04-27 02:05:30.742  [DEBUG]   Successfully created a new user with Email:  t@t.com
+2023-04-27 02:05:30.745  [DEBUG]   Successfully created a new user with Email:  t@t.com
+2023-04-27 02:05:30.745  [DEBUG]   Successfully created a new user with Email:  t@t.com
+2023-04-27 02:06:41.304  [DEBUG]   User  Test  is already logged-in on a different terminal. First logout then try to sign-in again!
+2023-04-27 02:06:41.306  [DEBUG]   User  Test  is already logged-in on a different terminal. First logout then try to sign-in again!
+2023-04-27 02:06:41.306  [DEBUG]   User  Test  is already logged-in on a different terminal. First logout then try to sign-in again!
+2023-04-27 02:06:46.043  [DEBUG]   User:  Test  Successfully Logged out!
+2023-04-27 02:06:46.045  [DEBUG]   User:  Test  Successfully Logged out!
+2023-04-27 02:06:46.046  [DEBUG]   User:  Test  Successfully Logged out!
+2023-04-27 02:06:57.218  [DEBUG]   User found with Email:  t@t.com , and Name:  Test
+2023-04-27 02:06:57.220  [DEBUG]   User found with Email:  t@t.com , and Name:  Test
+2023-04-27 02:06:57.221  [DEBUG]   User found with Email:  t@t.com , and Name:  Test
+2023-04-27 02:07:20.147  [DEBUG]   Can't create new user, since a user with email:  s@s.com  already exists
+2023-04-27 02:07:20.149  [DEBUG]   Can't create new user, since a user with email:  s@s.com  already exists
+2023-04-27 02:07:20.149  [DEBUG]   Can't create new user, since a user with email:  s@s.com  already exists

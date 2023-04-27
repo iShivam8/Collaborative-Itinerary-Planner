@@ -1,0 +1,64 @@
+2023-04-27 02:05:24.000  [DEBUG]   Starting the client:
+2023-04-27 02:05:24.001  [DEBUG]   Looking for RMI registry...
+2023-04-27 02:05:24.015  [DEBUG]   Found RMI registry!
+2023-04-27 02:05:24.015  [DEBUG]   Looking for the User Database server stub...
+2023-04-27 02:05:24.078  [DEBUG]   Found the User Database server stub!
+2023-04-27 02:05:25.081  [DEBUG]   Received Session request from user:  SignUp
+2023-04-27 02:05:30.735  [DEBUG]   Sending sign up request to the server:  Test|t@t.com|1234
+2023-04-27 02:05:30.749  [DEBUG]   Response from server:  User Created
+2023-04-27 02:05:30.750  [DEBUG]   Looking for RMI registry...
+2023-04-27 02:05:30.750  [DEBUG]   Found RMI registry!
+2023-04-27 02:05:30.750  [DEBUG]   Looking for the Itinerary KeyValueStore server stub...
+2023-04-27 02:05:30.757  [DEBUG]   Found the Itinerary KeyValueStore server stub!
+2023-04-27 02:05:30.757  [DEBUG]   Client connected to the server
+2023-04-27 02:05:34.818  [DEBUG]   Received request from user:  get|77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:05:34.819  [DEBUG]   Sending request to the server:  get|77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:05:34.822  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: Shiv 1
+Location: 1
+Description: asddsad
+Start Date: Mon Jan 01 00:00:00 EST 2024
+End Date: Wed Jan 24 00:00:00 EST 2024
+Created by: s@s.com
+List of Users with whom this Itinerary is shared with: []
+Version: 1
+
+2023-04-27 02:05:58.150  [DEBUG]   Received request from user:  get|77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:05:58.151  [DEBUG]   Sending request to the server:  get|77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:05:58.155  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: Shiv 1
+Location: 1
+Description: asddsad
+Start Date: Mon Jan 01 00:00:00 EST 2024
+End Date: Wed Jan 24 00:00:00 EST 2024
+Created by: s@s.com
+List of Users with whom this Itinerary is shared with: [t@t.com]
+Version: 1
+
+2023-04-27 02:06:02.958  [DEBUG]   Received request from user:  edit
+2023-04-27 02:06:02.959  [DEBUG]   Sending request to the server:  edit
+2023-04-27 02:06:02.962  [DEBUG]   Response from server:  Invalid operation: edit. Only PUT is supported with Single operand.
+2023-04-27 02:06:05.570  [DEBUG]   Received request from user:  edit|77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:05.571  [DEBUG]   Sending request to the server:  edit|77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:05.579  [DEBUG]   Response from server:  Update Itinerary Details|77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:19.005  [DEBUG]   Sending Itinerary request to the server:  Two T
+2023-04-27 02:06:19.019  [DEBUG]   Response from server:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:19.019  [DEBUG]   Itinerary Added with Name: ' Two T '  and you can access it using Unique ID:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:21.732  [DEBUG]   Received request from user:  get|77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:21.732  [DEBUG]   Sending request to the server:  get|77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:21.736  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: Two T
+Location: t
+Description: aasdasdas
+Start Date: Fri Feb 02 00:00:00 EST 2024
+End Date: Sun Feb 04 00:00:00 EST 2024
+Created by: t@t.com
+List of Users with whom this Itinerary is shared with: [t@t.com]
+Version: 2
+
+2023-04-27 02:06:46.034  [DEBUG]   Received request from user:  x
+2023-04-27 02:06:46.035  [DEBUG]   Quitting the application.
+2023-04-27 02:06:46.046  [DEBUG]   Logout response received from Server:  User Successfully Logged Out!

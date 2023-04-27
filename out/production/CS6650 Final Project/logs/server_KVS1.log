@@ -1,0 +1,48 @@
+2023-04-27 02:04:44.212  [DEBUG]   #KVS KVS1, Prepare() request received with sequence id:  1682575484207 , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:04:44.212  [DEBUG]   #KVS KVS1, Responding back to the prepare() request with:  Promise{sequenceNumber = 1682575484207, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-27 02:04:44.219  [DEBUG]   #KVS KVS1, Prepare() request received with sequence id:  1682575484207 , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de , and Proposed value:  Shiv 1
+2023-04-27 02:04:44.219  [DEBUG]   Accepting proposed value:  Shiv 1 , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de , and setting the accepted sequence id number to:  1682575484207
+2023-04-27 02:04:44.223  [DEBUG]   Learning and Committing the Value:  Shiv 1  for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:04:44.223  [DEBUG]   Successfully Deserialized the Itinerary:  Shiv 1
+2023-04-27 02:04:44.223  [DEBUG]   Itinerary ' Shiv 1 ' Added in the List of Created Itineraries of User:  Shivam
+2023-04-27 02:05:15.317  [DEBUG]   Message received from the Client:  get|77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:05:15.318  [DEBUG]   Found Itinerary Key :  77c0744f-80fd-4f70-93af-0d640f50c4de and Itinerary Name Value :  Shiv 1
+2023-04-27 02:05:15.318  [DEBUG]   Sending response message to the Client:  Itinerary Details:
+
+Name: Shiv 1
+Location: 1
+Description: asddsad
+Start Date: Mon Jan 01 00:00:00 EST 2024
+End Date: Wed Jan 24 00:00:00 EST 2024
+Created by: s@s.com
+List of Users with whom this Itinerary is shared with: []
+Version: 1
+
+2023-04-27 02:05:53.149  [DEBUG]   Message received from the Client:  share|77c0744f-80fd-4f70-93af-0d640f50c4de|t@t.com
+2023-04-27 02:05:53.150  [DEBUG]   Initiating PAXOS Phase 1
+2023-04-27 02:05:53.151  [DEBUG]   Sequence Number:  1682575553150
+2023-04-27 02:05:53.151  [DEBUG]   #KVS KVS1, Prepare() request received with sequence id:  1682575553150 , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:05:53.151  [DEBUG]   #KVS KVS1, Responding back to the prepare() request with:  Promise{sequenceNumber = 1682575553150, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-27 02:05:53.153  [DEBUG]   Number of received Promises:  3
+2023-04-27 02:05:53.153  [DEBUG]   Initiating PAXOS Phase 2 with proposed value:  t@t.com
+2023-04-27 02:05:53.153  [DEBUG]   #KVS KVS1, Prepare() request received with sequence id:  1682575553150 , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de , and Proposed value:  t@t.com
+2023-04-27 02:05:53.154  [DEBUG]   Accepting proposed value:  t@t.com , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de , and setting the accepted sequence id number to:  1682575553150
+2023-04-27 02:05:53.155  [DEBUG]   Number of Accepted Responses received:  3
+2023-04-27 02:05:53.155  [DEBUG]   Consensus has been reached! Learning and Committing the value:  t@t.com  for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:05:53.155  [DEBUG]   Learning and Committing the Value:  t@t.com  for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:05:53.155  [DEBUG]   User found with Email:  t@t.com  Sharing the Itinerary with:  Test
+2023-04-27 02:05:53.156  [DEBUG]   Itinerary ' Shiv 1 ' successfully shared with User:  Test
+2023-04-27 02:05:53.156  [DEBUG]   Sending response message to the Client:  Itinerary Successfully Shared
+2023-04-27 02:06:05.575  [DEBUG]   #KVS KVS1, Prepare() request received with sequence id:  1682575565573 , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:05.575  [DEBUG]   #KVS KVS1, Responding back to the prepare() request with:  Promise{sequenceNumber = 1682575565573, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-27 02:06:05.577  [DEBUG]   #KVS KVS1, Prepare() request received with sequence id:  1682575565573 , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de , and Proposed value:  null
+2023-04-27 02:06:05.577  [DEBUG]   Accepting proposed value:  null , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de , and setting the accepted sequence id number to:  1682575565573
+2023-04-27 02:06:05.579  [DEBUG]   Learning and Committing the Value:  null  for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:05.579  [DEBUG]   Found Itinerary Key :  77c0744f-80fd-4f70-93af-0d640f50c4de and Itinerary Name Value :  Shiv 1
+2023-04-27 02:06:19.012  [DEBUG]   #KVS KVS1, Prepare() request received with sequence id:  1682575579012 , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:19.013  [DEBUG]   #KVS KVS1, Responding back to the prepare() request with:  Promise{sequenceNumber = 1682575579012, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
+2023-04-27 02:06:19.014  [DEBUG]   #KVS KVS1, Prepare() request received with sequence id:  1682575579012 , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de , and Proposed value:  Two T
+2023-04-27 02:06:19.015  [DEBUG]   Accepting proposed value:  Two T , for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de , and setting the accepted sequence id number to:  1682575579012
+2023-04-27 02:06:19.019  [DEBUG]   Learning and Committing the Value:  Two T  for Key:  77c0744f-80fd-4f70-93af-0d640f50c4de
+2023-04-27 02:06:19.019  [DEBUG]   Successfully Deserialized the Itinerary:  Two T
+2023-04-27 02:06:19.020  [DEBUG]   Itinerary Updated to:  Two T
