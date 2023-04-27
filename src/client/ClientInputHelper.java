@@ -148,7 +148,7 @@ public class ClientInputHelper {
         System.out.println("User Profile Operations:");
         // This will print all the itineraries that are created by this user,
         // and with whom he has shared it with
-        System.out.println("a] List of Created and Shared Itineraries:        LIST CREATED");
+        System.out.println("a] List of Created Itineraries:                   LIST CREATED");
         // This will print out the itineraries that you have been invited to collaborate
         // And you're not the owner but a collaborator for that Itinerary.
         System.out.println("b] List of Collaborated Itineraries (Non-Owner):  LIST COLLAB");

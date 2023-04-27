@@ -60,7 +60,7 @@ The log for the client would be saved in src/logs/client_yyyy_mm_dd_HH_mm_ss.log
 
 - For PUT, DELETE, EDIT, SHARE operations:
 - The UserDBServer instance with whom client is connected,
-- would act the coordinator and the rest of the instances would act as participants for 2PC protocol.
+  would act the coordinator and the rest of the instances would act as participants for 2PC protocol.
 
 - the KeyValueStoreServer instance with whom client is connected,
   would act as the proposer and will initiate the PAXOS algorithm with the other instances
