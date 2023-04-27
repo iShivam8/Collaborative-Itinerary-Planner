@@ -1,7 +1,0 @@
-2023-04-26 20:27:38.025  [DEBUG]   #KVS KVS2, Prepare() request received with sequence id:  1682566058021 , for Key:  34f4c432-66dc-434a-b7d5-f883ecd3f838
-2023-04-26 20:27:38.050  [DEBUG]   #KVS KVS2, Responding back to the prepare() request with:  Promise{sequenceNumber = 1682566058021, acceptedSequenceNumber = null, acceptedValue = 'null', accepted = false, status = 'Promised'}
-2023-04-26 20:27:38.059  [DEBUG]   #KVS KVS2, Prepare() request received with sequence id:  1682566058021 , for Key:  34f4c432-66dc-434a-b7d5-f883ecd3f838 , and Proposed value:  hiking
-2023-04-26 20:27:38.059  [DEBUG]   Accepting proposed value:  hiking , for Key:  34f4c432-66dc-434a-b7d5-f883ecd3f838 , and setting the accepted sequence id number to:  1682566058021
-2023-04-26 20:27:38.065  [DEBUG]   Learning and Committing the Value:  hiking  for Key:  34f4c432-66dc-434a-b7d5-f883ecd3f838
-2023-04-26 20:27:38.066  [DEBUG]   Successfully Deserialized the Itinerary:  hiking
-2023-04-26 20:27:38.066  [DEBUG]   Itinerary ' hiking ' Added in the List of Created Itineraries of User:  ali

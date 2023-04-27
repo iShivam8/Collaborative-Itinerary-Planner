@@ -14,6 +14,7 @@ import java.util.Date;
 import logs.Logger;
 import server.Server;
 import server.itinerary.Itinerary;
+import server.user.Message;
 import server.user.User;
 
 /**
@@ -265,4 +266,36 @@ public class Client {
   String[] parseMessage(String message) {
     return message.split("\\|");
   }
+  public void sendMessage(String operation, String key, String value) throws RemoteException {
+    int timestamp = logicalClock.getTime();
+    Message message = new Message(timestamp, operation, key, value);
+    logicalClock.tick();
+    server.executeOperation(message);
+  }
+
+
+  /*
+
+
+  public void sendMessage(String operation, String key, String value) throws RemoteException {
+
+    logicalClock.tick()
+    // Update the logical timestamp
+    Message message = new Message(operation, key, value, logicalClock.tick());
+
+    try {
+      // Send the message to the server
+      Message response = server.executeOperation(message);
+
+      // Print the server response
+      System.out.println(String.format("Operation: %s, Key: %s, Value: %s, Response: %s, Timestamp: %s",
+              message.getOperation(), message.getKey(), message.getValue(), response.getValue(),
+              response.getLogicalTimestamp()));
+    } catch (RemoteException e) {
+      System.out.println("Error communicating with server: " + e.getMessage());
+    }
+  }
+  */
+
 }
+

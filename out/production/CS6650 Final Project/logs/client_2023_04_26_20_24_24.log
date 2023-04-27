@@ -1,8 +1,0 @@
-2023-04-26 20:24:25.001  [DEBUG]   Starting the client:
-2023-04-26 20:24:25.002  [DEBUG]   Looking for RMI registry...
-2023-04-26 20:24:25.055  [DEBUG]   Found RMI registry!
-2023-04-26 20:24:25.055  [DEBUG]   Looking for the User Database server stub...
-2023-04-26 20:24:25.154  [DEBUG]   Found the User Database server stub!
-2023-04-26 20:24:39.221  [DEBUG]   Received Session request from user:  LogIn
-2023-04-26 20:25:06.934  [DEBUG]   Sending login request to the server:  s4remi@gmail.com|1234
-2023-04-26 20:25:06.942  [DEBUG]   Response from server:  User Not Found
