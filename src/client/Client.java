@@ -14,7 +14,7 @@ import java.util.Date;
 import logs.Logger;
 import server.Server;
 import server.itinerary.Itinerary;
-import server.user.Message;
+import server.Message;
 import server.user.User;
 
 /**

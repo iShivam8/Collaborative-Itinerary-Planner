@@ -1,4 +1,4 @@
-package server.user;
+package server;
 
 import java.io.Serializable;
 import java.util.List;

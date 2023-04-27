@@ -1,4 +1,4 @@
-package server.user;
+package server;
 
 public class LogicalClock {
     private int timestamp = 0;
