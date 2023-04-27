@@ -5,26 +5,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import server.itinerary.Itinerary;
 
 /**
  * Model class for User.
  */
 public class User implements Serializable {
 
+  // Basic User details
   private final String name, emailId, password;
 
   // Created Itinerary that the user has created by himself
   // Shared Itinerary that other users have created, and shared with this user
-  private final List<Itinerary> listOfCreatedItinerary, listOfSharedItinerary;
+  // List of Itinerary IDs
+  private final List<String> listOfCreatedItinerary, listOfSharedItinerary;
 
+  // Whether the current user is logged in or not
   private boolean isLoggedIn;
 
-  // TODO - User should be able to see with whom he has shared the itineraries
-  // TODO - The shared user must be able to retract the shared itinerary
-
   // Current User can access, which itinerary is shared with which user email id
-  private final Map<Itinerary, List<String>> mapOfSharedItineraries;
+  // Itinerary ID + List of user email ids with whom the itinerary is shared with
+  private final Map<String, List<String>> mapOfSharedItineraries;
 
   public User(String name, String emailId, String password) {
     this.name = name;
@@ -59,12 +59,12 @@ public class User implements Serializable {
 
   // This method is for current users (owner), who is the owner of itinerary
   // Current user can see how many itineraries he has created
-  public void setListOfCreatedItinerary(Itinerary createdItinerary) {
-    if (!this.listOfCreatedItinerary.contains(createdItinerary)) {
-      this.listOfCreatedItinerary.add(createdItinerary);
+  public void setListOfCreatedItinerary(String createdItineraryId) {
+    if (!this.listOfCreatedItinerary.contains(createdItineraryId)) {
+      this.listOfCreatedItinerary.add(createdItineraryId);
     }
   }
-  public List<Itinerary> getListOfCreatedItinerary() {
+  public List<String> getListOfCreatedItinerary() {
     return this.listOfCreatedItinerary;
   }
 
@@ -73,10 +73,12 @@ public class User implements Serializable {
   // This if for the other user, with whom the itinerary is shared with, by the client
   // So If the current user wants to see, how many itineraries he has access to he can use this method
   // i.e. This User has access to These many Itineraries.
-  public void setListOfSharedItinerary(Itinerary sharedItinerary) {
-    this.listOfSharedItinerary.add(sharedItinerary);
+  public void setListOfSharedItinerary(String sharedItineraryId) {
+    if (!this.listOfSharedItinerary.contains(sharedItineraryId)) {
+      this.listOfSharedItinerary.add(sharedItineraryId);
+    }
   }
-  public List<Itinerary> getListOfSharedItinerary() {
+  public List<String> getListOfSharedItinerary() {
     return this.listOfSharedItinerary;
   }
 
@@ -84,18 +86,18 @@ public class User implements Serializable {
   // Method to add shared users to the map of current users
   // So that the current user can see, with whom who he has shared the specified itinerary
   // THIS IF FOR CURRENT USER - who is the owner of created itinerary
-  public void addSharedUserToMap(Itinerary itinerary, String sharedUserEmailId) {
-    if (this.mapOfSharedItineraries.containsKey(itinerary)) {
-      List<String> existingUsersEmailId = this.mapOfSharedItineraries.get(itinerary);
+  synchronized public void addSharedUserToMap(String itineraryId, String sharedUserEmailId) {
+    if (this.mapOfSharedItineraries.containsKey(itineraryId)) {
+      List<String> existingUsersEmailId = this.mapOfSharedItineraries.get(itineraryId);
       existingUsersEmailId.add(sharedUserEmailId);
-      this.mapOfSharedItineraries.put(itinerary, existingUsersEmailId);
+      this.mapOfSharedItineraries.replace(itineraryId, existingUsersEmailId);
     } else {
       List<String> tempListOfUserEmailId = new ArrayList<>();
       tempListOfUserEmailId.add(sharedUserEmailId);
-      this.mapOfSharedItineraries.put(itinerary, tempListOfUserEmailId);
+      this.mapOfSharedItineraries.put(itineraryId, tempListOfUserEmailId);
     }
   }
-  public Map<Itinerary, List<String>> getMapOfSharedItineraries() {
+  public Map<String , List<String>> getMapOfSharedItineraries() {
     return this.mapOfSharedItineraries;
   }
 }

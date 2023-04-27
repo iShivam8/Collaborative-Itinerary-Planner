@@ -8,6 +8,9 @@ import server.itinerary.Itinerary;
 import server.user.User;
 import server.user.UserDB;
 
+/**
+ * Server interface which is implemented by UserDBServer and KeyValueStoreServer.
+ */
 public interface Server extends Remote {
 
   /**
@@ -18,7 +21,7 @@ public interface Server extends Remote {
    * @return - Response of the executed operation to the client.
    * @throws RemoteException
    */
-  String executeOperation(String inputMessage) throws IOException,
+  String executeOperation(String inputMessage, String clientEmailId) throws IOException,
       ClassNotFoundException;
 
   /**
@@ -56,8 +59,20 @@ public interface Server extends Remote {
    */
   User getUser(String emailId) throws RemoteException;
 
+  /**
+   * Get the user db for storing user.
+   *
+   * @return - userdb
+   * @throws RemoteException
+   */
   UserDB getUserDB() throws RemoteException;
 
+  /**
+   * Returns the set of logged-in users in the system.
+   *
+   * @return - set of user email ids
+   * @throws RemoteException
+   */
   Set<String> getSetOfLoggedInUsers() throws RemoteException;
 
   /**

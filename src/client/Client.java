@@ -181,7 +181,7 @@ public class Client {
 
           logger.debug(false, "Sending request to the server: ", request);
           // Server executes the user inputs and sends the response
-          String response = this.keyValueStoreServer.executeOperation(request);
+          String response = this.keyValueStoreServer.executeOperation(request, this.user.getEmailId());
           logger.debug(false, "Response from server: ", response);
           System.out.println("Response from server: " + response);
 

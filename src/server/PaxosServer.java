@@ -61,7 +61,7 @@ public interface PaxosServer extends Remote {
    *
    * @param key - Key that need to be updated
    * @param value - Value that need to be updated
-   * @return - Result of PUT and DELETE operations when the commit actually occurs.
+   * @return - Result of PUT, DELETE, EDIT, SHARE operations when the commit actually occurs.
    * @throws RemoteException
    */
   String learn(String key, String value, String operation)

@@ -1,12 +1,15 @@
 package server.user;
 
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Set;
 import logs.Logger;
 import server.Server;
 import server.itinerary.Itinerary;
 
+/**
+ * UserDBServer that implements the Server interface and implements the user sign-in methods
+ * such as Signup, Login, Logout.
+ */
 public class UserDBServer implements Server {
 
   private final UserDB userDB;
@@ -86,7 +89,7 @@ public class UserDBServer implements Server {
 
   // Below methods are implemented in KeyValueStoreServer
   @Override
-  public String executeOperation(String inputMessage) throws RemoteException {
+  public String executeOperation(String inputMessage, String clientEmailId) throws RemoteException {
     return null;
   }
 

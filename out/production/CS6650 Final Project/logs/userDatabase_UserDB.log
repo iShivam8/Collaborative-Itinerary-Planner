@@ -1,0 +1,6 @@
+2023-04-26 21:58:15.544  [DEBUG]   SignUp Info received from the Client:  Shivam|s@s.com|1234
+2023-04-26 21:58:15.548  [DEBUG]   Sending response message to the Client:  User Created
+2023-04-26 21:58:15.549  [DEBUG]   Found the Logged in user:  Shivam
+2023-04-26 21:58:43.925  [DEBUG]   Login Info received from the Client:  s@s.com|1234
+2023-04-26 21:58:43.926  [DEBUG]   Sending response message to the Client:  User already Logged-in
+2023-04-26 21:58:43.928  [DEBUG]   Found the Logged in user:  Shivam

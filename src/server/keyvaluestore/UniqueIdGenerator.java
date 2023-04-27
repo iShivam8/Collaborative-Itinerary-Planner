@@ -14,7 +14,7 @@ public class UniqueIdGenerator {
 
   static Set<String> setOfUniqueIds = new HashSet<>();
 
-  static String generateId() {
+  public static String generateId() {
     String uniqueId = UUID.randomUUID().toString();
 
     if (setOfUniqueIds.contains(uniqueId)) {

@@ -41,6 +41,8 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   // We can use the userDbServer to access User Database
   private final Server userDbServer;
 
+  private String tempClientEmailId;
+
   public KeyValueStoreServer(String serverId, Server userDbServer) {
     this.keyValueStore = new KeyValueStore("src/logs/server_" + serverId
         + ".log", serverId, userDbServer);
@@ -354,18 +356,6 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     return true;
   }
 
-  // Helper method to parse the Byte Array object and fetch the Itinerary Name for logging purpose
-  private String parseByteArray(String value) throws IOException, ClassNotFoundException {
-    if (value != null) {
-      byte[] decodedBytes = Base64.getDecoder().decode(value);
-      ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(decodedBytes));
-      Itinerary deserializedItinerary = (Itinerary) ois.readObject();
-      return deserializedItinerary.getName();
-    }
-
-    return null;
-  }
-
   @Override
   public String learn(String key, String value, String operation)
       throws IOException, ClassNotFoundException {
@@ -417,13 +407,13 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     String result;
 
     assert stringCompleteOperation != null;
-    result = this.keyValueStore.executeOperation(stringCompleteOperation);
+    result = this.keyValueStore.executeOperation(stringCompleteOperation, getTemporaryClientEmailId());
     metadata.remove(key);
     return result;
   }
 
   @Override
-  public String executeOperation(String inputMessage)
+  public String executeOperation(String inputMessage, String clientEmailId)
       throws IOException, ClassNotFoundException {
 
     // InputMessages:  Put;   EDIT|123;    Get|123;    Delete|123;   Share|123|a@a.com;
@@ -431,6 +421,7 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     logger.debug(true, "Message received from the Client: ", inputMessage);
 
     String result;
+    setTemporaryClientId(clientEmailId);
     String[] tokens = keyValueStore.parseMessage(inputMessage);
     String[] validatedResponse = keyValueStore.validateTokens(tokens);
     // validatedResponse[0] = (Valid/Invalid + PAXOS);
@@ -441,11 +432,19 @@ public class KeyValueStoreServer implements Server, PaxosServer {
     } else if (validatedResponse[0].contains("PAXOS")) {
       result = startPaxos(tokens, validatedResponse[1]);
     } else {
-      result = this.keyValueStore.executeOperation(tokens);
+      result = this.keyValueStore.executeOperation(tokens, clientEmailId);
     }
 
     logger.debug(true, "Sending response message to the Client: ", result);
     return result;
+  }
+
+  private void setTemporaryClientId(String tempClientEmailId) {
+    this.tempClientEmailId = tempClientEmailId;
+  }
+
+  private String getTemporaryClientEmailId() {
+    return this.tempClientEmailId;
   }
 
   @Override
@@ -482,6 +481,18 @@ public class KeyValueStoreServer implements Server, PaxosServer {
         itinerary.getName(), ", with Unique Key ID: ", result);
 
     return result;
+  }
+
+  // Helper method to parse the Byte Array object and fetch the Itinerary Name for logging purpose
+  private String parseByteArray(String value) throws IOException, ClassNotFoundException {
+    if (value != null) {
+      byte[] decodedBytes = Base64.getDecoder().decode(value);
+      ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(decodedBytes));
+      Itinerary deserializedItinerary = (Itinerary) ois.readObject();
+      return deserializedItinerary.getName();
+    }
+
+    return null;
   }
 
 

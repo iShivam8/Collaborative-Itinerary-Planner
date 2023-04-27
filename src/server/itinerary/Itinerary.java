@@ -1,16 +1,17 @@
 package server.itinerary;
 
+import static server.keyvaluestore.UniqueIdGenerator.generateId;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import server.user.User;
 
 /**
  * Model class of the Itinerary.
  */
 public class Itinerary implements Serializable {
 
+  private final String itineraryId;
   private String name, location, description;
   private Date startDate, endDate;
 
@@ -18,8 +19,6 @@ public class Itinerary implements Serializable {
   private String createdBy;
 
   // List of users email id with whom this itinerary is shared with
-  // TODO - only add user email, and not the entire user object, and while fetching
-  //  - use the KVS + userDb, and fetch user object with email
   private List<String> listOfSharedWithUsers;
 
   // To keep a track of changes
@@ -28,6 +27,7 @@ public class Itinerary implements Serializable {
 
   public Itinerary(String name, String location, Date startDate,
                    Date endDate, String description, String createdBy) {
+    this.itineraryId = generateId();
     this.name = name;
     this.location = location;
     this.startDate = startDate;
@@ -37,6 +37,10 @@ public class Itinerary implements Serializable {
     this.listOfSharedWithUsers = new ArrayList<>();
     this.version = 0;
     this.prevItineraryId = null;
+  }
+
+  public String getItineraryId() {
+    return this.itineraryId;
   }
 
   public String getPrevItineraryId() {
@@ -109,6 +113,11 @@ public class Itinerary implements Serializable {
     }
   }
 
+  // This method updates the current list of shared user in the UPDATE call
+  public void updateListOfSharedUsers(List<String> listOfSharedWithUsers) {
+    this.listOfSharedWithUsers = listOfSharedWithUsers;
+  }
+
   public int getVersion() {
     return version;
   }
@@ -133,23 +142,5 @@ public class Itinerary implements Serializable {
         "List of Users with whom this Itinerary is shared with: "
         + listOfSharedWithUsers + '\n' +
         "Version: " + version + '\n';
-  }
-
-  private String fetchUserEmail(List<User> listOfSharedWithUsers) {
-    StringBuilder stringBuilder = new StringBuilder();
-    for (User user: listOfSharedWithUsers) {
-      stringBuilder.append("[");
-      stringBuilder.append(user.getName());
-      stringBuilder.append(", ");
-      stringBuilder.append(user.getEmailId());
-      stringBuilder.append("] ");
-    }
-
-    return stringBuilder.toString();
-  }
-
-  // This method updates the current list of shared user in the UPDATE call
-  public void updateListOfSharedUsers(List<String> listOfSharedWithUsers) {
-    this.listOfSharedWithUsers = listOfSharedWithUsers;
   }
 }
