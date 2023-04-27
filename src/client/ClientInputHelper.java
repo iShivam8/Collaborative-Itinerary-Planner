@@ -42,9 +42,9 @@ public class ClientInputHelper {
   }
 
   /**
-   * Method to fetch user sign up information: Name, Email, Password
+   * Method to fetch user sign up information: Name, Email, Password.
    *
-   * @return
+   * @return - User input as per the specified operation
    */
   static String fetchSignUpInput() {
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -145,7 +145,6 @@ public class ClientInputHelper {
         System.out.println("3] Delete an Itinerary:    DELETE  (Itinerary-ID)");
         System.out.println("4] Edit an Itinerary:      EDIT (Itinerary-ID)");
         System.out.println("5] Share an Itinerary:     SHARE (Itinerary-ID) (Email id)\n");
-        // TODO - Implement User Profile Operations
         System.out.println("User Profile Operations:");
         // This will print all the itineraries that are created by this user,
         // and with whom he has shared it with
@@ -191,7 +190,6 @@ public class ClientInputHelper {
     }
 
     // Keep taking the user input unless the boolean value turns false
-
 
     return null;
   }

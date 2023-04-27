@@ -34,21 +34,5 @@ public class ClientMainApplication {
     }
 
     client.signIn();
-
-    /*
-    // If the application gets closed via Option + c
-    Client finalClient = client;
-    Runtime.getRuntime().addShutdownHook(new Thread() {
-      @Override
-      public void run() {
-        // your code to logout the user
-        try {
-          finalClient.logout();
-        } catch (RemoteException e) {
-          e.printStackTrace();
-        }
-      }
-    });
-    */
   }
 }

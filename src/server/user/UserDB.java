@@ -110,8 +110,6 @@ public class UserDB {
         // Added the current user in Logged-in User
         this.loggedInUsersEmailId.add(user.getEmailId());
 
-        // TODO - Send the user to client
-
         logger.debug(true, "Successfully created a new user with Email: ", email);
         return "User Created";
       }

@@ -56,7 +56,6 @@ public class User implements Serializable {
     isLoggedIn = loggedIn;
   }
 
-
   // This method is for current users (owner), who is the owner of itinerary
   // Current user can see how many itineraries he has created
   public void setListOfCreatedItinerary(String createdItineraryKeyId) {
@@ -67,8 +66,6 @@ public class User implements Serializable {
   public List<String> getListOfCreatedItinerary() {
     return this.listOfCreatedItinerary;
   }
-
-
 
   // This if for the other user, with whom the itinerary is shared with, by the client
   // So If the current user wants to see, how many itineraries he has access to he can use this method
@@ -81,7 +78,6 @@ public class User implements Serializable {
   public List<String> getListOfSharedItinerary() {
     return this.listOfSharedItinerary;
   }
-
 
   // Method to add shared users to the map of current users
   // So that the current user can see, with whom who he has shared the specified itinerary

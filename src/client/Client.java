@@ -6,7 +6,6 @@ import static client.ClientInputHelper.fetchSignUpInput;
 import static client.ClientInputHelper.fetchUserOperationInput;
 import static client.ClientInputHelper.fetchSignupOrLoginInput;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
@@ -230,26 +229,8 @@ public class Client {
     }
   }
 
-  boolean isSignedIn() {
-    return this.isSignedIn;
-  }
-
   void setSignedIn(boolean signedIn) {
     this.isSignedIn = signedIn;
-  }
-
-  void logout() throws RemoteException {
-
-    if (this.user == null || this.userDbServer == null) {
-      return;
-    }
-
-    logger.debug(false, "Quitting the application.");
-    System.out.println("Quitting the application...");
-    this.setSignedIn(false);
-    this.user.setLoggedIn(false);
-    String logoutResponse = this.userDbServer.logout(this.user.getEmailId());
-    logger.debug(true, "Logout response received from Server: ", logoutResponse);
   }
 
   /**
