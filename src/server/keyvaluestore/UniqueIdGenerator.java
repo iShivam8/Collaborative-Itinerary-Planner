@@ -10,8 +10,6 @@ import java.util.UUID;
  */
 public class UniqueIdGenerator {
 
-  // TODO - We don't need a long 16 digit id, change it
-
   static Set<String> setOfUniqueIds = new HashSet<>();
 
   public static String generateId() {

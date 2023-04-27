@@ -1,0 +1,15 @@
+2023-04-27 01:50:22.829  [DEBUG]   SignUp Info received from the Client:  Shivam|s@s.com|1234
+2023-04-27 01:50:22.832  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : Initiating 2PC with coordinator as  UserDB2PC0
+2023-04-27 01:50:22.836  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : canCommit() invoked
+2023-04-27 01:50:22.837  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : Created transaction log [Prepared to commit, UserDB2PC0, Shivam, s@s.com, 1234, 0]
+2023-04-27 01:50:22.839  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : Voting phase completed
+2023-04-27 01:50:22.839  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : Votes:  [true, true, true]
+2023-04-27 01:50:22.839  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : Starting commits.
+2023-04-27 01:50:22.840  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : doCommit() invoked
+2023-04-27 01:50:22.841  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : haveCommitted() invoked
+2023-04-27 01:50:22.841  [DEBUG]   Transaction ee2a09e0-272d-408b-83b6-db732a277c83 : Transaction log [Committed, UserDB2PC0, Shivam, s@s.com, 1234, 0]
+2023-04-27 01:50:22.845  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : Waiting for commit responses
+2023-04-27 01:50:22.845  [DEBUG]   Sending response message to the Client:  User Created
+2023-04-27 01:50:22.846  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : haveCommitted() invoked
+2023-04-27 01:50:22.847  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : haveCommitted() invoked
+2023-04-27 01:50:22.847  [DEBUG]   Transaction  ee2a09e0-272d-408b-83b6-db732a277c83 : Received all commit responses. Removing transaction.

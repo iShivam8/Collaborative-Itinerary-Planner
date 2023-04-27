@@ -5,6 +5,8 @@ public class Todos {
   // TODO - Authorization access issue: Even if one owner shares an itinerary, the other user cannot see it
   // TODO - If a user has access to an itinerary then only he can edit or share or delete
 
+  // TODO - In UserDB - we can send the user (emailID) back to client to resolve the currentClient?
+
   // TODO - Objects are always changing: user?
   // TODO - List Collab shows two times the same Itinerary
 

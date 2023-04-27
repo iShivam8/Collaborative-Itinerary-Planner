@@ -56,7 +56,7 @@ public class Client {
       logger.debug(false, "Found RMI registry!");
 
       logger.debug(false, "Looking for the User Database server stub...");
-      this.userDbServer = (Server) registry.lookup("UserDB");
+      this.userDbServer = (Server) registry.lookup("UserDB2PC" + serverId);
       logger.debug(false, "Found the User Database server stub!");
 
       // Server asks for Log in Sign up

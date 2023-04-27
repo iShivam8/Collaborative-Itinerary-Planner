@@ -39,14 +39,12 @@ public class KeyValueStoreServer implements Server, PaxosServer {
   private final String serverId;
   private final Logger logger;
   // We can use the userDbServer to access User Database
-  private final Server userDbServer;
 
   private String tempClientEmailId;
 
   public KeyValueStoreServer(String serverId, Server userDbServer) {
     this.keyValueStore = new KeyValueStore("src/logs/server_" + serverId
         + ".log", serverId, userDbServer);
-    this.userDbServer = userDbServer;
     this.acceptors = new HashMap<>();
     this.metadata = new HashMap<>();
     this.serverId = serverId;

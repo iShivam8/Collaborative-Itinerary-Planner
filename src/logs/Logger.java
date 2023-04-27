@@ -11,8 +11,8 @@ import java.util.Date;
  */
 public class Logger {
 
-  private final String filename;
-  private final String serverId;
+  private String filename;
+  private String serverId;
 
   /**
    * Logger requires the filepath of the file to be used as log file.
@@ -22,6 +22,15 @@ public class Logger {
   public Logger(String filename, String serverId) {
     this.filename = filename;
     this.serverId = serverId;
+  }
+
+  /**
+   * Logger for logging transactions in 2PC.
+   *
+   * @param filename - filename of the file to be used as log file
+   */
+  public Logger(String filename) {
+    this.filename = filename;
   }
 
   /**
@@ -73,5 +82,23 @@ public class Logger {
    */
   public void debug(boolean stdout, String... args) {
     log("debug", stdout, args);
+  }
+
+  /**
+   * Creates a log in the transaction log of the server instance.
+   *
+   * @param transactionId - transaction id
+   * @param transactionLogMessage - log message
+   */
+  public void logTransaction(String transactionId, String[] transactionLogMessage) {
+    StringBuilder logMessage = new StringBuilder("[");
+    String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+    logMessage.append(currentTime).append("] ").append(transactionId);
+
+    for (String token : transactionLogMessage) {
+      logMessage.append("|").append(token);
+    }
+
+    write(logMessage);
   }
 }

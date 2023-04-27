@@ -32,7 +32,7 @@ public class UserDB {
     if (tokens.length == 3) {
       // Signup
       if (tokens[0].length() <= 100 && validateEmail(tokens[1]) && tokens[2].length() <= 100) {
-        return "Valid Input Signup";
+        return "Valid Input Signup. 2PC.";
       } else {
         logger.error(true, "Invalid SignUp Input! Name & Password should be less " +
             "than 100 Characters. And Email should be valid!");
@@ -41,7 +41,7 @@ public class UserDB {
     } else if (tokens.length == 2) {
       //Login
       if (validateEmail(tokens[0]) && tokens[1].length() <= 100) {
-        return "Valid Input Login";
+        return "Valid Input Login. 2PC.";
       } else {
         logger.error(true, "Invalid Login Input! Password should be less " +
             "than 100 Characters. And Email should be valid!");
@@ -58,6 +58,24 @@ public class UserDB {
     // Regular expression for email validation
     String regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
     return email.matches(regex);
+  }
+
+  /**
+   * Method that navigates the incoming 2PC requests of Signup, Login, Logout.
+   *
+   * @param tokens - Client credentials
+   * @return - Executed Response of the specified operation
+   */
+  synchronized String executeOperation(String[] tokens) {
+    // 3 - signup,  2 - login,  1 - logout
+
+    if (tokens.length == 3) {
+      return signUpUser(tokens);
+    } else if (tokens.length == 2) {
+      return loginUser(tokens);
+    } else {
+      return logout(tokens[0]);
+    }
   }
 
   /**
@@ -89,7 +107,6 @@ public class UserDB {
         this.loggedInUsersEmailId.add(user.getEmailId());
 
         // TODO - Send the user to client
-        //setLoggedInUser(user);
 
         logger.debug(true, "Successfully created a new user with Email: ", email);
         return "User Created";
@@ -156,6 +173,29 @@ public class UserDB {
   }
 
   /**
+   * Method to log out the specified user.
+   *
+   * @param emailId - email id of the user
+   * @return - Response of logout
+   */
+  synchronized String logout(String emailId) {
+    if (!this.userDatabase.containsKey(emailId)) {
+      logger.error(true, "User with Email: ", emailId, " Not found!");
+      return "User Not Found";
+    }
+
+    User user = this.userDatabase.get(emailId);
+    this.userDatabase.get(emailId).setLoggedIn(false);
+    this.loggedInUsersEmailId.remove(emailId);
+    logger.debug(true, "User: ", user.getName(), " Successfully Logged out!");
+    return "User Successfully Logged Out!";
+  }
+
+  Set<String> getListOfLoggedInUsers() {
+    return this.loggedInUsersEmailId;
+  }
+
+  /**
    * Method to fetch Specified User via their Email id.
    *
    * @param emailId - Email id of the user
@@ -173,8 +213,6 @@ public class UserDB {
     return this.userDatabase;
   }
 
-
-
   /**
    * Parse the tokens from the input message which is pipe separated.
    *
@@ -183,28 +221,5 @@ public class UserDB {
    */
   String[] parseMessage(String message) {
     return message.split("\\|");
-  }
-
-  /**
-   * Method to log out the specified user.
-   *
-   * @param emailId - email id of the user
-   * @return - Response of logout
-   */
-  String logout(String emailId) {
-    if (!this.userDatabase.containsKey(emailId)) {
-      logger.error(true, "User with Email: ", emailId, " Not found!");
-      return "User Not Found";
-    }
-
-    User user = this.userDatabase.get(emailId);
-    this.userDatabase.get(emailId).setLoggedIn(false);
-    this.loggedInUsersEmailId.remove(emailId);
-    logger.debug(true, "User: ", user.getName(), " Successfully Logged out!");
-    return "User Successfully Logged Out!";
-  }
-
-  Set<String> getListOfLoggedInUsers() {
-    return this.loggedInUsersEmailId;
   }
 }

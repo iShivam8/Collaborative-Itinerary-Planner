@@ -1,0 +1,35 @@
+2023-04-27 01:50:09.841  [DEBUG]   Starting the client:
+2023-04-27 01:50:09.842  [DEBUG]   Looking for RMI registry...
+2023-04-27 01:50:09.859  [DEBUG]   Found RMI registry!
+2023-04-27 01:50:09.860  [DEBUG]   Looking for the User Database server stub...
+2023-04-27 01:50:09.926  [DEBUG]   Found the User Database server stub!
+2023-04-27 01:50:17.295  [DEBUG]   Received Session request from user:  SignUp
+2023-04-27 01:50:22.825  [DEBUG]   Sending sign up request to the server:  Shivam|s@s.com|1234
+2023-04-27 01:50:22.854  [DEBUG]   Response from server:  User Created
+2023-04-27 01:50:22.854  [DEBUG]   Looking for RMI registry...
+2023-04-27 01:50:22.854  [DEBUG]   Found RMI registry!
+2023-04-27 01:50:22.854  [DEBUG]   Looking for the Itinerary KeyValueStore server stub...
+2023-04-27 01:50:22.861  [DEBUG]   Found the Itinerary KeyValueStore server stub!
+2023-04-27 01:50:22.861  [DEBUG]   Client connected to the server
+2023-04-27 01:52:14.606  [DEBUG]   Received request from user:  1
+2023-04-27 01:52:14.608  [DEBUG]   Sending request to the server:  1
+2023-04-27 01:52:14.618  [DEBUG]   Response from server:  Invalid operation: 1. Only PUT is supported with Single operand.
+2023-04-27 01:52:20.699  [DEBUG]   Received request from user:  put
+2023-04-27 01:52:20.700  [DEBUG]   Sending request to the server:  put
+2023-04-27 01:52:20.703  [DEBUG]   Response from server:  Enter Itinerary Details
+2023-04-27 01:52:30.649  [DEBUG]   Sending Itinerary request to the server:  One
+2023-04-27 01:52:30.682  [DEBUG]   Response from server:  547babdc-665b-4e26-84a7-188184a1f9d7
+2023-04-27 01:52:30.682  [DEBUG]   Itinerary Added with Name: ' One '  and you can access it using Unique ID:  547babdc-665b-4e26-84a7-188184a1f9d7
+2023-04-27 01:52:36.467  [DEBUG]   Received request from user:  get|547babdc-665b-4e26-84a7-188184a1f9d7
+2023-04-27 01:52:36.468  [DEBUG]   Sending request to the server:  get|547babdc-665b-4e26-84a7-188184a1f9d7
+2023-04-27 01:52:36.471  [DEBUG]   Response from server:  Itinerary Details:
+
+Name: One
+Location: one
+Description: asdsad
+Start Date: Thu Jan 11 00:00:00 EST 2024
+End Date: Mon Jan 22 00:00:00 EST 2024
+Created by: s@s.com
+List of Users with whom this Itinerary is shared with: []
+Version: 1
+
